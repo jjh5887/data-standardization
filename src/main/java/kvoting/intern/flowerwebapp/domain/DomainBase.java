@@ -2,6 +2,7 @@ package kvoting.intern.flowerwebapp.domain;
 
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.Data;
+import kvoting.intern.flowerwebapp.type.ProcessType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class DomainBase {
-    @Column(name = "DOMAIN_NM", nullable = false, length = 50)
+    @Column(name = "DOMAIN_NAME", nullable = false)
     private String name;
+    @Column(name = "DOMAIN_ENG_NAME", nullable = false)
+    private String engName;
     @Column(name = "DOMAIN_DESC_CONT", length = 200)
     private String description;
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "DBTYPE_TPCD",nullable = false, length = 2)
+    @Column(name = "DBTYPE_TPCD", nullable = false, length = 2)
     private DB db;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "DATATYPE_TPCD", nullable = false, length = 2)
@@ -39,4 +42,13 @@ public abstract class DomainBase {
     private LocalDateTime modifiedTime;
     @Column(name = "MODF_NM")
     private String modifier;
+    @Column(name = "STDZ_PROC_TPCD", nullable = false)
+    private ProcessType processType;
+
+    @PrePersist
+    public void setUp() {
+        if (processType == null) {
+            processType = ProcessType.UNHANDLED;
+        }
+    }
 }

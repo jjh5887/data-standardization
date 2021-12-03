@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 public class DomainService {
     private final DomainRepository domainRepository;
 
-    public Domain saveDomain(Domain domain) {
+    public Domain save(Domain domain) {
         return domainRepository.save(domain);
     }
 
-    public Page<Domain> getDomainByName(String name, Pageable pageable) {
+    public Page<Domain> getByName(String name, Pageable pageable) {
         return domainRepository.findByNameContains(name, pageable);
     }
 }

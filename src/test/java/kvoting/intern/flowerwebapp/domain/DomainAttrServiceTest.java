@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class DomainAttrServiceTest {
@@ -26,7 +27,7 @@ class DomainAttrServiceTest {
     @Test
     public void saveDomain() {
         Domain domain = getDomain();
-        Domain saveDomain = domainService.saveDomain(domain);
+        Domain saveDomain = domainService.save(domain);
 
         assertThat(saveDomain.getName()).isEqualTo(domain.getName());
         assertThat(saveDomain.getDescription()).isEqualTo(domain.getDescription());
@@ -40,15 +41,15 @@ class DomainAttrServiceTest {
         Domain domain = getDomain();
         domain.setDb(null);
 
-        assertThatThrownBy(()-> {
-            domainService.saveDomain(domain);
+        assertThatThrownBy(() -> {
+            domainService.save(domain);
         });
     }
 
     @Test
     public void findByName() {
-        Domain saveDomain = domainService.saveDomain(getDomain());
-        Page<Domain> domainByName = domainService.getDomainByName(saveDomain.getName(), PageRequest.of(0, 1));
+        Domain saveDomain = domainService.save(getDomain());
+        Page<Domain> domainByName = domainService.getByName(saveDomain.getName(), PageRequest.of(0, 1));
         for (Domain domain : domainByName) {
             assertThat(domain.getName()).isEqualTo(saveDomain.getName());
         }

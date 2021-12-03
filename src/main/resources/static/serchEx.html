@@ -1,0 +1,257 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"/>
+    <link href="css/main.css" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="..\static\css\bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/search.js"></script>
+    <link rel="stylesheet" href="css/table.css">
+    <style>
+        body {
+            padding: 20px 20px;
+        }
+
+        .results tr[visible='false'],
+        .no-result {
+            display: none;
+        }
+
+        .results tr[visible='true'] {
+            display: table-row;
+        }
+
+        input[type=checkbox] {
+            margin: 4px 18px 0;
+        }
+
+        .counter {
+            padding: 8px;
+            color: #ccc;
+        }
+    </style>
+    <script>
+        const ALL_VALUE = '0';
+        const TABLE_VALUE = '1';
+        const DOMAIN_VALUE = '2';
+        const WORDS_VALUE = '3'
+
+        function selectFunction(target) {
+
+            if (target.value == TABLE_VALUE) {
+                document.getElementById('table').style.display = 'block';
+                document.getElementById('domain').style.display = 'none';
+                document.getElementById('words').style.display = 'none';
+            }else if (target.value == DOMAIN_VALUE) {
+                document.getElementById('table').style.display = 'none';
+                document.getElementById('domain').style.display = 'block';
+                document.getElementById('words').style.display = 'none';
+            } else if (target.value == WORDS_VALUE) {
+                document.getElementById('table').style.display = 'none';
+                document.getElementById('domain').style.display = 'none';
+                document.getElementById('words').style.display = 'block';
+            } else if(target.value == ALL_VALUE){
+                document.getElementById('table').style.display = 'block';
+                document.getElementById('domain').style.display = 'block';
+                document.getElementById('words').style.display = 'block';
+            }
+
+        }
+
+        $(document).ready(function () {
+            // $('#btn1').addEventListener('click', aa)
+            $("#btn1").click(function () {
+                var searchTerm = $(".search").val();
+                var listItem = $('.results tbody').children('tr');
+                var searchSplit = searchTerm.replace(/ /g, "'):containsi('");
+
+                $.extend($.expr[':'], {
+                    'containsi': function (elem, i, match, array) {
+                        return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+                    }
+                });
+                $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function (e) {
+                    $(this).attr('visible', 'false');
+                });
+                $(".results tbody tr:containsi('" + searchSplit + "')").each(function (e) {
+                    $(this).attr('visible', 'true');
+                });
+
+                var jobCount = $('.results tbody tr[visible="true"]').length;
+                $('.counter').text(jobCount + ' item');
+
+                if (jobCount == '0') {
+                    $('.no-result').show();
+                } else {
+                    $('.no-result').hide();
+                }
+            });
+            $("#search").keydown(function (keyNum) { //현재의 키보드의 입력값을 keyNum으로 받음
+                if (keyNum.keyCode == 13) {
+                    keyNum.preventDefault();
+                    // keydown으로 발생한 keyNum의 숫자체크
+                    // 숫자가 enter의 아스키코드 13과 같으면 기존에 정의된 클릭함수를 호출
+                    $("#btn1").click();
+                }
+            });
+        });
+        const aa = () => {
+
+        }
+    </script>
+
+</head>
+<body>
+<div class="s003">
+    <form>
+        <div class="inner-form">
+            <div class="input-field first-wrap">
+                <div class="input-select">
+                    <select id="mySelect" onchange="selectFunction(this)" data-trigger="" name="choices-single-defaul">
+                        <option value="0"> --전체--</option>
+                        <option value="1">용어</option>
+                        <option value="2">도메인</option>
+                        <option value="3">단어</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-field second-wrap">
+                <input id="search" class="search form-control" type="text" placeholder="검색어를 입력해주세요"/>
+            </div>
+            <div class="input-field third-wrap">
+                <button id="btn1" type="button" class="btn-search" type="button">
+                    <svg class="svg-inline--fa fa-search fa-w-16" data-prefix="fas" data-icon="search" role="img"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor"
+                              d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </form>
+    <form>
+        <div>
+            <button type="button" class="btn-edit" > 수정 </button>
+            <button type="button" class="btn-delete" value="삭제"> 삭제 </button>
+        </div>
+    <table id="table" class="table table-hover results">
+        <thead>
+        <tr><th>선택</th>
+            <th>No.</th>
+            <th class="col-xs-4">용어</th>
+            <th class="col-xs-4">용어설명</th>
+            <th> #</th>
+        </tr>
+        <tr class="warning no-result">
+            <td colspan="4"><i class="fa fa-warning"></i>자료가 없습니다.</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">1</th>
+            <td>A_USER</td>
+            <td>A_USER 설명</td>
+            <th>
+                <button name="T_Btn" type="button" onclick="getTableName()"> 보기</button>
+            </th>
+        </tr>
+        <tr><th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">2</th>
+            <td>B_USER</td>
+            <td>B_USER 설명</td>
+            <th>
+                <button type="button" onclick="getTableName()"> 보기</button>
+            </th>
+        </tr>
+        <tr><th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">3</th>
+            <td>C_USER</td>
+            <td>C_USER 설명</td>
+            <th>
+                <button type="button" onclick="getTableName()"> 보기</button>
+            </th>
+        </tr>
+        <tr><th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">4</th>
+            <td>D_USER</td>
+            <td>D_USER 설명</td>
+            <th>
+                <button type="button" onclick="getTableName()"> 보기</button>
+            </th>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <table id="domain" class="table table-hover results">
+        <thead>
+        <tr><th>선택</th>
+            <th>No.</th>
+            <th class="col-xs-4">도메인</th>
+            <th class="col-xs-4">info</th>
+            <th> #</th>
+        </tr>
+        <tr class="warning no-result">
+            <td colspan="4"><i class="fa fa-warning"></i>자료가 없습니다.</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">1</th>
+            <td>도메인</td>
+            <td>\</td>
+            <th>
+                <button name="T_Btn" type="button" onclick="getTableName()"> 보기</button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <table id="words" class="table table-hover results">
+        <thead>
+        <tr>
+            <th>선택</th>
+            <th>No.</th>
+            <th class="col-xs-4">단어</th>
+            <th class="col-xs-4">info</th>
+            <th> #</th>
+        </tr>
+        <tr class="warning no-result">
+            <td colspan="4"><i class="fa fa-warning"></i>자료가 없습니다.</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><th> <input type="checkbox" /></th>
+            <th scope="row" class="userId">1</th>
+            <td>단어</td>
+            <td>\</td>
+            <th>
+                <button name="T_Btn" type="button" onclick="getTableName()"> 보기</button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+
+<script src="js/extention/choices.js"></script>
+<script>
+    const choices = new Choices('[data-trigger]',
+        {
+            searchEnabled: false,
+            itemSelectText: '',
+        });
+
+</script>
+</body>
+</html>
+
+<!--https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=igazoa2&logNo=220823794181-->

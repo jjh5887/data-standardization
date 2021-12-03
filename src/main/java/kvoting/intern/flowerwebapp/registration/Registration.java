@@ -1,10 +1,12 @@
 package kvoting.intern.flowerwebapp.registration;
 
 
+import kvoting.intern.flowerwebapp.type.ProcessType;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @Embeddable
@@ -14,22 +16,28 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Registration {
-
-    @Column(name = "STDZ_REG_TPCD", nullable = false)
-    private RegistrationCode registrationCode;
-    @Column(name = "STDZ_PROC_TPCD", nullable = false)
-    private ProcessCode processCode;
-
-    @Column(name = "REG_TM", nullable = false)
-    private LocalDateTime dateRegistered;
-    @Column(name = "REGT_NM", nullable = false)
+    @Column(name = "REGT_NM")
     private String register;
+    @Column(name = "STDZ_REG_TPCD")
+    private RegistrationType registrationType;
+    @Column(name = "REG_TM")
+    private LocalDateTime dateRegistered;
 
-    @Column(name = "PROC_TM")
-    private LocalDateTime dateProcessed;
     @Column(name = "PROCR_NM")
     private String processor;
+    @Column(name = "STDZ_PROCR_TPCD")
+    private ProcessType processType;
+    @Column(name = "PROC_TM")
+    private LocalDateTime dateProcessed;
 
     @Column(name = "ERR_CONT", length = 500)
     private String errorMessage;
+
+    @PrePersist
+    public void setUp() {
+        if (dateRegistered == null) {
+            dateRegistered = LocalDateTime.now();
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.word;
 
 
+import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import lombok.*;
@@ -34,7 +35,6 @@ public class Word {
     @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<WordReg> wordRegs = new HashSet<>();
 
-    public void addWordReg(WordReg wordReg) {
-        wordRegs.add(wordReg);
-    }
+    @ManyToMany(mappedBy = "words", fetch = FetchType.EAGER)
+    Set<Domain> domains = new HashSet<>();
 }

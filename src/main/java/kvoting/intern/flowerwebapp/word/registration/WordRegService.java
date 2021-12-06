@@ -71,7 +71,6 @@ public class WordRegService {
                 modelMapper.map(wordReg.getRegWord(), word);
                 word = wordService.save(word);
                 wordReg.setWord(word);
-                System.out.println(wordReg.getRegistration().getRegistrationType());
             }
             if (wordReg.getRegistration().getRegistrationType() == RegistrationType.DELETE) {
                 wordService.deleteWord(wordReg.getWord());

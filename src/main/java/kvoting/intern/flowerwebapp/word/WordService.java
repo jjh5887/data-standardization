@@ -1,5 +1,7 @@
 package kvoting.intern.flowerwebapp.word;
 
+import kvoting.intern.flowerwebapp.domain.Domain;
+import kvoting.intern.flowerwebapp.domain.DomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,9 +11,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WordService {
     private final WordRepository wordRepository;
+    private final DomainService domainService;
 
     public Word save(Word word) {
-        return wordRepository.save(word);
+        Word save = wordRepository.save(word);
+        for (Domain domain : save.getDomains()) {
+            domain.setUp();
+            domainService.save(domain);
+        }
+        return save;
     }
 
     public Page<Word> getByName(String name, Pageable pageable) {

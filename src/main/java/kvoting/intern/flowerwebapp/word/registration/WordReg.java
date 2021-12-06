@@ -4,14 +4,13 @@ import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordBase;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Entity(name = "CC_WORD_REG_TC")
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

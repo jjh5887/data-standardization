@@ -1,6 +1,16 @@
 package kvoting.intern.flowerwebapp.config;
 
+import kvoting.intern.flowerwebapp.domain.DomainRepository;
+import kvoting.intern.flowerwebapp.domain.DomainService;
+import kvoting.intern.flowerwebapp.domain.registeration.DomainReg;
+import kvoting.intern.flowerwebapp.domain.registeration.DomainRegService;
+import kvoting.intern.flowerwebapp.domain.registeration.request.DomainRegistRequest;
+import kvoting.intern.flowerwebapp.type.DB;
+import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.type.ProcessType;
+import kvoting.intern.flowerwebapp.word.Word;
+import kvoting.intern.flowerwebapp.word.WordRepository;
+import kvoting.intern.flowerwebapp.word.WordService;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import kvoting.intern.flowerwebapp.word.registration.WordRegService;
 import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
@@ -28,7 +38,22 @@ public class AppConfig {
             @Autowired
             WordRegService wordRegService;
 
-            private WordRegistRequest makeRequest(int idx) {
+            @Autowired
+            DomainRegService domainRegService;
+
+            @Autowired
+            WordService wordService;
+
+            @Autowired
+            WordRepository wordRepository;
+
+            @Autowired
+            DomainRepository domainRepository;
+
+            @Autowired
+            DomainService domainService;
+
+            private WordRegistRequest makeWordRequest(int idx) {
                 return WordRegistRequest.builder()
                         .engName("TST" + idx)
                         .name("테스트" + idx)
@@ -36,11 +61,23 @@ public class AppConfig {
                         .build();
             }
 
+            private DomainRegistRequest makeDomainRequest(List<Word> words) {
+                return DomainRegistRequest.builder()
+                        .words(words)
+                        .size(20)
+                        .scale(0)
+                        .nullable(true)
+                        .description("this is test domain")
+                        .db(DB.ORACLE)
+                        .dataType(DataType.VARCHAR2)
+                        .build();
+            }
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
                 List<WordRegistRequest> requests = new ArrayList<>();
                 for (int i = 0; i < 10; i++) {
-                    requests.add(makeRequest(i));
+                    requests.add(makeWordRequest(i));
                 }
 
                 List<WordReg> wordRegs = new ArrayList<>();
@@ -53,12 +90,27 @@ public class AppConfig {
                 wordRegService.processWordReg(wordReg.getId(), ProcessType.APPROVED);
                 request.setName("TTT");
                 WordReg modify = wordRegService.modify(request, wordReg.getWord().getId());
-                System.out.println(modify.getRegistration().getRegistrationType());
-
-                System.out.println();
-                System.out.println();
-                System.out.println("hi");
                 wordRegService.processWordReg(modify.getId(), ProcessType.APPROVED);
+
+                List<Word> words = wordRepository.findAll();
+
+                List<DomainReg> domainRegs = new ArrayList<>();
+                domainRegs.add(domainRegService.create(makeDomainRequest(words)));
+                domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(0, 5))));
+                domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(1, 3))));
+                domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(4, 9))));
+                domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(5, 8))));
+                domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(7, 9))));
+
+                for (int i = 0; i < domainRegs.size(); i++) {
+                    if (i % 2 == 0) {
+                        domainRegService.processDomainReg(domainRegs.get(i).getId(), ProcessType.APPROVED);
+                    }
+                }
+
+                Word word = wordService.getWord(words.get(2).getId());
+                word.setEngName("GGGG");
+                wordService.save(word);
             }
         };
     }

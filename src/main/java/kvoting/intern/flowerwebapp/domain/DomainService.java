@@ -14,7 +14,21 @@ public class DomainService {
         return domainRepository.save(domain);
     }
 
-    public Page<Domain> getByName(String name, Pageable pageable) {
+    public Domain getDomain(Long id) {
+        return domainRepository.findById(id).orElseThrow(() -> {
+            throw new RuntimeException();
+        });
+    }
+
+    public Page<Domain> getDomainByName(String name, Pageable pageable) {
         return domainRepository.findByNameContains(name, pageable);
+    }
+
+    public Page<Domain> getDomainByEngName(String engName, Pageable pageable) {
+        return domainRepository.findByEngNameContains(engName, pageable);
+    }
+
+    public void delete(Domain domain) {
+        domainRepository.delete(domain);
     }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Persistence</ID>
+  <OriginalElement>JavaeeElement:/857c11bf/entityManagerFactory/flower-webapp/jpa/JPA/PersistenceModel</OriginalElement>
+  <nodes>
+    <node x="0.0" y="414.0">Domain#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/Domain.java</node>
+    <node x="0.0" y="314.0">DomainReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/registeration/DomainReg.java</node>
+    <node x="30.495967741935488" y="0.0">DomainBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/DomainBase.java</node>
+    <node x="213.4959677419355" y="11.0">Registration#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/registration/Registration.java</node>
+    <node x="306.9072580645161" y="543.0">Word#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/Word.java</node>
+    <node x="422.7459677419355" y="261.0">WordBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/WordBase.java</node>
+    <node x="303.7459677419355" y="425.0">WordReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/registration/WordReg.java</node>
+    <node x="636.7459677419355" y="105.0">AbstractAuditable#jar:///Users/jung-gwonho/.m2/repository/org/springframework/data/spring-data-jpa/2.6.0/spring-data-jpa-2.6.0.jar!/org/springframework/data/jpa/domain/AbstractAuditable.class</node>
+    <node x="636.7459677419355" y="0.0">AbstractPersistable#jar:///Users/jung-gwonho/.m2/repository/org/springframework/data/spring-data-jpa/2.6.0/spring-data-jpa-2.6.0.jar!/org/springframework/data/jpa/domain/AbstractPersistable.class</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Word#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/Word.java" target="WordReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/registration/WordReg.java" relationship="RELATION">
+      <point x="-41.5" y="-38.5" />
+      <point x="348.4072580645161" y="522.0" />
+      <point x="224.875" y="522.0" />
+      <point x="224.875" y="512.0" />
+      <point x="400.2459677419355" y="512.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="AbstractAuditable#jar:///Users/jung-gwonho/.m2/repository/org/springframework/data/spring-data-jpa/2.6.0/spring-data-jpa-2.6.0.jar!/org/springframework/data/jpa/domain/AbstractAuditable.class" target="AbstractPersistable#jar:///Users/jung-gwonho/.m2/repository/org/springframework/data/spring-data-jpa/2.6.0/spring-data-jpa-2.6.0.jar!/org/springframework/data/jpa/domain/AbstractPersistable.class" relationship="INHERITANCE">
+      <point x="0.0" y="-38.5" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="Word#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/Word.java" target="Domain#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/Domain.java" relationship="RELATION">
+      <point x="-41.5" y="-38.5" />
+      <point x="348.4072580645161" y="522.0" />
+      <point x="224.875" y="522.0" />
+      <point x="224.875" y="512.0" />
+      <point x="83.5" y="512.0" />
+      <point x="0.0" y="38.5" />
+    </edge>
+    <edge source="WordReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/registration/WordReg.java" target="WordBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/WordBase.java" relationship="EMBEDDING">
+      <point x="0.0" y="-27.5" />
+      <point x="400.2459677419355" y="387.0" />
+      <point x="507.2459677419355" y="387.0" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="Domain#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/Domain.java" target="DomainBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/DomainBase.java" relationship="EMBEDDING">
+      <point x="-41.75" y="-38.5" />
+      <point x="41.75" y="387.0" />
+      <point x="54.24596774193549" y="387.0" />
+      <point x="54.24596774193549" y="240.0" />
+      <point x="111.99596774193549" y="240.0" />
+      <point x="0.0" y="104.5" />
+    </edge>
+    <edge source="DomainReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/registeration/DomainReg.java" target="DomainBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/DomainBase.java" relationship="EMBEDDING">
+      <point x="0.0" y="-27.5" />
+      <point x="105.0" y="230.0" />
+      <point x="111.99596774193549" y="230.0" />
+      <point x="0.0" y="104.5" />
+    </edge>
+    <edge source="DomainReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/registeration/DomainReg.java" target="Registration#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/registration/Registration.java" relationship="EMBEDDING">
+      <point x="0.0" y="-27.5" />
+      <point x="105.0" y="240.0" />
+      <point x="342.4959677419355" y="240.0" />
+      <point x="0.0" y="93.5" />
+    </edge>
+    <edge source="DomainReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/registeration/DomainReg.java" target="Word#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/Word.java" relationship="RELATION">
+      <point x="0.0" y="27.5" />
+      <point x="105.0" y="522.0" />
+      <point x="348.4072580645161" y="522.0" />
+      <point x="-41.5" y="-38.5" />
+    </edge>
+    <edge source="Word#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/Word.java" target="WordBase#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/WordBase.java" relationship="EMBEDDING">
+      <point x="41.5" y="-38.5" />
+      <point x="431.4072580645161" y="522.0" />
+      <point x="507.2459677419355" y="522.0" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="Domain#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/Domain.java" target="DomainReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/domain/registeration/DomainReg.java" relationship="RELATION">
+      <point x="41.75" y="-38.5" />
+      <point x="125.25" y="387.0" />
+      <point x="105.0" y="387.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="WordReg#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/word/registration/WordReg.java" target="Registration#file:///Users/jung-gwonho/workspace/flower-webapp/src/main/java/kvoting/intern/flowerwebapp/registration/Registration.java" relationship="EMBEDDING">
+      <point x="0.0" y="-27.5" />
+      <point x="400.2459677419355" y="230.0" />
+      <point x="342.4959677419355" y="230.0" />
+      <point x="0.0" y="93.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="223.5" y="344.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Embeddables</Category>
+    <Category>Properties</Category>
+    <Category>Superclasses</Category>
+  </Categories>
+</Diagram>
+

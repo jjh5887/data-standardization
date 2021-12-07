@@ -1,7 +1,6 @@
 package kvoting.intern.flowerwebapp.domain.registeration;
 
 import kvoting.intern.flowerwebapp.domain.Domain;
-import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registeration.request.DomainRegistRequest;
 import kvoting.intern.flowerwebapp.registration.Registration;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 
 @Service
@@ -28,14 +26,15 @@ public class DomainRegService {
     }
 
     public DomainReg create(DomainRegistRequest request) {
-        // create mappedWord
+        // create mappedDomain
         Domain mappedDomain = modelMapper.map(request, Domain.class);
         mappedDomain.setStatus(ProcessType.UNHANDLED);
         mappedDomain.setDomainRegs(new HashSet<>());
         Domain domain = domainService.save(mappedDomain);
 
         // create domain create_reg
-        return domainRegRepository.save(generateDomainReg(request, domain, RegistrationType.CREATE));
+        return domainRegRepository
+                .save(generateDomainReg(request, domain, RegistrationType.CREATE));
     }
 
     public DomainReg modify(DomainRegistRequest request, Long id) {
@@ -60,17 +59,19 @@ public class DomainRegService {
         if (type == ProcessType.REJECTED) {
             if (domainReg.getRegistration().getRegistrationType() == RegistrationType.CREATE) {
                 domainReg.getDomain().setStatus(type);
+                domainService.save(domainReg.getDomain());
             }
         }
         if (type == ProcessType.APPROVED) {
             if (domainReg.getRegistration().getRegistrationType() == RegistrationType.CREATE) {
                 domainReg.getDomain().setStatus(type);
+                domainService.save(domainReg.getDomain());
             }
             if (domainReg.getRegistration().getRegistrationType() == RegistrationType.MODIFY) {
                 Domain domain = domainService.getDomain(domainReg.getDomain().getId());
-                modelMapper.map(domainReg.getRegDomain(), domain);
+                modelMapper.map(domainReg.getDomainBase(), domain);
                 domain.getWords().clear();
-                domain.getWords().addAll(domainReg.getRegDomain().getWords());
+                domain.getWords().addAll(domainReg.getWords());
                 domainService.save(domain);
                 domainReg.setDomain(domain);
             }
@@ -90,12 +91,10 @@ public class DomainRegService {
     }
 
     private DomainReg generateDomainReg(DomainRegistRequest request, Domain domain, RegistrationType type) {
-        DomainBase regDomain = modelMapper.map(request, DomainBase.class);
-        return DomainReg.builder()
-                .domain(domain)
-                .regDomain(regDomain)
-                .registration(generateReg(type))
-                .build();
+        DomainReg map = modelMapper.map(request, DomainReg.class);
+        map.setDomain(domain);
+        map.setRegistration(generateReg(type));
+        return map;
     }
 
     private Registration generateReg(RegistrationType type) {
@@ -103,7 +102,6 @@ public class DomainRegService {
                 .register("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
-                .dateRegistered(LocalDateTime.now())
                 .build();
     }
 }

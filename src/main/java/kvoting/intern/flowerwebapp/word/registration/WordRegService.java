@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 
 @Service
@@ -29,10 +28,13 @@ public class WordRegService {
 
     public WordReg create(WordRegistRequest request) {
         // create mappedWord
-        Word mappedWord = modelMapper.map(request, Word.class);
-        mappedWord.setStatus(ProcessType.UNHANDLED);
-        mappedWord.setWordRegs(new HashSet<>());
-        Word word = wordService.save(mappedWord);
+        WordBase wordBase = modelMapper.map(request, WordBase.class);
+        Word word = Word.builder().wordBase(wordBase)
+                .status(ProcessType.UNHANDLED)
+                .wordRegs(new HashSet<>())
+                .domains(new HashSet<>())
+                .build();
+        word = wordService.save(word);
 
         // create word create_reg
         return wordRegRepository.save(generateWordReg(request, word, RegistrationType.CREATE));
@@ -68,7 +70,7 @@ public class WordRegService {
             }
             if (wordReg.getRegistration().getRegistrationType() == RegistrationType.MODIFY) {
                 Word word = wordReg.getWord();
-                modelMapper.map(wordReg.getRegWord(), word);
+                modelMapper.map(wordReg.getWordBase(), word);
                 word = wordService.save(word);
                 wordReg.setWord(word);
             }
@@ -89,10 +91,10 @@ public class WordRegService {
     }
 
     private WordReg generateWordReg(WordRegistRequest request, Word word, RegistrationType type) {
-        WordBase regWord = modelMapper.map(request, WordBase.class);
+        WordBase wordBase = modelMapper.map(request, WordBase.class);
         return WordReg.builder()
                 .word(word)
-                .regWord(regWord)
+                .wordBase(wordBase)
                 .registration(generateReg(type))
                 .build();
     }
@@ -102,7 +104,6 @@ public class WordRegService {
                 .register("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
-                .dateRegistered(LocalDateTime.now())
                 .build();
     }
 

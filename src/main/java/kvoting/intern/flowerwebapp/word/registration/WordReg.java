@@ -23,7 +23,7 @@ public class WordReg {
     private Long id;
 
     @Embedded
-    private WordBase regWord;
+    private WordBase wordBase;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "WORD_ID")

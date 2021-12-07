@@ -21,11 +21,11 @@ public class DomainService {
     }
 
     public Page<Domain> getDomainByName(String name, Pageable pageable) {
-        return domainRepository.findByNameContains(name, pageable);
+        return domainRepository.findByDomainBase_NameContains(name, pageable);
     }
 
     public Page<Domain> getDomainByEngName(String engName, Pageable pageable) {
-        return domainRepository.findByEngNameContains(engName, pageable);
+        return domainRepository.findByDomainBase_EngNameContains(engName, pageable);
     }
 
     public void delete(Domain domain) {

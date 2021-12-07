@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
+import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordRepository;
@@ -22,9 +23,12 @@ class WordRegServiceTest {
     WordRepository wordRepository;
     @Autowired
     WordRegRepository wordRegRepository;
+    @Autowired
+    DomainRepository domainRepository;
 
     @BeforeEach
     public void setUp() {
+        domainRepository.deleteAll();
         wordRepository.deleteAll();
     }
 
@@ -134,7 +138,7 @@ class WordRegServiceTest {
 
         // Then
         Word modWord = wordService.getWord(approvedWordReg.getWord().getId());
-        assertThat(modWord.getName()).isEqualTo(newName);
+        assertThat(modWord.getWordBase().getName()).isEqualTo(newName);
         assertThat(wordRegRepository.count()).isEqualTo(2L);
         assertThat(wordRepository.count()).isEqualTo(1L);
     }
@@ -156,7 +160,7 @@ class WordRegServiceTest {
 
         // Then
         Word modWord = wordService.getWord(approvedWordReg.getWord().getId());
-        assertThat(modWord.getName()).isEqualTo(word.getName());
+        assertThat(modWord.getWordBase().getName()).isEqualTo(word.getWordBase().getName());
         assertThat(wordRegRepository.count()).isEqualTo(2L);
         assertThat(wordRepository.count()).isEqualTo(1L);
     }

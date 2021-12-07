@@ -23,11 +23,11 @@ public class WordService {
     }
 
     public Page<Word> getByName(String name, Pageable pageable) {
-        return wordRepository.findByNameContains(name, pageable);
+        return wordRepository.findByWordBase_NameContains(name, pageable);
     }
 
     public Word getWordByEng(String engName) {
-        return wordRepository.findByEngName(engName).orElseThrow(() -> {
+        return wordRepository.findByWordBase_EngName(engName).orElseThrow(() -> {
             throw new RuntimeException();
         });
     }
@@ -43,6 +43,6 @@ public class WordService {
     }
 
     public boolean existsByEngName(String engName) {
-        return wordRepository.existsByEngName(engName);
+        return wordRepository.existsByWordBase_EngName(engName);
     }
 }

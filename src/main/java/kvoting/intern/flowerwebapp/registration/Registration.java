@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @Embeddable
@@ -34,9 +35,16 @@ public class Registration {
     private String errorMessage;
 
     @PrePersist
-    public void setUp() {
+    public void made() {
         if (dateRegistered == null) {
             dateRegistered = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    public void processed() {
+        if (dateProcessed == null) {
+            dateProcessed = LocalDateTime.now();
         }
     }
 

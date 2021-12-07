@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.config;
 
+import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registeration.DomainReg;
@@ -64,6 +65,12 @@ public class AppConfig {
             private DomainRegistRequest makeDomainRequest(List<Word> words) {
                 return DomainRegistRequest.builder()
                         .words(words)
+                        .domainBase(makeDomainBase())
+                        .build();
+            }
+
+            private DomainBase makeDomainBase() {
+                return DomainBase.builder()
                         .size(20)
                         .scale(0)
                         .nullable(true)
@@ -93,7 +100,6 @@ public class AppConfig {
                 wordRegService.processWordReg(modify.getId(), ProcessType.APPROVED);
 
                 List<Word> words = wordRepository.findAll();
-
                 List<DomainReg> domainRegs = new ArrayList<>();
                 domainRegs.add(domainRegService.create(makeDomainRequest(words)));
                 domainRegs.add(domainRegService.create(makeDomainRequest(words.subList(0, 5))));
@@ -109,7 +115,7 @@ public class AppConfig {
                 }
 
                 Word word = wordService.getWord(words.get(2).getId());
-                word.setEngName("GGGG");
+                word.getWordBase().setEngName("GGGG");
                 wordService.save(word);
             }
         };

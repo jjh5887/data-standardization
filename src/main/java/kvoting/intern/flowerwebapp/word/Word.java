@@ -23,13 +23,11 @@ public class Word {
     @GeneratedValue
     @Column(name = "WORD_ID")
     private Long id;
-    @Column(name = "WORD_ENG_NAME", unique = true)
-    private String engName;
-    @Column(name = "WORD_NAME")
-    private String name;
-    @Column(name = "WORD_ORG_ENG_NAME")
-    private String orgEngName;
-    @Column(name = "STDZ_PROC_TPCD")
+
+    @Embedded
+    WordBase wordBase;
+
+    @Column(name = "WORD_PROC_TPCD")
     private ProcessType status;
 
     @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)

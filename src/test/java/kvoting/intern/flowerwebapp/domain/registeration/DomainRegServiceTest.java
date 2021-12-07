@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.domain.registeration;
 
 import kvoting.intern.flowerwebapp.domain.Domain;
+import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registeration.request.DomainRegistRequest;
@@ -49,7 +50,7 @@ class DomainRegServiceTest {
     }
 
     @Test
-    public void registCreateDomain() {
+    public void registCreateDomainAndUpdateWord() {
         // When
         // generateWords
         generateWords();
@@ -61,15 +62,19 @@ class DomainRegServiceTest {
         // Then
         Domain domain = domainService.getDomain(domainReg.getDomain().getId());
         List<Word> domainWords = domain.getWords();
-        List<Word> regWords = domainReg.getRegDomain().getWords();
+        List<Word> regWords = domainReg.getWords();
         assertThat(domainWords.size()).isEqualTo(regWords.size());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.UNHANDLED);
 
+        // When
+        // update Word
         Word word = wordService.getWord(words.get(0).getId());
-        word.setEngName("GGG");
+        word.getWordBase().setEngName("GGG");
         wordService.save(word);
-
-        Page<Domain> domainByName = domainService.getDomainByEngName(word.getEngName(), PageRequest.of(0, 10));
+        // Then
+        Page<Domain> domainByName = domainService
+                .getDomainByEngName(word.getWordBase().getEngName(),
+                        PageRequest.of(0, 10));
         assertThat(domainByName.getTotalElements()).isEqualTo(1L);
     }
 
@@ -79,17 +84,17 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // modify
-        request.setDescription("this is new domain");
+        request.getDomainBase().setDescription("this is new domain");
         request.getWords().remove(3);
         DomainReg savedModifyReg = domainRegService.modify(request, domainReg.getDomain().getId());
 
         // Then
         DomainReg savedReg = domainRegService.getDomainReg(savedModifyReg.getId());
         assertThat(savedReg).isEqualTo(savedModifyReg);
-        assertThat(savedModifyReg.getRegDomain().getWords().size()).isEqualTo(9L);
+        assertThat(savedModifyReg.getWords().size()).isEqualTo(9L);
         assertThat(domainRegRepository.count()).isEqualTo(2L);
         assertThat(wordRepository.count()).isEqualTo(10L);
     }
@@ -100,7 +105,7 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // delete
         DomainReg savedDeleteReg = domainRegService.delete(domainReg.getDomain().getId());
@@ -162,10 +167,10 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // modify
-        request.setDescription("this is new domain");
+        request.getDomainBase().setDescription("this is new domain");
         request.getWords().remove(3);
         DomainReg savedModifyReg = domainRegService.modify(request, domainReg.getDomain().getId());
         // approve
@@ -174,9 +179,9 @@ class DomainRegServiceTest {
         // Then
         Domain domain = domainService.getDomain(approvedReg.getDomain().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
-        assertThat(domain.getDescription()).isEqualTo(request.getDescription());
+        assertThat(domain.getDomainBase().getDescription()).isEqualTo(request.getDomainBase().getDescription());
         List<Word> domainWords = domain.getWords();
-        List<Word> approvedWords = approvedReg.getRegDomain().getWords();
+        List<Word> approvedWords = approvedReg.getWords();
 
         for (int i = 0; i < domainWords.size(); i++) {
             assertThat(domainWords.get(i)).isEqualTo(approvedWords.get(i));
@@ -189,10 +194,10 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // modify
-        request.setDescription("this is new domain");
+        request.getDomainBase().setDescription("this is new domain");
         request.getWords().remove(3);
         assertThat(request.getWords().size()).isEqualTo(9);
         DomainReg savedModifyReg = domainRegService.modify(request, domainReg.getDomain().getId());
@@ -204,7 +209,7 @@ class DomainRegServiceTest {
         assertThat(domainRepository.count()).isEqualTo(1L);
 
         List<Word> domainWords = domain.getWords();
-        List<Word> domainRegWords = domainReg.getRegDomain().getWords();
+        List<Word> domainRegWords = domainReg.getWords();
         assertThat(domainWords.size()).isEqualTo(10);
         for (int i = 0; i < domainWords.size(); i++) {
             assertThat(domainWords.get(i)).isEqualTo(domainRegWords.get(i));
@@ -217,7 +222,7 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // delete
         DomainReg savedModifyReg = domainRegService.delete(domainReg.getDomain().getId());
@@ -235,7 +240,7 @@ class DomainRegServiceTest {
         // create
         generateWords();
         List<Word> words = wordRepository.findAll();
-        DomainRegistRequest request = makeRequest(words);
+        DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = domainRegService.create(request);
         // delete
         DomainReg savedModifyReg = domainRegService.delete(domainReg.getDomain().getId());
@@ -249,19 +254,13 @@ class DomainRegServiceTest {
 
     private DomainRegistRequest makeDomRequest(List<Word> words) {
         return DomainRegistRequest.builder()
-                .dataType(DataType.VARCHAR2)
-                .db(DB.ORACLE)
-                .description("test domain")
-                .nullable(true)
-                .scale(0)
-                .size(20)
                 .words(words)
+                .domainBase(makeDomainBase())
                 .build();
     }
 
-    private DomainRegistRequest makeRequest(List<Word> words) {
-        return DomainRegistRequest.builder()
-                .words(words)
+    private DomainBase makeDomainBase() {
+        return DomainBase.builder()
                 .size(20)
                 .scale(0)
                 .nullable(true)

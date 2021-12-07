@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface WordRepository extends JpaRepository<Word, Long> {
-    Page<Word> findByNameContains(String name, Pageable pageable);
+    Page<Word> findByWordBase_NameContains(String name, Pageable pageable);
 
-    boolean existsByEngName(String engName);
+    Optional<Word> findByWordBase_EngName(String engName);
 
-    Optional<Word> findByEngName(String engName);
+    boolean existsByWordBase_EngName(String engName);
 }

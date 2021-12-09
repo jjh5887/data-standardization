@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.word;
 
 
+import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
@@ -30,9 +31,12 @@ public class Word {
     @Column(name = "WORD_PROC_TPCD")
     private ProcessType status;
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "word", cascade = CascadeType.REMOVE)
     private Set<WordReg> wordRegs = new HashSet<>();
 
-    @ManyToMany(mappedBy = "words", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
     Set<Domain> domains = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    Set<Dict> dicts = new HashSet<>();
 }

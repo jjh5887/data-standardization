@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_high_cmcd_tc</OriginalElement>
+  <nodes>
+    <node x="1538.6724041575799" y="-130.92119465147965">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_tc</node>
+    <node x="423.29781731051196" y="258.72758654226243">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc</node>
+    <node x="738.996464037942" y="384.65468463889505">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_word_tc</node>
+    <node x="110.5991705830819" y="258.72758654226243">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc</node>
+    <node x="1161.813201769001" y="23.078805348520348">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_tc</node>
+    <node x="151.91765807067975" y="-105.02914285714272">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_tc</node>
+    <node x="618.3684896257391" y="10.265142857143047">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_word_tc</node>
+    <node x="-185.09947614434816" y="5.470857142857284">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_high_cmcd_tc</node>
+    <node x="468.9347922857077" y="-160.02914285714272">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_word_tc</node>
+    <node x="886.09084569737" y="-160.02914285714272">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_tc</node>
+    <node x="1161.813201769001" y="396.15468463889505">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_domain_tc</node>
+    <node x="-185.09947614434816" y="319.2635865422624">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_high_cmcd_tc</node>
+    <node x="1757.3301184432944" y="374.90358654226253">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_word_tc</node>
+    <node x="423.29781731051196" y="561.4819297248691">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_reg_tc</node>
+    <node x="886.09084569737" y="216.61186465335862">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc</node>
+    <node x="110.5991705830819" y="485.3263143891354">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_word_tc</node>
+    <node x="1491.7688855254041" y="363.40358654226253">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_word_tc</node>
+    <node x="1266.3073392131892" y="-134.42172756480613">939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_domain_tc</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_tc" relationship="REFERENCES">
+      <point x="-103.65771428571452" y="-50.0" />
+      <point x="114.0" y="204.0" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_tc" relationship="REFERENCES">
+      <point x="-121.5" y="0.0" />
+      <point x="121.5" y="-77.0" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="-104.45420391145342" y="-0.633714285714376" />
+      <point x="619.9142857142857" y="60.26514285714305" />
+      <point x="552.298" y="60.26514285714305" />
+      <point x="1.8268948804234242E-4" y="-71.99958654226242" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="4.6624159608654736E-5" y="50.00041345773758" />
+      <point x="826.4965106621016" y="516.5520000000001" />
+      <point x="552.298" y="516.5520000000001" />
+      <point x="1.8268948804234242E-4" y="72.00041345773758" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_domain_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc" relationship="REFERENCES">
+      <point x="-97.0002017690008" y="4.134577374657056E-4" />
+      <point x="996.09084569737" y="434.6550980966325" />
+      <point x="996.09084569737" y="404.2546588579795" />
+      <point x="996.091" y="404.2546588579795" />
+      <point x="1.54302629994163E-4" y="71.9995639180699" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc" relationship="REFERENCES">
+      <point x="33.5" y="-50.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_tc" relationship="REFERENCES">
+      <point x="106.0" y="0.0" />
+      <point x="-110.0" y="71.29428571428576" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_domain_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_tc" relationship="REFERENCES">
+      <point x="-115.5" y="0.0" />
+      <point x="110.0" y="-84.89258470766342" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc" relationship="REFERENCES">
+      <point x="3.4192932025689515E-4" y="94.00014285714272" />
+      <point x="279.418" y="177.29136089810794" />
+      <point x="996.0908923215296" y="177.29136089810794" />
+      <point x="4.6624159608654736E-5" y="-72.0004360819301" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc" relationship="REFERENCES">
+      <point x="-90.14176457869718" y="92.21123536240293" />
+      <point x="189.27589349198257" y="195.6014285714286" />
+      <point x="189.15865536954493" y="195.6014285714286" />
+      <point x="-48.94051521353697" y="-88.39758654226239" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_tc" relationship="REFERENCES">
+      <point x="-113.00000000000006" y="12.5" />
+      <point x="127.5" y="-86.5" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_domain_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_tc" relationship="REFERENCES">
+      <point x="96.9997982309992" y="4.134577374657056E-4" />
+      <point x="1434.0" y="434.6550980966325" />
+      <point x="1434.0" y="150.079" />
+      <point x="121.4997982309992" y="1.9465147966002405E-4" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc" relationship="REFERENCES">
+      <point x="40.56940084548944" y="-82.93044368511949" />
+      <point x="278.66857142857134" y="220.74000000000012" />
+      <point x="279.41765807067975" y="220.74000000000012" />
+      <point x="279.41765807067975" y="177.29136089810794" />
+      <point x="996.0908923215296" y="177.29136089810794" />
+      <point x="4.6624159608654736E-5" y="-72.0004360819301" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_high_cmcd_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc" relationship="REFERENCES">
+      <point x="17.233444788376232" y="-39.497348268797055" />
+      <point x="-48.86603135597193" y="233.0" />
+      <point x="150.4201199630582" y="233.0" />
+      <point x="-87.6790506200237" y="-77.97683594682155" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="-1.1844329424093303E-4" y="50.00041345773758" />
+      <point x="1877.8300000000002" y="516.5520000000001" />
+      <point x="552.298" y="516.5520000000001" />
+      <point x="1.8268948804234242E-4" y="72.00041345773758" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_domain_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_tc" relationship="REFERENCES">
+      <point x="-98.49413744418825" y="38.5" />
+      <point x="0.0" y="-127.0" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_reg_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc" relationship="REFERENCES">
+      <point x="1.54302629994163E-4" y="149.00014285714272" />
+      <point x="4.6624159608654736E-5" y="-72.0004360819301" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_dict_tc" relationship="REFERENCES">
+      <point x="87.50004662415972" y="4.134577374657056E-4" />
+      <point x="996.09084569737" y="434.6550980966325" />
+      <point x="996.09084569737" y="402.95451244509513" />
+      <point x="996.091" y="402.95451244509513" />
+      <point x="1.54302629994163E-4" y="71.9995639180699" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="-29.254792285707822" y="50.4148571428571" />
+      <point x="552.68" y="-11.029142857142716" />
+      <point x="552.298" y="-11.029142857142716" />
+      <point x="1.8268948804234242E-4" y="-71.99958654226242" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_reg_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="4.6624159608654736E-5" y="-148.99978956653604" />
+      <point x="552.2978639346716" y="459.0" />
+      <point x="552.298" y="459.0" />
+      <point x="1.8268948804234242E-4" y="72.00041345773758" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_tc" relationship="REFERENCES">
+      <point x="-101.99988552540435" y="4.134577374657056E-4" />
+      <point x="1434.0" y="413.404" />
+      <point x="1434.0" y="150.079" />
+      <point x="121.4997982309992" y="1.9465147966002405E-4" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_high_cmcd_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_tc" relationship="REFERENCES">
+      <point x="137.5" y="0.0" />
+      <point x="-127.5" y="55.0" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="95.69297613792605" y="-19.46926511162519" />
+      <point x="552.298" y="515.8570492775102" />
+      <point x="1.8268948804234242E-4" y="72.00041345773758" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_reg_high_cmcd_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_cmcd_tc" relationship="REFERENCES">
+      <point x="-3.3322163665161497E-4" y="38.499571428571286" />
+      <point x="-47.59980936598481" y="233.0" />
+      <point x="150.4201199630582" y="233.0" />
+      <point x="-87.6790506200237" y="-82.90270966480148" />
+    </edge>
+    <edge source="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_domain_word_tc" target="939a5c8b-0af8-46b1-9bcb-a1da7a73d15b.TABLE:test.cc_word_tc" relationship="REFERENCES">
+      <point x="1.1447459564806195E-4" y="50.00041345773758" />
+      <point x="1593.7689999999998" y="516.5520000000001" />
+      <point x="552.298" y="516.5520000000001" />
+      <point x="1.8268948804234242E-4" y="72.00041345773758" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.6382882882882883" showDependencies="false" x="912.1354975299929" y="412.38335114426866" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

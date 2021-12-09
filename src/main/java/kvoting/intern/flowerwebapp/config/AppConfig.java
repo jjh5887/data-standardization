@@ -3,9 +3,9 @@ package kvoting.intern.flowerwebapp.config;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.domain.DomainService;
-import kvoting.intern.flowerwebapp.domain.registeration.DomainReg;
-import kvoting.intern.flowerwebapp.domain.registeration.DomainRegService;
-import kvoting.intern.flowerwebapp.domain.registeration.request.DomainRegistRequest;
+import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
+import kvoting.intern.flowerwebapp.domain.registration.DomainRegService;
+import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.type.ProcessType;
@@ -33,7 +33,7 @@ public class AppConfig {
         return new ModelMapper();
     }
 
-    @Bean
+    //    @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
             @Autowired

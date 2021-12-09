@@ -1,4 +1,4 @@
-package kvoting.intern.flowerwebapp.domain.registeration;
+package kvoting.intern.flowerwebapp.domain.registration;
 
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
@@ -27,16 +27,16 @@ public class DomainReg {
     @Embedded
     private DomainBase domainBase;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOMAIN_ID")
     private Domain domain;
 
     @Embedded
     private Registration registration;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
-    @JoinTable(name = "CC_DOMAIN_REG_WORD_CC",
+    @JoinTable(name = "CC_DOMAIN_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "DOMAIN_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words;

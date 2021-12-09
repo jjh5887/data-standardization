@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -43,16 +45,19 @@ class WordRegServiceTest {
         Word word = wordService.getWordByEng(request.getEngName());
         assertThat(wordReg.getWord()).isEqualTo(word);
         assertThat(word.getStatus()).isEqualTo(ProcessType.UNHANDLED);
-        assertThat(word.getWordRegs().size()).isEqualTo(1);
-        for (WordReg reg : word.getWordRegs()) {
+
+        List<WordReg> wordRegs = wordRegRepository.findAll();
+        assertThat(wordRegs.size()).isEqualTo(1);
+        for (WordReg reg : wordRegs) {
             assertThat(reg).isEqualTo(wordReg);
         }
 
         // When
         // delete word
-        wordRepository.delete(word);
+        wordService.deleteWord(word);
 
         // Then
+        assertThat(wordRepository.count()).isEqualTo(0L);
         assertThat(wordRegRepository.count()).isEqualTo(0L);
     }
 

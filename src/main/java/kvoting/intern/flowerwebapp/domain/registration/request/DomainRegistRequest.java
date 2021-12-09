@@ -1,4 +1,4 @@
-package kvoting.intern.flowerwebapp.domain.registeration.request;
+package kvoting.intern.flowerwebapp.domain.registration.request;
 
 import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.word.Word;

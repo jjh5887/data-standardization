@@ -25,7 +25,7 @@ public class WordReg {
     @Embedded
     private WordBase wordBase;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "WORD_ID")
     private Word word;
 

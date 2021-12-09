@@ -1,19 +1,21 @@
-package kvoting.intern.flowerwebapp.domain.registeration;
+package kvoting.intern.flowerwebapp.domain.registration;
 
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainService;
-import kvoting.intern.flowerwebapp.domain.registeration.request.DomainRegistRequest;
+import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
 import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.registration.RegistrationType;
 import kvoting.intern.flowerwebapp.type.ProcessType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DomainRegService {
     private final DomainRegRepository domainRegRepository;
     private final DomainService domainService;
@@ -71,7 +73,7 @@ public class DomainRegService {
                 Domain domain = domainService.getDomain(domainReg.getDomain().getId());
                 modelMapper.map(domainReg.getDomainBase(), domain);
                 domain.getWords().clear();
-                domain.getWords().addAll(domainReg.getWords());
+//                domain.getWords().addAll(domainReg.getWords());
                 domainService.save(domain);
                 domainReg.setDomain(domain);
             }

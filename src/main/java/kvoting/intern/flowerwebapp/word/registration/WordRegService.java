@@ -10,11 +10,13 @@ import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class WordRegService {
     private final WordRegRepository wordRegRepository;
     private final WordService wordService;

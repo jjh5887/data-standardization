@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.domain;
 
-import kvoting.intern.flowerwebapp.domain.registeration.DomainReg;
+import kvoting.intern.flowerwebapp.dict.Dict;
+import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
@@ -32,17 +33,19 @@ public class Domain {
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
 
-    @OneToMany(mappedBy = "domain", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "domain", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<DomainReg> domainRegs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
-    @JoinTable(name = "CC_DOMAIN_WORD_CC",
+    @JoinTable(name = "CC_DOMAIN_WORD_TC",
             joinColumns = @JoinColumn(name = "DOMAIN_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words = new ArrayList<>();
 
-    @PrePersist
+    @ManyToMany(mappedBy = "domains", fetch = FetchType.LAZY)
+    private Set<Dict> dicts = new HashSet<>();
+
     public void setUp() {
         String name = "";
         String engName = "";

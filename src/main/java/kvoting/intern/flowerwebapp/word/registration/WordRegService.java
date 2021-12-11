@@ -1,8 +1,8 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
+import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.registration.RegistrationType;
-import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordBase;
 import kvoting.intern.flowerwebapp.word.WordService;
@@ -35,6 +35,9 @@ public class WordRegService {
                 .status(ProcessType.UNHANDLED)
                 .wordRegs(new HashSet<>())
                 .domains(new HashSet<>())
+                .dicts(new HashSet<>())
+                .dictRegs(new HashSet<>())
+                .domainRegs(new HashSet<>())
                 .build();
         word = wordService.save(word);
 
@@ -103,7 +106,7 @@ public class WordRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .register("admin")
+                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();

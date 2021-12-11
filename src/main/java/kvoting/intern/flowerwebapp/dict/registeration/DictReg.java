@@ -38,14 +38,14 @@ public class DictReg {
     @Embedded
     private Registration registration;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
     @JoinTable(name = "CC_DICT_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "CC_DICT_REG_DOMAIN_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))

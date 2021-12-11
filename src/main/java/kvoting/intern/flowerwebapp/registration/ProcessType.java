@@ -1,4 +1,4 @@
-package kvoting.intern.flowerwebapp.type;
+package kvoting.intern.flowerwebapp.registration;
 
 public enum ProcessType {
     UNHANDLED, APPROVED, REJECTED

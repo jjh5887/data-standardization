@@ -1,7 +1,8 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
+import kvoting.intern.flowerwebapp.dict.DictRepository;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
-import kvoting.intern.flowerwebapp.type.ProcessType;
+import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordRepository;
 import kvoting.intern.flowerwebapp.word.WordService;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class WordRegServiceTest {
     @Autowired
     WordRegService wordRegService;
@@ -27,9 +29,12 @@ class WordRegServiceTest {
     WordRegRepository wordRegRepository;
     @Autowired
     DomainRepository domainRepository;
+    @Autowired
+    DictRepository dictRepository;
 
     @BeforeEach
     public void setUp() {
+        dictRepository.deleteAll();
         domainRepository.deleteAll();
         wordRepository.deleteAll();
     }
@@ -132,7 +137,7 @@ class WordRegServiceTest {
         // create
         WordRegistRequest request = makeRequest();
         WordReg wordReg = wordRegService.create(request);
-        Word word = wordService.getWord(wordReg.getWord().getId());
+        wordService.getWord(wordReg.getWord().getId());
         // modify
         String newName = "나테스트아님";
         request.setName(newName);
@@ -176,12 +181,12 @@ class WordRegServiceTest {
         // create
         WordRegistRequest request = makeRequest();
         WordReg wordReg = wordRegService.create(request);
-        Word word = wordService.getWord(wordReg.getWord().getId());
+        wordService.getWord(wordReg.getWord().getId());
         // delete
         WordReg savedModifyReg = wordRegService.delete(wordReg.getWord().getId());
 
         // approve
-        WordReg approvedWordReg = wordRegService.processWordReg(savedModifyReg.getId(), ProcessType.APPROVED);
+        wordRegService.processWordReg(savedModifyReg.getId(), ProcessType.APPROVED);
 
         // Then
         assertThat(wordRegRepository.count()).isEqualTo(0);
@@ -194,13 +199,13 @@ class WordRegServiceTest {
         // create
         WordRegistRequest request = makeRequest();
         WordReg wordReg = wordRegService.create(request);
-        Word word = wordService.getWord(wordReg.getWord().getId());
+        wordService.getWord(wordReg.getWord().getId());
 
         // delete
         WordReg savedModifyReg = wordRegService.delete(wordReg.getWord().getId());
 
         // reject
-        WordReg approvedWordReg = wordRegService.processWordReg(savedModifyReg.getId(), ProcessType.REJECTED);
+        wordRegService.processWordReg(savedModifyReg.getId(), ProcessType.REJECTED);
 
         // Then
         assertThat(wordRegRepository.count()).isEqualTo(2L);

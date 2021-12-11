@@ -1,17 +1,17 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
+import kvoting.intern.flowerwebapp.dict.DictRepository;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
+import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.DataType;
-import kvoting.intern.flowerwebapp.type.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordRepository;
 import kvoting.intern.flowerwebapp.word.WordService;
-import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import kvoting.intern.flowerwebapp.word.registration.WordRegService;
 import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest
 class DomainRegServiceTest {
     @Autowired
@@ -43,9 +43,12 @@ class DomainRegServiceTest {
     WordRepository wordRepository;
     @Autowired
     WordService wordService;
+    @Autowired
+    DictRepository dictRepository;
 
     @BeforeEach
     public void setUp() {
+        dictRepository.deleteAll();
         domainRepository.deleteAll();
         wordRepository.deleteAll();
     }
@@ -62,9 +65,6 @@ class DomainRegServiceTest {
 
         // Then
         Domain domain = domainService.getDomain(domainReg.getDomain().getId());
-        List<Word> domainWords = domain.getWords();
-//        List<Word> regWords = domainReg.getWords();
-//        assertThat(domainWords.size()).isEqualTo(regWords.size());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.UNHANDLED);
 
         // When
@@ -74,7 +74,7 @@ class DomainRegServiceTest {
         wordService.save(word);
         // Then
         Page<Domain> domainByName = domainService
-                .getDomainByEngName(word.getWordBase().getEngName(),
+                .getDomainByEngNameContains(word.getWordBase().getEngName(),
                         PageRequest.of(0, 10));
         assertThat(domainByName.getTotalElements()).isEqualTo(1L);
     }
@@ -181,16 +181,9 @@ class DomainRegServiceTest {
         Domain domain = domainService.getDomain(approvedReg.getDomain().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
         assertThat(domain.getDomainBase().getDescription()).isEqualTo(request.getDomainBase().getDescription());
-        List<Word> domainWords = domain.getWords();
-//        List<Word> approvedWords = approvedReg.getWords();
-
-//        for (int i = 0; i < domainWords.size(); i++) {
-//            assertThat(domainWords.get(i)).isEqualTo(approvedWords.get(i));
-//        }
     }
 
     @Test
-    @Transactional
     public void rejectModifyDomain() {
         // When
         // create
@@ -211,11 +204,7 @@ class DomainRegServiceTest {
         assertThat(domainRepository.count()).isEqualTo(1L);
 
         List<Word> domainWords = domain.getWords();
-//        List<Word> domainRegWords = domainReg.getWords();
         assertThat(domainWords.size()).isEqualTo(10);
-        for (int i = 0; i < domainWords.size(); i++) {
-//            assertThat(domainWords.get(i)).isEqualTo(domainRegWords.get(i));
-        }
     }
 
     @Test
@@ -286,9 +275,8 @@ class DomainRegServiceTest {
             requests.add(makeRequest(i));
         }
 
-        List<WordReg> wordRegs = new ArrayList<>();
         for (WordRegistRequest request : requests) {
-            wordRegs.add(wordRegService.create(request));
+            wordRegService.create(request);
         }
     }
 }

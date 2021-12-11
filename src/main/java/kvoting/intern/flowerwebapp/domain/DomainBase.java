@@ -24,10 +24,10 @@ public class DomainBase {
     private String engName;
     @Column(name = "DOMAIN_DESC_CONT")
     private String description;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "DBTYPE_TPCD")
     private DB db;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "DATATYPE_TPCD")
     private DataType dataType;
     @Column(name = "DOMAIN_SIZE")

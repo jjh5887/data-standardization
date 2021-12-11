@@ -3,9 +3,9 @@ package kvoting.intern.flowerwebapp.domain.registration;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
+import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.registration.RegistrationType;
-import kvoting.intern.flowerwebapp.type.ProcessType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,10 @@ public class DomainRegService {
         return domainRegRepository.findById(id).orElseThrow(() -> {
             throw new RuntimeException();
         });
+    }
+
+    public boolean exist(Long id) {
+        return domainRegRepository.existsById(id);
     }
 
     public DomainReg create(DomainRegistRequest request) {
@@ -73,7 +77,6 @@ public class DomainRegService {
                 Domain domain = domainService.getDomain(domainReg.getDomain().getId());
                 modelMapper.map(domainReg.getDomainBase(), domain);
                 domain.getWords().clear();
-//                domain.getWords().addAll(domainReg.getWords());
                 domainService.save(domain);
                 domainReg.setDomain(domain);
             }
@@ -101,9 +104,13 @@ public class DomainRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .register("admin")
+                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();
+    }
+
+    public DomainReg save(DomainReg domainReg) {
+        return domainRegRepository.save(domainReg);
     }
 }

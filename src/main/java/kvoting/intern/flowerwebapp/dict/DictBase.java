@@ -20,7 +20,10 @@ public class DictBase {
     private String engName;
     @Column(name = "DICT_SCR_NAME")
     private String screenName;
-
     @Column(name = "DICT_CMCD_YN")
     private Boolean isCommon;
+    @Column(name = "DICT_CASE")
+    private CaseStyle caseStyle;
+    @Column(name = "DICT_DESC_CONT")
+    private String description;
 }

@@ -1,7 +1,6 @@
 package kvoting.intern.flowerwebapp.registration;
 
 
-import kvoting.intern.flowerwebapp.type.ProcessType;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Registration {
     @Column(name = "REGT_NM")
-    private String register;
+    private String registrant;
     @Column(name = "STDZ_REG_TPCD")
     private RegistrationType registrationType;
     @Column(name = "REG_TM")
@@ -35,7 +34,7 @@ public class Registration {
     private String errorMessage;
 
     @PrePersist
-    public void made() {
+    public void registered() {
         if (dateRegistered == null) {
             dateRegistered = LocalDateTime.now();
         }

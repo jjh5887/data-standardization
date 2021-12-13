@@ -51,7 +51,7 @@ public class DictReg {
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     private Set<Domain> domains = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch =  FetchType.EAGER)
     @JoinColumn(name = "CMCD_ID")
     private CommonCode commonCode;
 }

@@ -1,6 +1,8 @@
 package kvoting.intern.flowerwebapp.word;
 
 
+import kvoting.intern.flowerwebapp.cmcd.CommonCode;
+import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.domain.Domain;
@@ -47,4 +49,10 @@ public class Word {
 
     @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
     Set<Dict> dicts = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    Set<CommonCode> commonCodes = new HashSet<>();
 }

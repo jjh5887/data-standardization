@@ -1,6 +1,11 @@
 package kvoting.intern.flowerwebapp.config;
 
+import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
+import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
+import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeRegService;
+import kvoting.intern.flowerwebapp.cmcd.registration.request.CmcdRegRequest;
 import kvoting.intern.flowerwebapp.dict.CaseStyle;
+import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictBase;
 import kvoting.intern.flowerwebapp.dict.DictService;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
@@ -68,6 +73,9 @@ public class AppConfig {
             @Autowired
             DictRegService dictRegService;
 
+            @Autowired
+            CommonCodeRegService commonCodeRegService;
+
             private WordRegistRequest makeWordRequest(String engName, String name, String orgEngName) {
                 return WordRegistRequest.builder()
                         .engName(engName)
@@ -107,6 +115,21 @@ public class AppConfig {
                         .screenName(snm)
                         .isCommon(false)
                         .caseStyle(cs)
+                        .build();
+            }
+
+            public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {
+                return CmcdRegRequest.builder()
+                        .commonCodeBase(generateCommonCodeBase())
+                        .words(words)
+                        .dict(dict)
+                        .build();
+            }
+
+            private CommonCodeBase generateCommonCodeBase() {
+                return CommonCodeBase.builder()
+                        .code("AO1")
+                        .description("this is test cmcd descritption")
                         .build();
             }
 
@@ -172,6 +195,14 @@ public class AppConfig {
                 dictRegService.create(dictRegistRequest);
                 DictRegistRequest mb_nm = makeDictRequest(List.of(mb, nm), CaseStyle.SNAKE, "회원 이름", List.of(num));
                 dictRegService.create(mb_nm);
+
+                Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
+                Word blb = wordService.getWordByEng("blb");
+                CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(blb), dict);
+                CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+
+                // approve
+                commonCodeRegService.processCommonCodeReg(commonCodeReg.getId(), ProcessType.APPROVED);
             }
         };
     }

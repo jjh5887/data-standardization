@@ -1,7 +1,6 @@
 package kvoting.intern.flowerwebapp.word;
 
 import kvoting.intern.flowerwebapp.dict.Dict;
-import kvoting.intern.flowerwebapp.dict.DictRepository;
 import kvoting.intern.flowerwebapp.dict.DictService;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;

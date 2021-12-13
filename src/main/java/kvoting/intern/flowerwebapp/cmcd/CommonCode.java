@@ -3,6 +3,7 @@ package kvoting.intern.flowerwebapp.cmcd;
 
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
+import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
@@ -29,16 +30,15 @@ public class CommonCode {
     @Embedded
     private CommonCodeBase commonCodeBase;
 
+    @Column(name = "STDZ_PROC_TPCD")
+    private ProcessType status;
+
     @OneToMany(mappedBy = "commonCode", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DICT_ID")
     private Dict dict;
-
-    @OneToOne
-    @JoinColumn(name = "HIGH_CMCD_ID")
-    private CommonCode highCommonCode;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
@@ -46,5 +46,14 @@ public class CommonCode {
             joinColumns = @JoinColumn(name = "CMCD_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words;
+
+    @PrePersist
+    public void setUp() {
+        String name = "";
+        for (Word word : words) {
+            name += word.getWordBase().getName() + " ";
+        }
+        this.commonCodeBase.setCodeName(name.substring(0, name.length() - 1));
+    }
 
 }

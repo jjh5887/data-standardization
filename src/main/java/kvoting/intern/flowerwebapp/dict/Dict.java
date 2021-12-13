@@ -36,6 +36,7 @@ public class Dict {
 
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
     @JoinTable(name = "CC_DICT_WORD_TC",
@@ -49,7 +50,7 @@ public class Dict {
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     private Set<Domain> domains = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "dict", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "CMCD_ID")
     private CommonCode commonCode;
 

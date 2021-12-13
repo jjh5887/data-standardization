@@ -18,8 +18,6 @@ public class CommonCodeBase {
     private String code;
     @Column(name = "CMCD_CD_NAME")
     private String codeName;
-    @Column(name = "CMCD_SCR_ORDR")
-    private int order;
     @Column(name = "CMCD_CD_DESC_CONT")
     private String description;
 }

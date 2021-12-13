@@ -3,10 +3,12 @@ package kvoting.intern.flowerwebapp.cmcd.registration;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.dict.Dict;
+import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "CC_CMCD_REG_TC")
@@ -27,6 +29,9 @@ public class CommonCodeReg {
     @Embedded
     private CommonCodeBase commonCodeBase;
 
+    @Embedded
+    private Registration registration;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     private Dict dict;
@@ -35,14 +40,20 @@ public class CommonCodeReg {
     @JoinColumn(name = "CMCD_ID")
     private CommonCode commonCode;
 
-    @OneToOne
-    @JoinColumn(name = "HIGH_CMCD_ID")
-    private CommonCode highCommonCode;
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
     @JoinTable(name = "CC_CMCD_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "CMCD_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words;
+
+    @PrePersist
+    public void setUp() {
+        if (words == null) return;
+        String name = "";
+        for (Word word : words) {
+            name += word.getWordBase().getName() + " ";
+        }
+        this.commonCodeBase.setCodeName(name.substring(0, name.length() - 1));
+    }
 }

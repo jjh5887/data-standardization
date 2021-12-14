@@ -36,7 +36,7 @@ public class CommonCode {
     @OneToMany(mappedBy = "commonCode", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     private Dict dict;
 

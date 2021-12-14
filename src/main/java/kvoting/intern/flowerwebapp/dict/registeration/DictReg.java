@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
+import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictBase;
@@ -9,6 +10,7 @@ import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,20 +40,32 @@ public class DictReg {
     @Embedded
     private Registration registration;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    private Account registrant;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    private Account processor;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DICT_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
-    private List<Word> words;
+    private List<Word> words = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "CC_DICT_REG_DOMAIN_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     private Set<Domain> domains = new HashSet<>();
 
-    @OneToOne(fetch =  FetchType.EAGER)
+    @OneToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "CMCD_ID")
     private CommonCode commonCode;
 }

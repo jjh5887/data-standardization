@@ -37,14 +37,14 @@ public class Dict {
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DICT_WORD_TC",
             joinColumns = @JoinColumn(name = "DICT_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     private List<Word> words = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "CC_DICT_DOMAIN_TC",
             joinColumns = @JoinColumn(name = "DICT_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))

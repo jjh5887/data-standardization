@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
+import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.dict.Dict;
@@ -32,6 +33,18 @@ public class CommonCodeReg {
     @Embedded
     private Registration registration;
 
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    private Account registrant;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    private Account processor;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     private Dict dict;
@@ -40,7 +53,7 @@ public class CommonCodeReg {
     @JoinColumn(name = "CMCD_ID")
     private CommonCode commonCode;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_CMCD_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "CMCD_REG_ID"),

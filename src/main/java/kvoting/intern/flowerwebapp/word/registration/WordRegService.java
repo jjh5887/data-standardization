@@ -29,35 +29,24 @@ public class WordRegService {
     }
 
     public WordReg create(WordRegistRequest request) {
-        // create mappedWord
         WordBase wordBase = modelMapper.map(request, WordBase.class);
-        Word word = Word.builder().wordBase(wordBase)
-                .status(ProcessType.UNHANDLED)
-                .wordRegs(new HashSet<>())
-                .domains(new HashSet<>())
-                .dicts(new HashSet<>())
-                .dictRegs(new HashSet<>())
-                .domainRegs(new HashSet<>())
-                .build();
+        Word word = new Word();
+        word.setWordBase(wordBase);
+        word.setStatus(ProcessType.UNHANDLED);
         word = wordService.save(word);
 
-        // create word create_reg
-        return wordRegRepository.save(generateWordReg(request, word, RegistrationType.CREATE));
+        return wordRegRepository.save(generateWordReg(request, word,
+                RegistrationType.CREATE));
     }
 
     public WordReg modify(WordRegistRequest request, Long id) {
-        // find word
         Word word = wordService.getWord(id);
-
-        // create word modify_reg
-        return wordRegRepository.save(generateWordReg(request, word, RegistrationType.MODIFY));
+        return wordRegRepository.save(generateWordReg(request, word,
+                RegistrationType.MODIFY));
     }
 
     public WordReg delete(Long id) {
-        // find word
         Word word = wordService.getWord(id);
-
-        // create word delete_reg
         return wordRegRepository.save(generateWordReg(word));
     }
 
@@ -106,7 +95,6 @@ public class WordRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();

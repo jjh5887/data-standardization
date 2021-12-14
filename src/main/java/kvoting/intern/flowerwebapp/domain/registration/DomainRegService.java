@@ -32,30 +32,24 @@ public class DomainRegService {
     }
 
     public DomainReg create(DomainRegistRequest request) {
-        // create mappedDomain
         Domain mappedDomain = modelMapper.map(request, Domain.class);
         mappedDomain.setStatus(ProcessType.UNHANDLED);
         mappedDomain.setDomainRegs(new HashSet<>());
         Domain domain = domainService.save(mappedDomain);
 
-        // create domain create_reg
         return domainRegRepository
-                .save(generateDomainReg(request, domain, RegistrationType.CREATE));
+                .save(generateDomainReg(request, domain,
+                        RegistrationType.CREATE));
     }
 
     public DomainReg modify(DomainRegistRequest request, Long id) {
-        // find domain
         Domain domain = domainService.getDomain(id);
-
-        // create domain modify_reg
-        return domainRegRepository.save(generateDomainReg(request, domain, RegistrationType.MODIFY));
+        return domainRegRepository.save(generateDomainReg(request, domain,
+                RegistrationType.MODIFY));
     }
 
     public DomainReg delete(Long id) {
-        // find domain
         Domain domain = domainService.getDomain(id);
-
-        // create domain delete_reg
         return domainRegRepository.save(generateDomainReg(domain));
     }
 
@@ -104,7 +98,6 @@ public class DomainRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();

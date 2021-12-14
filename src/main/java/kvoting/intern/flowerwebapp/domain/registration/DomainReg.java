@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
+import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.registration.Registration;
@@ -7,6 +8,7 @@ import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "CC_DOMAIN_REG_TC")
@@ -34,12 +36,24 @@ public class DomainReg {
     @Embedded
     private Registration registration;
 
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    private Account registrant;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    private Account processor;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DOMAIN_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "DOMAIN_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
-    private List<Word> words;
+    private List<Word> words = new ArrayList<>();
 
     @PrePersist
     public void setUp() {

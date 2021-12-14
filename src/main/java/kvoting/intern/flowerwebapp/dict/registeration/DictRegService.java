@@ -41,12 +41,14 @@ public class DictRegService {
         mappedDict.setDictRegs(new HashSet<>());
         Dict dict = dictService.save(mappedDict);
 
-        return dictRegRepository.save(generateDictReg(request, dict, RegistrationType.CREATE));
+        return dictRegRepository.save(generateDictReg(request, dict,
+                RegistrationType.CREATE));
     }
 
     public DictReg modify(DictRegistRequest request, Long id) {
         Dict dict = dictService.getDict(id);
-        return dictRegRepository.save(generateDictReg(request, dict, RegistrationType.MODIFY));
+        return dictRegRepository.save(generateDictReg(request, dict,
+                RegistrationType.MODIFY));
     }
 
     public DictReg delete(Long id) {
@@ -103,7 +105,6 @@ public class DictRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();

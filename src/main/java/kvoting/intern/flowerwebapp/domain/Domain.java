@@ -34,7 +34,7 @@ public class Domain {
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DOMAIN_WORD_TC",
             joinColumns = @JoinColumn(name = "DOMAIN_ID"),

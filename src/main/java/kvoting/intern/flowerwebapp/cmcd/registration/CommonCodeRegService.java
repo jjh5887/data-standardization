@@ -99,7 +99,6 @@ public class CommonCodeRegService {
 
     private Registration generateReg(RegistrationType type) {
         return Registration.builder()
-                .registrant("admin")
                 .registrationType(type)
                 .processType(ProcessType.UNHANDLED)
                 .build();

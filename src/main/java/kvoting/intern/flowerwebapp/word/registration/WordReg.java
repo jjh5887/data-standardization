@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
+import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordBase;
@@ -31,4 +32,16 @@ public class WordReg {
 
     @Embedded
     private Registration registration;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    private Account registrant;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
+            @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    private Account processor;
 }

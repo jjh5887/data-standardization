@@ -1,5 +1,8 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
+import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.account.AccountRepository;
+import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeRepository;
@@ -61,12 +64,19 @@ class CommonCodeRegServiceTest {
     @Autowired
     WordRepository wordRepository;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    AccountRepository accountRepository;
+
     @BeforeEach
     public void setUp() throws Exception {
         commonCodeRepository.deleteAll();
         dictRepository.deleteAll();
         domainRepository.deleteAll();
         wordRepository.deleteAll();
+        accountRepository.deleteAll();
         applicationRunner.run(null);
         commonCodeRepository.deleteAll();
     }
@@ -77,14 +87,16 @@ class CommonCodeRegServiceTest {
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
+
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
 
         // Then
         assertThat(commonCodeReg.getDict()).isEqualTo(dict);
-        dict = dictService.getDict(dict.getId());
-        CommonCode commonCode = commonCodeService.getCommonCode(commonCodeReg.getCommonCode().getId());
+        dict = dictService.get(dict.getId());
+        CommonCode commonCode = commonCodeService.get(commonCodeReg.getCommonCode().getId());
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
         assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
@@ -94,26 +106,29 @@ class CommonCodeRegServiceTest {
     }
 
     @Test
-    public void registModifyCmcd() {
+    public void registModifyCmcd() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // modify
         cmcdRegRequest.getCommonCodeBase().setCode("B01");
         Word clb = wordService.getWordByEng("clb");
         cmcdRegRequest.setWords(List.of(clb));
-        CommonCodeReg modify = commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId());
+        CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId(), account);
 
         // Then
-        assertThat(commonCodeRegService.getCommonCodeReg(modify.getId()).getCommonCodeBase().getCodeName()).isEqualTo(clb.getWordBase().getName());
+        CommonCodeReg modifyReg = (CommonCodeReg) commonCodeRegService.getRegistration(modify.getId());
+
+        assertThat(modifyReg.getCommonCodeBase().getCodeName()).isEqualTo(clb.getWordBase().getName());
         assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 
-        dict = dictService.getDict(dict.getId());
-        CommonCode commonCode = commonCodeService.getCommonCode(commonCodeReg.getCommonCode().getId());
+        dict = dictService.get(dict.getId());
+        CommonCode commonCode = commonCodeService.get(commonCodeReg.getCommonCode().getId());
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
         assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
         assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
@@ -127,11 +142,12 @@ class CommonCodeRegServiceTest {
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // delete
-        commonCodeRegService.delete(commonCodeReg.getCommonCode().getId());
+        commonCodeRegService.delete(commonCodeReg.getCommonCode().getId(), account);
 
         // Then
         assertThat(commonCodeRegRepository.count()).isEqualTo(2L);
@@ -139,8 +155,8 @@ class CommonCodeRegServiceTest {
 
 
         assertThat(commonCodeReg.getDict()).isEqualTo(dict);
-        dict = dictService.getDict(dict.getId());
-        CommonCode commonCode = commonCodeService.getCommonCode(commonCodeReg.getCommonCode().getId());
+        dict = dictService.get(dict.getId());
+        CommonCode commonCode = commonCodeService.get(commonCodeReg.getCommonCode().getId());
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
         assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
@@ -150,21 +166,22 @@ class CommonCodeRegServiceTest {
     }
 
     @Test
-    public void approveCreateCmcd() {
+    public void approveCreateCmcd() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // approve
-        commonCodeRegService.processCommonCodeReg(commonCodeReg.getId(), ProcessType.APPROVED);
+        commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
 
         // Then
         assertThat(commonCodeReg.getDict()).isEqualTo(dict);
-        dict = dictService.getDict(dict.getId());
-        CommonCode commonCode = commonCodeService.getCommonCode(commonCodeReg.getCommonCode().getId());
+        dict = dictService.get(dict.getId());
+        CommonCode commonCode = commonCodeService.get(commonCodeReg.getCommonCode().getId());
 
         assertThat(commonCodeRepository.count()).isEqualTo(1L);
         assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
@@ -178,21 +195,22 @@ class CommonCodeRegServiceTest {
     }
 
     @Test
-    public void rejectCreateCmcd() {
+    public void rejectCreateCmcd() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // reject
-        commonCodeRegService.processCommonCodeReg(commonCodeReg.getId(), ProcessType.REJECTED);
+        commonCodeRegService.process(commonCodeReg.getId(), ProcessType.REJECTED, account);
 
         // Then
         assertThat(commonCodeReg.getDict()).isEqualTo(dict);
-        dict = dictService.getDict(dict.getId());
-        CommonCode commonCode = commonCodeService.getCommonCode(commonCodeReg.getCommonCode().getId());
+        dict = dictService.get(dict.getId());
+        CommonCode commonCode = commonCodeService.get(commonCodeReg.getCommonCode().getId());
 
         assertThat(commonCodeRepository.count()).isEqualTo(1L);
         assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
@@ -206,67 +224,70 @@ class CommonCodeRegServiceTest {
     }
 
     @Test
-    public void approveModifyCmcd() {
+    public void approveModifyCmcd() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        Account account = accountService.getAccount("test@test.com");
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // modify
         cmcdRegRequest.getCommonCodeBase().setCode("B01");
         Word clb = wordService.getWordByEng("clb");
         cmcdRegRequest.setWords(List.of(clb));
-        CommonCodeReg modify = commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId());
+        CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId(), account);
 
         // approve
-        commonCodeRegService.processCommonCodeReg(modify.getId(), ProcessType.APPROVED);
+        commonCodeRegService.process(modify.getId(), ProcessType.APPROVED, account);
 
         // Then
-        CommonCode commonCode = commonCodeService.getCommonCode(modify.getCommonCode().getId());
+        CommonCode commonCode = commonCodeService.get(modify.getCommonCode().getId());
         assertThat(commonCode.getCommonCodeBase().getCode()).isEqualTo(cmcdRegRequest.getCommonCodeBase().getCode());
         assertThat(commonCode.getCommonCodeBase().getCodeName()).isEqualTo(clb.getWordBase().getName());
     }
 
     @Test
-    public void rejectModifyCmcd() {
+    public void rejectModifyCmcd() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // modify
         cmcdRegRequest.getCommonCodeBase().setCode("B01");
         Word clb = wordService.getWordByEng("clb");
         cmcdRegRequest.setWords(List.of(clb));
-        CommonCodeReg modify = commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId());
+        CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getCommonCode().getId(), account);
 
         // reject
-        commonCodeRegService.processCommonCodeReg(modify.getId(), ProcessType.REJECTED);
+        commonCodeRegService.process(modify.getId(), ProcessType.REJECTED, account);
 
         // Then
-        CommonCode commonCode = commonCodeService.getCommonCode(modify.getCommonCode().getId());
+        CommonCode commonCode = commonCodeService.get(modify.getCommonCode().getId());
         assertThat(commonCode.getCommonCodeBase().getCode()).isNotEqualTo(cmcdRegRequest.getCommonCodeBase().getCode());
         assertThat(commonCode.getCommonCodeBase().getCodeName()).isEqualTo(word.getWordBase().getName());
     }
 
     @Test
-    public void approveDeleteCommonCode() {
+    public void approveDeleteCommonCode() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // delete
-        CommonCodeReg delete = commonCodeRegService.delete(commonCodeReg.getCommonCode().getId());
+        CommonCodeReg delete = (CommonCodeReg) commonCodeRegService.delete(commonCodeReg.getCommonCode().getId(), account);
 
         // approve
-        commonCodeRegService.processCommonCodeReg(delete.getId(), ProcessType.APPROVED);
+        commonCodeRegService.process(delete.getId(), ProcessType.APPROVED, account);
 
         // Then
         assertThat(commonCodeRegRepository.count()).isEqualTo(0L);
@@ -274,26 +295,27 @@ class CommonCodeRegServiceTest {
     }
 
     @Test
-    public void rejectDeleteCommonCode() {
+    public void rejectDeleteCommonCode() throws Throwable {
         // When
         // create
         Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
         Word word = wordService.getWordByEng("blb");
+        Account account = accountService.getAccount("test@test.com");
         CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-        CommonCodeReg commonCodeReg = commonCodeRegService.create(cmcdRegRequest);
+        CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
         // delete
-        CommonCodeReg delete = commonCodeRegService.delete(commonCodeReg.getCommonCode().getId());
+        CommonCodeReg delete = (CommonCodeReg) commonCodeRegService.delete(commonCodeReg.getCommonCode().getId(), account);
 
         // reject
-        commonCodeRegService.processCommonCodeReg(delete.getId(), ProcessType.REJECTED);
+        commonCodeRegService.process(delete.getId(), ProcessType.REJECTED, account);
 
         // Then
         assertThat(commonCodeRegRepository.count()).isEqualTo(2L);
         assertThat(commonCodeRepository.count()).isEqualTo(1L);
 
-        CommonCodeReg rejectedReg = commonCodeRegService.getCommonCodeReg(delete.getId());
-        assertThat(rejectedReg.getRegistration().getProcessType()).isEqualTo(ProcessType.REJECTED);
+        CommonCodeReg rejectedReg = (CommonCodeReg) commonCodeRegService.getRegistration(delete.getId());
+        assertThat(rejectedReg.getProcessType()).isEqualTo(ProcessType.REJECTED);
     }
 
     public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {

@@ -1,6 +1,6 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import kvoting.intern.flowerwebapp.registration.RegistrationRepository;
 
-public interface WordRegRepository extends JpaRepository<WordReg, Long> {
+public interface WordRegRepository extends RegistrationRepository<WordReg> {
 }

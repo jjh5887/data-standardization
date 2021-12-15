@@ -1,7 +1,7 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import kvoting.intern.flowerwebapp.registration.RegistrationRepository;
 
-public interface DictRegRepository extends JpaRepository<DictReg, Long> {
+public interface DictRegRepository extends RegistrationRepository<DictReg> {
 
 }

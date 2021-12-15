@@ -5,8 +5,6 @@ import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
-import kvoting.intern.flowerwebapp.domain.Domain;
-import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.registration.ProcessType;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import lombok.*;
@@ -37,12 +35,6 @@ public class Word {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "word", cascade = CascadeType.REMOVE)
     private Set<WordReg> wordRegs = new HashSet<>();
-
-    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
-    Set<DomainReg> domainRegs = new HashSet<>();
-
-    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
-    Set<Domain> domains = new HashSet<>();
 
     @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
     Set<DictReg> dictRegs = new HashSet<>();

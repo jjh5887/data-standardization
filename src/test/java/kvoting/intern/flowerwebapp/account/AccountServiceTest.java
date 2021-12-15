@@ -23,6 +23,7 @@ class AccountServiceTest {
 
     @Test
     public void test() {
+        accountService.delete(AccountDeleteRequest.builder().password("1234").build(), "test@test.com");
         AccountCreateRequest accountCreateRequest = generateCreateRequest("test@test.com", "1234", "테스트", "테스트 부서");
         Account savedAccount = accountService.create(accountCreateRequest);
         assertThat(accountRepository.count()).isEqualTo(1L);

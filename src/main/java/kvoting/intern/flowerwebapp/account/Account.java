@@ -1,9 +1,6 @@
 package kvoting.intern.flowerwebapp.account;
 
-import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
-import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
-import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
-import kvoting.intern.flowerwebapp.word.registration.WordReg;
+import kvoting.intern.flowerwebapp.registration.Registration;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +30,7 @@ public class Account implements UserDetails {
 
     @Column(name = "USER_EMAIL")
     private String email;
-    @Column(name = "USER_PASS")
+    @Column(name = "USER_PASS", length = 500)
     private String password;
     @Column(name = "USER_NM")
     private String name;
@@ -45,29 +42,10 @@ public class Account implements UserDetails {
     private Set<AccountRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "registrant", fetch = FetchType.LAZY)
-    private Set<WordReg> wordRegs = new HashSet<>();
+    private Set<Registration> Regs = new HashSet<>();
 
     @OneToMany(mappedBy = "processor", fetch = FetchType.LAZY)
-    private Set<WordReg> processWordRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "registrant", fetch = FetchType.LAZY)
-    private Set<DomainReg> domainRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "processor", fetch = FetchType.LAZY)
-    private Set<DomainReg> processDomainRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "registrant", fetch = FetchType.LAZY)
-    private Set<DictReg> dictRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "processor", fetch = FetchType.LAZY)
-    private Set<DictReg> processDictRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "registrant", fetch = FetchType.LAZY)
-    private Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
-
-    @OneToMany(mappedBy = "processor", fetch = FetchType.LAZY)
-    private Set<CommonCodeReg> processCommonCodeRegs = new HashSet<>();
-
+    private Set<Registration> processRegs = new HashSet<>();
 
     public void addRole(AccountRole role) {
         roles.add(role);

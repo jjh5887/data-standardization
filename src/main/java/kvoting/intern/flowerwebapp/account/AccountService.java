@@ -4,8 +4,10 @@ import kvoting.intern.flowerwebapp.account.request.AccountCreateRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountDeleteRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountLoginRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountUpdateRequest;
+import kvoting.intern.flowerwebapp.registration.Registration;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +25,6 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     public Account save(Account account) {
-        account.encodePassword(passwordEncoder);
         return accountRepository.save(account);
     }
 
@@ -33,15 +34,26 @@ public class AccountService implements UserDetailsService {
         }
         Account account = modelMapper.map(request, Account.class);
         account.addRole(AccountRole.USER);
+        account.encodePassword(passwordEncoder);
         return save(account);
     }
 
+    @Transactional(readOnly = true)
+    public Account getDetail(Long id) {
+        Account account = getAccount(id);
+        Hibernate.initialize(account.getRegs());
+        Hibernate.initialize(account.getProcessRegs());
+        return account;
+    }
+
+    @Transactional(readOnly = true)
     public Account getAccount(String email) {
         return accountRepository.findByEmail(email).orElseThrow(() -> {
             throw new RuntimeException();
         });
     }
 
+    @Transactional(readOnly = true)
     public Account getAccount(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> {
             throw new RuntimeException();
@@ -56,9 +68,11 @@ public class AccountService implements UserDetailsService {
         modelMapper.map(request, account);
         if (request.getNewPassword() != null)
             account.setPassword(request.getNewPassword());
+        account.encodePassword(passwordEncoder);
         return save(account);
     }
 
+    @Transactional(readOnly = true)
     public boolean login(AccountLoginRequest request) {
         Account account = getAccount(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), account.getPassword())) {
@@ -72,6 +86,13 @@ public class AccountService implements UserDetailsService {
         if (!passwordEncoder.matches(request.getPassword(), account.getPassword())) {
             throw new RuntimeException();
         }
+        for (Registration reg : account.getRegs()) {
+            reg.setRegistrant(null);
+        }
+        for (Registration processReg : account.getProcessRegs()) {
+            processReg.setProcessor(null);
+        }
+
         accountRepository.delete(account);
     }
 

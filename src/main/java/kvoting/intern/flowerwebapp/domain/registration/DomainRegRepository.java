@@ -1,6 +1,6 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import kvoting.intern.flowerwebapp.registration.RegistrationRepository;
 
-public interface DomainRegRepository extends JpaRepository<DomainReg, Long> {
+public interface DomainRegRepository extends RegistrationRepository<DomainReg> {
 }

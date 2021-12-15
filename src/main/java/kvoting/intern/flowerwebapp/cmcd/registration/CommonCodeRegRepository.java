@@ -1,6 +1,6 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import kvoting.intern.flowerwebapp.registration.RegistrationRepository;
 
-public interface CommonCodeRegRepository extends JpaRepository<CommonCodeReg, Long> {
+public interface CommonCodeRegRepository extends RegistrationRepository<CommonCodeReg> {
 }

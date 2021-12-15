@@ -1,5 +1,8 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
+import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.account.AccountRepository;
+import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.dict.*;
 import kvoting.intern.flowerwebapp.dict.registeration.request.DictRegistRequest;
 import kvoting.intern.flowerwebapp.domain.Domain;
@@ -24,7 +27,6 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class DictRegServiceTest {
 
     @Autowired
@@ -54,11 +56,18 @@ class DictRegServiceTest {
     @Autowired
     ApplicationRunner applicationRunner;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    AccountRepository accountRepository;
+
     @BeforeEach
     public void setUp() throws Exception {
         dictRepository.deleteAll();
         domainRepository.deleteAll();
         wordRepository.deleteAll();
+        accountRepository.deleteAll();
         applicationRunner.run(null);
         dictRepository.deleteAll();
     }
@@ -72,6 +81,7 @@ class DictRegServiceTest {
         Word nm = wordService.getWordByEng("nm");
         Word mb = wordService.getWordByEng("mb");
 
+
         // getDomains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
@@ -79,10 +89,11 @@ class DictRegServiceTest {
         Domain num = numDomains.getContent().get(0);
 
         // create dict_reg
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        dictRegService.create(dictRegistRequest);
+        dictRegService.create(dictRegistRequest, account);
         DictRegistRequest mb_nm = makeDictRequest(List.of(mb, nm), CaseStyle.SNAKE, "회원 이름", List.of(num));
-        dictRegService.create(mb_nm);
+        dictRegService.create(mb_nm, account);
 
         // Then
         assertThat(dictRepository.count()).isEqualTo(2L);
@@ -95,7 +106,7 @@ class DictRegServiceTest {
 
         // When
         // update word
-        Word word = wordService.getWord(pass.getId());
+        Word word = wordService.get(pass.getId());
         word.getWordBase().setEngName("password");
         Word save = wordService.save(word);
 
@@ -112,7 +123,7 @@ class DictRegServiceTest {
 
         // When
         // delete some words of dict
-        wordService.deleteWord(save);
+        wordService.delete(save);
         assertThat(dictRepository.count()).isEqualTo(2L);
 
         // Then word has also been deleted
@@ -124,7 +135,7 @@ class DictRegServiceTest {
 
         // When
         // delete all words of dict
-        wordService.deleteWord(us);
+        wordService.delete(us);
 
         // Then
         // The Dict has also deleted
@@ -153,16 +164,18 @@ class DictRegServiceTest {
         Domain num = numDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // modify
         dictRegistRequest.setWords(List.of(nm, pass));
         dictRegistRequest.setDomains(List.of(num));
-        DictReg modify = dictRegService.modify(dictRegistRequest, dictReg.getDict().getId());
+        DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getDict().getId(), account);
 
         // Then
         Dict dict = modify.getDict();
+        dict = dictService.getDetail(dict.getId());
         assertThat(dictRepository.count()).isEqualTo(1L);
         assertThat(dictRegRepository.count()).isEqualTo(2L);
         // before dict info
@@ -185,11 +198,12 @@ class DictRegServiceTest {
         Domain var = varDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // delete
-        dictRegService.delete(dictReg.getDict().getId());
+        dictRegService.delete(dictReg.getDict().getId(), account);
 
         // Then
         assertThat(dictRepository.count()).isEqualTo(1L);
@@ -197,7 +211,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void approveCreateDict() {
+    public void approveCreateDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -208,11 +222,12 @@ class DictRegServiceTest {
         Domain var = varDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // approve
-        dictRegService.processDictReg(dictReg.getId(), ProcessType.APPROVED);
+        dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
 
         // Then
         assertThat(dictRegRepository.count()).isEqualTo(1L);
@@ -220,7 +235,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void rejectCreateDict() {
+    public void rejectCreateDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -231,11 +246,12 @@ class DictRegServiceTest {
         Domain var = varDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // delete
-        dictRegService.processDictReg(dictReg.getId(), ProcessType.REJECTED);
+        dictRegService.process(dictReg.getId(), ProcessType.REJECTED, account);
 
         // Then
         assertThat(dictRegRepository.count()).isEqualTo(1L);
@@ -243,7 +259,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void approveModifyDict() {
+    public void approveModifyDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -257,19 +273,20 @@ class DictRegServiceTest {
         Domain num = numDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // modify
         dictRegistRequest.setWords(Arrays.asList(nm, pass));
         dictRegistRequest.setDomains(List.of(num));
-        DictReg modify = dictRegService.modify(dictRegistRequest, dictReg.getDict().getId());
+        DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getDict().getId(), account);
 
         // approve
-        dictRegService.processDictReg(modify.getId(), ProcessType.APPROVED);
+        dictRegService.process(modify.getId(), ProcessType.APPROVED, account);
 
         // Then
-        Dict dict = dictService.getDict(modify.getDict().getId());
+        Dict dict = dictService.getDetail(modify.getDict().getId());
         assertThat(dictRepository.count()).isEqualTo(1L);
         assertThat(dictRegRepository.count()).isEqualTo(2L);
         // before dict info
@@ -281,7 +298,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void rejectModifyDict() {
+    public void rejectModifyDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -295,18 +312,20 @@ class DictRegServiceTest {
         Domain num = numDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         // modify
         dictRegistRequest.setWords(List.of(nm, pass));
         dictRegistRequest.setDomains(List.of(num));
-        DictReg modify = dictRegService.modify(dictRegistRequest, dictReg.getDict().getId());
+        DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getDict().getId(), account);
 
         // reject
-        dictRegService.processDictReg(modify.getId(), ProcessType.REJECTED);
+        dictRegService.process(modify.getId(), ProcessType.REJECTED, account);
 
         // Then
         Dict dict = modify.getDict();
+        dict = dictService.getDetail(dict.getId());
         assertThat(dictRepository.count()).isEqualTo(1L);
         assertThat(dictRegRepository.count()).isEqualTo(2L);
         // before dict info
@@ -318,7 +337,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void approveDeleteDict() {
+    public void approveDeleteDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -329,14 +348,15 @@ class DictRegServiceTest {
         Domain var = varDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // delete
-        DictReg delete = dictRegService.delete(dictReg.getDict().getId());
+        DictReg delete = (DictReg) dictRegService.delete(dictReg.getDict().getId(), account);
 
         // approve
-        dictRegService.processDictReg(delete.getId(), ProcessType.APPROVED);
+        dictRegService.process(delete.getId(), ProcessType.APPROVED, account);
 
         // Then
         assertThat(dictRepository.count()).isEqualTo(0L);
@@ -344,7 +364,7 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void rejectDeleteDict() {
+    public void rejectDeleteDict() throws Throwable {
         // When
         // get words
         Word pass = wordService.getWordByEng("pass");
@@ -355,20 +375,20 @@ class DictRegServiceTest {
         Domain var = varDomains.getContent().get(0);
 
         // create
+        Account account = accountService.getAccount("test@test.com");
         DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-        DictReg dictReg = dictRegService.create(dictRegistRequest);
+        DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // delete
-        DictReg delete = dictRegService.delete(dictReg.getDict().getId());
+        DictReg delete = (DictReg) dictRegService.delete(dictReg.getDict().getId(), account);
 
         // reject
-        dictRegService.processDictReg(delete.getId(), ProcessType.REJECTED);
+        dictRegService.process(delete.getId(), ProcessType.REJECTED, account);
 
         // Then
         assertThat(dictRepository.count()).isEqualTo(1L);
         assertThat(dictRegRepository.count()).isEqualTo(2L);
     }
-
 
     private DictRegistRequest makeDictRequest(List<Word> words, CaseStyle cs, String nm, List<Domain> domains) {
         return DictRegistRequest.builder()

@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Builder
 public class CmcdRegRequest {
-    private CommonCodeBase commonCodeBase;
+    private CommonCodeBase base;
     private List<Word> words;
     private Dict dict;
 }

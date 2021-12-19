@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @Builder
 public class DomainRegistRequest {
-    private DomainBase domainBase;
+    private DomainBase base;
 }

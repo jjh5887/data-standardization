@@ -4,6 +4,8 @@ import kvoting.intern.flowerwebapp.account.request.AccountCreateRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountDeleteRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountLoginRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountUpdateRequest;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.item.registration.RegistrationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +22,9 @@ class AccountServiceTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    RegistrationRepository registrationRepository;
 
     @Test
     public void test() {
@@ -38,13 +43,29 @@ class AccountServiceTest {
         accountService.updateAccount(accountUpdateRequest, account.getId());
 
         assertThat(accountRepository.count()).isEqualTo(1L);
-        assertThrows(RuntimeException.class, () -> {
-            accountService.getAccount(accountCreateRequest.getEmail());
-        });
+        assertThrows(RuntimeException.class, () -> accountService.getAccount(accountCreateRequest.getEmail()));
 
         accountService.delete(generateDeleteRequest(accountUpdateRequest.getPassword()), accountUpdateRequest.getEmail());
         assertThat(accountRepository.count()).isEqualTo(0L);
+        assertThat(registrationRepository.count()).isNotEqualTo(0L);
 
+        for (Object reg : registrationRepository.findAll()) {
+            assertThat(((Registration) reg).getRegistrant()).isEqualTo(null);
+            assertThat(((Registration) reg).getProcessor()).isEqualTo(null);
+        }
+    }
+
+    @Test
+    public void detailTest() {
+        Account account = accountService.getAccount("test@test.com");
+        Account detail = accountService.getDetail(account.getId());
+        System.out.println(detail.getRegs().size());
+        System.out.println(detail.getProcessRegs().size());
+
+        for (Object reg : registrationRepository.findAll()) {
+            assertThat(((Registration) reg).getRegistrant()).isEqualTo(account);
+            assertThat(((Registration) reg).getProcessor() == null || ((Registration) reg).getProcessor().equals(account)).isEqualTo(true);
+        }
     }
 
     public AccountCreateRequest generateCreateRequest(String email, String password, String name, String department) {

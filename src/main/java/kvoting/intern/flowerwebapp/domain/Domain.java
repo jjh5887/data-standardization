@@ -1,9 +1,12 @@
 package kvoting.intern.flowerwebapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
-import kvoting.intern.flowerwebapp.registration.ProcessType;
+import kvoting.intern.flowerwebapp.item.Item;
+import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Domain {
+public class Domain implements Item {
 
     @Id
     @Column(name = "DOMAIN_ID")
@@ -31,12 +34,15 @@ public class Domain {
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
 
-    @OneToMany(mappedBy = "domain", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Set<DomainReg> domainRegs = new HashSet<>();
 
-    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "domains", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     Set<DictReg> dictRegs = new HashSet<>();
 
     @ManyToMany(mappedBy = "domains", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Set<Dict> dicts = new HashSet<>();
 }

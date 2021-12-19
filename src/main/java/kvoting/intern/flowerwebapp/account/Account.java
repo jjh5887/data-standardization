@@ -1,6 +1,8 @@
 package kvoting.intern.flowerwebapp.account;
 
-import kvoting.intern.flowerwebapp.registration.Registration;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,12 +21,11 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 public class Account implements UserDetails {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     @Column(name = "USER_ID")
     private Long id;
 
@@ -42,9 +43,11 @@ public class Account implements UserDetails {
     private Set<AccountRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "registrant", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Set<Registration> Regs = new HashSet<>();
 
     @OneToMany(mappedBy = "processor", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Set<Registration> processRegs = new HashSet<>();
 
     public void addRole(AccountRole role) {

@@ -1,8 +1,12 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
-import kvoting.intern.flowerwebapp.registration.Registration;
+import kvoting.intern.flowerwebapp.domain.serializer.DomainSerializer;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,30 +22,36 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "DOMAIN")
-public class DomainReg extends Registration {
+public class DomainReg extends Registration<Domain, DomainBase> {
     @Embedded
-    private DomainBase domainBase;
+    private DomainBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOMAIN_ID")
-    private Domain domain;
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonSerialize(using = DomainSerializer.class)
+    private Domain item;
 
     @Override
     public void registered() {
         super.registered();
-        if (domainBase == null) {
+        if (base == null) {
             return;
         }
-        String name = domainBase.getDataType().toString() + domainBase.getSize();
-        if (domainBase.getScale() > 0) {
-            name += "." + domainBase.getScale();
+        String name = base.getDataType().toString();
+        if (base.getSize() != null) {
+            name += base.getSize();
         }
-        if (!domainBase.getNullable()) {
-            name += "NN";
-        } else {
-            name += "NY";
+        if (base.getScale() != null) {
+            name += "." + base.getScale();
         }
-
-        domainBase.setEngName(name);
+        if (base.getNullable() != null) {
+            if (!base.getNullable()) {
+                name += "NN";
+            } else {
+                name += "NY";
+            }
+        }
+        base.setName(name);
     }
 }

@@ -18,8 +18,8 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 @lombok.Data
 public class DomainBase {
-    @Column(name = "DOMAIN_ENG_NAME")
-    private String engName;
+    @Column(name = "DOMAIN_NAME")
+    private String name;
     @Column(name = "DOMAIN_DESC_CONT")
     private String description;
     @Enumerated(EnumType.STRING)

@@ -1,4 +1,4 @@
-package kvoting.intern.flowerwebapp.registration;
+package kvoting.intern.flowerwebapp.item.registration;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

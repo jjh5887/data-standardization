@@ -1,13 +1,9 @@
 package kvoting.intern.flowerwebapp.dict;
 
-import kvoting.intern.flowerwebapp.dict.registeration.request.DictRegistRequest;
-import kvoting.intern.flowerwebapp.registration.ItemService;
-import kvoting.intern.flowerwebapp.registration.ProcessType;
+import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordRepository;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,26 +15,28 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class DictService implements ItemService<Dict, DictRegistRequest> {
-    private final DictRepository dictRepository;
+public class DictService extends ItemServiceImpl<Dict> {
     private final WordRepository wordRepository;
-    private final ModelMapper modelMapper;
+
+    public DictService(DictRepository dictRepository, WordRepository wordRepository) {
+        super(dictRepository);
+        this.wordRepository = wordRepository;
+    }
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByName(String name, Pageable pageable) {
-        return dictRepository.findByDictBase_NameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByDictBase_NameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByEngName(String name, Pageable pageable) {
-        return dictRepository.findByDictBase_EngNameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByDictBase_EngNameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByScreenName(String name, Pageable pageable) {
-        return dictRepository.findByDictBase_ScreenNameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByDictBase_ScreenNameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -58,43 +56,8 @@ public class DictService implements ItemService<Dict, DictRegistRequest> {
     public Dict getDetail(Long id) {
         Dict dict = get(id);
         Hibernate.initialize(dict.getWords());
+        Hibernate.initialize(dict.getDictRegs());
         Hibernate.initialize(dict.getDomains());
         return dict;
     }
-
-    public void delete(Long id) {
-        dictRepository.delete(get(id));
-    }
-
-    @Override
-    public void delete(Dict dict) {
-        dictRepository.delete(dict);
-    }
-
-    @Override
-    public void setStatus(Dict item, ProcessType type) {
-        item.setStatus(type);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Dict get(Long id) {
-        return dictRepository.findById(id).orElseThrow(() -> {
-            throw new RuntimeException();
-        });
-    }
-
-    @Override
-    public Dict map(DictRegistRequest request) {
-        Dict map = modelMapper.map(request, Dict.class);
-        map.setStatus(ProcessType.UNHANDLED);
-        map.setDictRegs(new HashSet<>());
-        return map;
-    }
-
-    @Override
-    public Dict save(Dict dict) {
-        return dictRepository.save(dict);
-    }
-
 }

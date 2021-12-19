@@ -8,10 +8,24 @@ import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeRegService;
 import kvoting.intern.flowerwebapp.cmcd.registration.request.CmcdRegRequest;
+import kvoting.intern.flowerwebapp.constraint.Constraint;
+import kvoting.intern.flowerwebapp.constraint.ConstraintBase;
+import kvoting.intern.flowerwebapp.constraint.ConstraintService;
+import kvoting.intern.flowerwebapp.constraint.registration.ConstraintReg;
+import kvoting.intern.flowerwebapp.constraint.registration.ConstraintRegService;
+import kvoting.intern.flowerwebapp.constraint.registration.request.ConstraintRegRequest;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomainBase;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomainService;
+import kvoting.intern.flowerwebapp.ctdomain.InputType;
+import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainReg;
+import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainRegService;
+import kvoting.intern.flowerwebapp.ctdomain.registration.request.CustomDomainRegRequest;
 import kvoting.intern.flowerwebapp.dict.CaseStyle;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictBase;
 import kvoting.intern.flowerwebapp.dict.DictService;
+import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
 import kvoting.intern.flowerwebapp.dict.registeration.request.DictRegistRequest;
 import kvoting.intern.flowerwebapp.domain.Domain;
@@ -21,10 +35,10 @@ import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.domain.registration.DomainRegService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
-import kvoting.intern.flowerwebapp.registration.ProcessType;
-import kvoting.intern.flowerwebapp.registration.Registration;
-import kvoting.intern.flowerwebapp.registration.RegistrationRepository;
-import kvoting.intern.flowerwebapp.registration.RegistrationService;
+import kvoting.intern.flowerwebapp.item.registration.ProcessType;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.item.registration.RegistrationRepository;
+import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.word.Word;
@@ -45,6 +59,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Configuration
@@ -94,6 +109,18 @@ public class AppConfig {
             @Autowired
             CommonCodeRegService commonCodeRegService;
 
+            @Autowired
+            ConstraintRegService constraintRegService;
+
+            @Autowired
+            CustomDomainRegService customDomainRegService;
+
+            @Autowired
+            CustomDomainService customDomainService;
+
+            @Autowired
+            ConstraintService constraintService;
+
             public AccountCreateRequest generateCreateRequest(String email, String password, String name, String department) {
                 return AccountCreateRequest.builder()
                         .email(email)
@@ -105,7 +132,7 @@ public class AppConfig {
 
             private WordRegistRequest makeWordRequest(String engName, String name, String orgEngName) {
                 return WordRegistRequest.builder()
-                        .wordBase(WordBase.builder()
+                        .base(WordBase.builder()
                                 .engName(engName)
                                 .name(name)
                                 .orgEngName(orgEngName)
@@ -115,7 +142,7 @@ public class AppConfig {
 
             private DomainRegistRequest makeDomainRequest(int idx) {
                 return DomainRegistRequest.builder()
-                        .domainBase(makeDomainBase(idx))
+                        .base(makeDomainBase(idx))
                         .build();
             }
 
@@ -133,8 +160,9 @@ public class AppConfig {
             private DictRegistRequest makeDictRequest(List<Word> words, CaseStyle cs, String nm, List<Domain> domains) {
                 return DictRegistRequest.builder()
                         .words(words)
-                        .dictBase(makeDictBase(nm, cs))
+                        .base(makeDictBase(nm, cs))
                         .domains(domains)
+                        .customDomains(new HashSet<>())
                         .build();
             }
 
@@ -148,7 +176,7 @@ public class AppConfig {
 
             public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {
                 return CmcdRegRequest.builder()
-                        .commonCodeBase(generateCommonCodeBase())
+                        .base(generateCommonCodeBase())
                         .words(words)
                         .dict(dict)
                         .build();
@@ -161,24 +189,53 @@ public class AppConfig {
                         .build();
             }
 
+            private ConstraintRegRequest generateConstraintRegRequest() {
+                return ConstraintRegRequest.builder()
+                        .base(generateConstraintBase())
+                        .build();
+            }
+
+            private ConstraintBase generateConstraintBase() {
+                return ConstraintBase.builder()
+                        .name("Kable")
+                        .description("K를 붙일 수 있는가?")
+                        .inputType(InputType.BOOLEAN)
+                        .value("0")
+                        .build();
+            }
+
+            private CustomDomainRegRequest generateCustomDomainRegRequest(List<Constraint> constraints) {
+                return CustomDomainRegRequest.builder()
+                        .base(generateCustomDomainBase())
+                        .constraints(constraints)
+                        .build();
+            }
+
+            private CustomDomainBase generateCustomDomainBase() {
+                return CustomDomainBase.builder()
+                        .db("KDB")
+                        .dataType("KVARCHAR")
+                        .description("K 디비에서 쓰이는 문자열")
+                        .build();
+            }
+
             @SneakyThrows
             @Override
             public void run(ApplicationArguments args) {
-                AccountCreateRequest accountCreateRequest = generateCreateRequest("test@test.com", "1234", "테스트", "테스트 부서");
+                AccountCreateRequest accountCreateRequest = generateCreateRequest("test@test.com", "1234", "관리자", "연구소");
                 Account savedAccount = accountService.create(accountCreateRequest);
                 savedAccount.addRole(AccountRole.ADMIN);
                 Account account = accountService.save(savedAccount);
 
-
                 List<WordRegistRequest> requests = new ArrayList<>();
-                requests.add(makeWordRequest("var", "문자열", "varchar2"));
-                requests.add(makeWordRequest("num", "숫자", "number"));
-                requests.add(makeWordRequest("cha", "고정 문자열", "char"));
+                requests.add(makeWordRequest("shhd", "주주", "shareholder"));
+                requests.add(makeWordRequest("gemt", "총회", "general meeting"));
+                requests.add(makeWordRequest("phnm", "핸드폰번호", "phone number"));
                 requests.add(makeWordRequest("dt", "날짜", "date"));
-                requests.add(makeWordRequest("td", "타임스탬프", "timestamp"));
-                requests.add(makeWordRequest("blb", "블롭", "blob"));
-                requests.add(makeWordRequest("clb", "클롭", "clob"));
-                requests.add(makeWordRequest("lng", "롱형", "long"));
+                requests.add(makeWordRequest("num", "숫자", "number"));
+                requests.add(makeWordRequest("vt", "투표", "vote"));
+                requests.add(makeWordRequest("plac", "장소", "place"));
+                requests.add(makeWordRequest("addr", "주소", "address"));
 
                 requests.add(makeWordRequest("us", "사용자", "user"));
                 requests.add(makeWordRequest("pass", "비밀번호", "password"));
@@ -195,10 +252,14 @@ public class AppConfig {
                 WordRegistRequest request = requests.get(0);
 
                 wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
-                request.getWordBase().setEngName("va");
+                request.getBase().setEngName("shd");
 
-                WordReg modify = (WordReg) wordRegService.modify(request, ((WordReg) wordReg).getWord().getId(), account);
+                WordReg modify = (WordReg) wordRegService.modify(request, ((WordReg) wordReg).getItem().getId(), account);
                 wordRegService.process(modify.getId(), ProcessType.APPROVED, account);
+
+                for (Registration reg : wordRegs) {
+                    wordRegService.process(reg.getId(), ProcessType.APPROVED, account);
+                }
 
                 List<Word> words = wordRepository.findAll();
                 List<DomainReg> domainRegs = new ArrayList<>();
@@ -213,7 +274,7 @@ public class AppConfig {
                 }
 
                 Word word = wordService.get(words.get(2).getId());
-                word.getWordBase().setEngName("ch");
+                word.getWordBase().setEngName("phn");
                 wordService.save(word);
 
                 Word pass = wordService.getWordByEng("pass");
@@ -228,18 +289,29 @@ public class AppConfig {
                 Domain num = numDomains.getContent().get(0);
 
                 // create dict_reg
-                DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
-                dictRegService.create(dictRegistRequest, account);
+                DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "비밀번호", List.of(var));
+                DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
                 DictRegistRequest mb_nm = makeDictRequest(List.of(mb, nm), CaseStyle.SNAKE, "회원 이름", List.of(num));
-                dictRegService.create(mb_nm, account);
+                DictReg reg = (DictReg) dictRegService.create(mb_nm, account);
+                Dict item = reg.getItem();
 
                 Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
-                Word blb = wordService.getWordByEng("blb");
+                Word blb = wordService.getWordByEng("addr");
                 CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(blb), dict);
                 CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 
                 // approve
+                dictRegService.process(reg.getId(), ProcessType.APPROVED, account);
                 commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+                ConstraintReg constraintReg = (ConstraintReg) constraintRegService.create(generateConstraintRegRequest(), account);
+                CustomDomainReg customDomainReg = (CustomDomainReg) customDomainRegService.create(generateCustomDomainRegRequest(List.of(constraintReg.getItem())), account);
+
+                CustomDomain customDomain = customDomainService.getDetail(customDomainReg.getItem().getId());
+                constraintRegService.process(constraintReg.getId(), ProcessType.APPROVED, account);
+                customDomainRegService.process(customDomainReg.getId(), ProcessType.APPROVED, account);
+                mb_nm.getCustomDomains().add(customDomain);
+                DictReg modifyDictReg = (DictReg) dictRegService.modify(mb_nm, item.getId(), account);
+                dictRegService.process(modifyDictReg.getId(), ProcessType.APPROVED, account);
             }
         };
     }

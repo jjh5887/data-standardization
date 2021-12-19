@@ -1,7 +1,12 @@
-package kvoting.intern.flowerwebapp.registration;
+package kvoting.intern.flowerwebapp.item.registration;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.account.serialize.AccountSerializer;
+import kvoting.intern.flowerwebapp.item.Item;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,7 +22,7 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "REG_TYPE")
 @EqualsAndHashCode(of = "id")
-public class Registration {
+public class Registration<I extends Item, B> {
 
     @Id
     @GeneratedValue
@@ -28,7 +33,10 @@ public class Registration {
     @JoinColumns({
             @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
             @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonSerialize(using = AccountSerializer.class)
     private Account registrant;
+
     @Column(name = "STDZ_REG_TPCD")
     private RegistrationType registrationType;
     @Column(name = "REG_TM")
@@ -42,6 +50,8 @@ public class Registration {
     @JoinColumns({
             @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
             @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonSerialize(using = AccountSerializer.class)
     private Account processor;
 
     @Column(name = "ERR_CONT", length = 500)
@@ -59,6 +69,20 @@ public class Registration {
         if (dateProcessed == null) {
             dateProcessed = LocalDateTime.now();
         }
+    }
+
+    public I getItem() {
+        return null;
+    }
+
+    public void setItem(I item) {
+    }
+
+    public B getBase() {
+        return null;
+    }
+
+    public void setBase(B base) {
     }
 }
 

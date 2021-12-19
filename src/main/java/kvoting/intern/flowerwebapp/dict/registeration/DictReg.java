@@ -1,10 +1,12 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
-import kvoting.intern.flowerwebapp.cmcd.CommonCode;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictBase;
 import kvoting.intern.flowerwebapp.domain.Domain;
-import kvoting.intern.flowerwebapp.registration.Registration;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,28 +27,34 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "DICT")
-public class DictReg extends Registration {
+public class DictReg extends Registration<Dict, DictBase> {
     @Embedded
-    private DictBase dictBase;
+    private DictBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
-    private Dict dict;
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    private Dict item;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DICT_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private List<Word> words = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "CC_DICT_REG_DOMAIN_TC",
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Set<Domain> domains = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CMCD_ID")
-    private CommonCode commonCode;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "CC_DICT_REG_CUSTOM_DOMAIN_TC",
+            joinColumns = @JoinColumn(name = "DICT_REG_ID"),
+            inverseJoinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    private Set<CustomDomain> customDomains = new HashSet<>();
 }

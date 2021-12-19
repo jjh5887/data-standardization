@@ -4,7 +4,7 @@ import kvoting.intern.flowerwebapp.account.request.AccountCreateRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountDeleteRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountLoginRequest;
 import kvoting.intern.flowerwebapp.account.request.AccountUpdateRequest;
-import kvoting.intern.flowerwebapp.registration.Registration;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hibernate.Hibernate;

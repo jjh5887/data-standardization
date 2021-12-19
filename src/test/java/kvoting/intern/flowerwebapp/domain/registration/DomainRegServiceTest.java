@@ -8,7 +8,7 @@ import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.domain.DomainRepository;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
-import kvoting.intern.flowerwebapp.registration.ProcessType;
+import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.word.Word;
@@ -67,8 +67,8 @@ class DomainRegServiceTest {
         DomainReg domainReg = (DomainReg) domainRegService.create(domainRegistRequest, account);
 
         // Then
-        Domain domain = domainService.get(domainReg.getDomain().getId());
-        assertThat(domain.getDomainBase().getDataType()).isEqualTo(domainReg.getDomainBase().getDataType());
+        Domain domain = domainService.get(domainReg.getItem().getId());
+        assertThat(domain.getDomainBase().getDataType()).isEqualTo(domainReg.getBase().getDataType());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.UNHANDLED);
     }
 
@@ -81,10 +81,11 @@ class DomainRegServiceTest {
         List<Word> words = wordRepository.findAll();
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
         // modify
-        request.getDomainBase().setDescription("this is new domain");
-        request.getDomainBase().setNullable(false);
-        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getDomain().getId(), account);
+        request.getBase().setDescription("this is new domain");
+        request.getBase().setNullable(false);
+        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getItem().getId(), account);
 
         // Then
         DomainReg savedReg = (DomainReg) domainRegService.getRegistration(savedModifyReg.getId());
@@ -103,8 +104,9 @@ class DomainRegServiceTest {
         List<Word> words = wordRepository.findAll();
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
         // delete
-        DomainReg savedDeleteReg = (DomainReg) domainRegService.delete(domainReg.getDomain().getId(), account);
+        DomainReg savedDeleteReg = (DomainReg) domainRegService.delete(domainReg.getItem().getId(), account);
 
         // Then
         DomainReg savedReg = (DomainReg) domainRegService.getRegistration(savedDeleteReg.getId());
@@ -132,7 +134,7 @@ class DomainRegServiceTest {
         assertThat(domainReg).isEqualTo(approvedDomainReg);
         // 하지만 실제로 처리상태는 다름
         assertThat(domainReg.getProcessType()).isNotEqualTo(approvedDomainReg.getProcessType());
-        Domain domain = domainService.get(domainReg.getDomain().getId());
+        Domain domain = domainService.get(domainReg.getItem().getId());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.APPROVED);
     }
 
@@ -155,7 +157,7 @@ class DomainRegServiceTest {
         assertThat(domainReg).isEqualTo(rejectedDomainReg);
         // 하지만 실제로 처리상태는 다름
         assertThat(domainReg.getProcessType()).isNotEqualTo(rejectedDomainReg.getProcessType());
-        Domain domain = domainService.get(domainReg.getDomain().getId());
+        Domain domain = domainService.get(domainReg.getItem().getId());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.REJECTED);
     }
 
@@ -168,17 +170,18 @@ class DomainRegServiceTest {
         generateWords(account);
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
         // modify
-        request.getDomainBase().setDescription("this is new domain");
-        request.getDomainBase().setNullable(false);
-        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getDomain().getId(), account);
+        request.getBase().setDescription("this is new domain");
+        request.getBase().setNullable(false);
+        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getItem().getId(), account);
         // approve
         DomainReg approvedReg = (DomainReg) domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED, account);
 
         // Then
-        Domain domain = domainService.get(approvedReg.getDomain().getId());
+        Domain domain = domainService.get(approvedReg.getItem().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
-        assertThat(domain.getDomainBase().getDescription()).isEqualTo(request.getDomainBase().getDescription());
+        assertThat(domain.getDomainBase().getDescription()).isEqualTo(request.getBase().getDescription());
     }
 
     @Test
@@ -190,15 +193,16 @@ class DomainRegServiceTest {
         generateWords(account);
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
         // modify
-        request.getDomainBase().setDescription("this is new domain");
-        request.getDomainBase().setNullable(false);
-        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getDomain().getId(), account);
+        request.getBase().setDescription("this is new domain");
+        request.getBase().setNullable(false);
+        DomainReg savedModifyReg = (DomainReg) domainRegService.modify(request, domainReg.getItem().getId(), account);
         // approve
         DomainReg rejectedReg = (DomainReg) domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account);
 
         // Then
-        Domain domain = domainService.get(rejectedReg.getDomain().getId());
+        Domain domain = domainService.get(rejectedReg.getItem().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
 
         Boolean nullable = domain.getDomainBase().getNullable();
@@ -214,14 +218,17 @@ class DomainRegServiceTest {
         List<Word> words = wordRepository.findAll();
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+
         // delete
-        DomainReg savedModifyReg = (DomainReg) domainRegService.delete(domainReg.getDomain().getId(), account);
+        DomainReg savedModifyReg = (DomainReg) domainRegService.delete(domainReg.getItem().getId(), account);
         // approve
-        domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED, account);
+        DomainReg processReg = (DomainReg) domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED, account);
 
         // Then
-        assertThat(domainRegRepository.count()).isEqualTo(0L);
-        assertThat(domainRepository.count()).isEqualTo(0L);
+        assertThat(domainRegRepository.count()).isEqualTo(2L);
+        assertThat(domainRepository.count()).isEqualTo(1L);
+        assertThat(processReg.getItem().getStatus()).isEqualTo(ProcessType.DELETABLE);
     }
 
     @Test
@@ -234,8 +241,9 @@ class DomainRegServiceTest {
 
         DomainRegistRequest request = makeDomRequest(words);
         DomainReg domainReg = (DomainReg) domainRegService.create(request, account);
+        domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
         // delete
-        DomainReg savedModifyReg = (DomainReg) domainRegService.delete(domainReg.getDomain().getId(), account);
+        DomainReg savedModifyReg = (DomainReg) domainRegService.delete(domainReg.getItem().getId(), account);
         // reject
         domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account);
 
@@ -246,7 +254,7 @@ class DomainRegServiceTest {
 
     private DomainRegistRequest makeDomRequest(List<Word> words) {
         return DomainRegistRequest.builder()
-                .domainBase(makeDomainBase())
+                .base(makeDomainBase())
                 .build();
     }
 
@@ -263,7 +271,7 @@ class DomainRegServiceTest {
 
     private WordRegistRequest makeRequest(int idx) {
         return WordRegistRequest.builder()
-                .wordBase(WordBase.builder()
+                .base(WordBase.builder()
                         .engName("TST" + idx)
                         .name("테스트" + idx)
                         .orgEngName("TEST" + idx)

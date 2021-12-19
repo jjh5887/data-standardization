@@ -1,9 +1,11 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.dict.Dict;
-import kvoting.intern.flowerwebapp.registration.Registration;
+import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,16 +24,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "CMCD")
-public class CommonCodeReg extends Registration {
+public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
     @Embedded
-    private CommonCodeBase commonCodeBase;
+    private CommonCodeBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMCD_ID")
-    private CommonCode commonCode;
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    private CommonCode item;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Dict dict;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -39,6 +43,7 @@ public class CommonCodeReg extends Registration {
     @JoinTable(name = "CC_CMCD_REG_WORD_TC",
             joinColumns = @JoinColumn(name = "CMCD_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private List<Word> words;
 
     @Override
@@ -53,6 +58,6 @@ public class CommonCodeReg extends Registration {
         for (Word word : words) {
             name += word.getWordBase().getName() + " ";
         }
-        this.commonCodeBase.setCodeName(name.substring(0, name.length() - 1));
+        this.base.setCodeName(name.substring(0, name.length() - 1));
     }
 }

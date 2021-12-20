@@ -29,7 +29,7 @@ public class Registration<I extends Item, B> {
     @Column(name = "REG_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
             @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
@@ -42,17 +42,18 @@ public class Registration<I extends Item, B> {
     @Column(name = "REG_TM")
     private LocalDateTime dateRegistered;
 
-    @Column(name = "STDZ_PROCR_TPCD")
-    private ProcessType processType;
-    @Column(name = "PROC_TM")
-    private LocalDateTime dateProcessed;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
             @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonSerialize(using = AccountSerializer.class)
     private Account processor;
+    @Column(name = "STDZ_PROCR_TPCD")
+    private ProcessType processType;
+    @Column(name = "PROC_TM")
+    private LocalDateTime dateProcessed;
+
 
     @Column(name = "ERR_CONT", length = 500)
     private String errorMessage;

@@ -93,13 +93,13 @@ class DictRegServiceTest {
     }
 
     @Test
-    public void registCreatDict_UpdateWordAndUpdateDomain_DeleteAllWordsOfDict() {
+    public void registCreatDict_UpdateWordAndUpdateDomain_DeleteAllWordsOfDict() throws Throwable {
         // When
         // getWords
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
-        Word nm = wordService.getWordByEng("nm");
-        Word mb = wordService.getWordByEng("mb");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
+        Word nm = wordService.getByEng("nm");
+        Word mb = wordService.getByEng("mb");
 
 
         // getDomains
@@ -120,14 +120,14 @@ class DictRegServiceTest {
         Page<Dict> dictByWord = dictService.getDictByWord(List.of(pass), PageRequest.of(0, 10));
         assertThat(dictByWord.getTotalElements()).isEqualTo(1L);
         for (Dict dict : dictByWord) {
-            assertThat(dict.getDictBase().getEngName()).containsIgnoringCase(pass.getWordBase().getEngName());
+            assertThat(dict.getDictBase().getEngName()).containsIgnoringCase(pass.getBase().getEngName());
         }
 
 
         // When
         // update word
-        Word word = wordService.get(pass.getId());
-        word.getWordBase().setEngName("password");
+        Word word = (Word) wordService.get(pass.getId());
+        word.getBase().setEngName("password");
         Word save = wordService.save(word);
 
         // Then
@@ -135,7 +135,7 @@ class DictRegServiceTest {
         Page<Dict> dictByPass = dictService.getDictByWord(List.of(save), PageRequest.of(0, 10));
         assertThat(dictByPass.getTotalElements()).isEqualTo(1L);
         for (Dict byPass : dictByPass) {
-            assertThat(Pattern.compile(Pattern.quote(save.getWordBase().getEngName()),
+            assertThat(Pattern.compile(Pattern.quote(save.getBase().getEngName()),
                     Pattern.CASE_INSENSITIVE).matcher(byPass.getDictBase().getEngName()).find())
                     .isEqualTo(true);
         }
@@ -148,7 +148,7 @@ class DictRegServiceTest {
 
         // Then word has also been deleted
         for (Dict dict : dictRepository.findAll()) {
-            assertThat(Pattern.compile(Pattern.quote(save.getWordBase().getEngName()),
+            assertThat(Pattern.compile(Pattern.quote(save.getBase().getEngName()),
                     Pattern.CASE_INSENSITIVE).matcher(dict.getDictBase().getEngName()).find())
                     .isEqualTo(false);
         }
@@ -173,9 +173,9 @@ class DictRegServiceTest {
     public void registModifyDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
-        Word nm = wordService.getWordByEng("nm");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
+        Word nm = wordService.getByEng("nm");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -217,8 +217,8 @@ class DictRegServiceTest {
     public void registDeleteDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -248,8 +248,8 @@ class DictRegServiceTest {
     public void approveCreateDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -281,8 +281,8 @@ class DictRegServiceTest {
     public void rejectCreateDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -305,9 +305,9 @@ class DictRegServiceTest {
     public void approveModifyDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
-        Word nm = wordService.getWordByEng("nm");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
+        Word nm = wordService.getByEng("nm");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -352,9 +352,9 @@ class DictRegServiceTest {
     public void rejectModifyDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
-        Word nm = wordService.getWordByEng("nm");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
+        Word nm = wordService.getByEng("nm");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -400,8 +400,8 @@ class DictRegServiceTest {
     public void approveDeleteDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
@@ -438,8 +438,8 @@ class DictRegServiceTest {
     public void rejectDeleteDict() throws Throwable {
         // When
         // get words
-        Word pass = wordService.getWordByEng("pass");
-        Word us = wordService.getWordByEng("us");
+        Word pass = wordService.getByEng("pass");
+        Word us = wordService.getByEng("us");
 
         // get Domains
         Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));

@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.Dict;
@@ -34,7 +35,11 @@ public class DictReg extends Registration<Dict, DictBase> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
     private Dict item;
+
+    @Column(name = "DICT_ID", insertable = false, updatable = false)
+    private Long ItemId;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn

@@ -5,6 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DomainRepository extends JpaRepository<Domain, Long> {
-    Page<Domain> findByDomainBase_NameContains(String engName, Pageable pageable);
+    Page<Domain> findByBase_NameContains(String engName, Pageable pageable);
 
 }

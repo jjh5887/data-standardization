@@ -1,17 +1,17 @@
 package kvoting.intern.flowerwebapp.constraint.registration;
 
 import kvoting.intern.flowerwebapp.constraint.Constraint;
-import kvoting.intern.flowerwebapp.constraint.registration.request.ConstraintRegRequest;
-import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
+import kvoting.intern.flowerwebapp.constraint.ConstraintService;
+import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConstraintRegService extends RegistrationService<ConstraintRegRequest, Constraint> {
+public class ConstraintRegService extends RegistrationService {
 
-    public ConstraintRegService(ConstraintRegRepository constraintRegRepository, ModelMapper modelMapper, ItemServiceImpl<Constraint> itemService) {
+    public ConstraintRegService(ConstraintRegRepository constraintRegRepository, ModelMapper modelMapper, ConstraintService itemService) {
         super(constraintRegRepository, modelMapper, itemService);
         this.regClazz = ConstraintReg.class;
         this.itemClazz = Constraint.class;
@@ -19,12 +19,12 @@ public class ConstraintRegService extends RegistrationService<ConstraintRegReque
 
 
     @Override
-    public void validateItem(Constraint item) {
+    public void validateItem(Item item) {
 
     }
 
     @Override
-    public void update(Registration registration, Constraint item) {
+    public void update(Registration registration, Item item) {
 
     }
 }

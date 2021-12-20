@@ -53,7 +53,7 @@ class ConstraintRegServiceTest {
 
         assertThat(constraintRepository.count()).isEqualTo(1L);
         assertThat(constraintRegRepository.count()).isEqualTo(1L);
-        Constraint constraint = constraintService.get(registration.getItem().getId());
+        Constraint constraint = (Constraint) constraintService.get(registration.getItem().getId());
         assertThat(constraint.getStatus()).isEqualTo(ProcessType.UNHANDLED);
         registration = (ConstraintReg) constraintRegService.getRegistration(registration.getId());
         assertThat(registration.getBase().getDescription()).isEqualTo(request.getBase().getDescription());

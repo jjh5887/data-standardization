@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ConstraintService extends ItemServiceImpl<Constraint> {
+public class ConstraintService extends ItemServiceImpl {
     private final ConstraintRepository constraintRepository;
 
     public ConstraintService(ConstraintRepository constraintRepository, ConstraintRepository constraintRepository1) {

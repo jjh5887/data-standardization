@@ -4,6 +4,7 @@ import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictService;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
+import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class WordService extends ItemServiceImpl<Word> {
+public class WordService extends ItemServiceImpl {
     private final DictService dictService;
     private final DictRegService dictRegService;
 
@@ -22,25 +23,35 @@ public class WordService extends ItemServiceImpl<Word> {
     }
 
     @Transactional(readOnly = true)
-    public Word getWordByEng(String engName) {
-        return ((WordRepository) itemRepository).findByWordBase_EngName(engName).orElseThrow(() -> {
+    public Word getByEng(String engName) {
+        return ((WordRepository) itemRepository).findByBase_EngName(engName).orElseThrow(() -> {
             throw new RuntimeException();
         });
     }
 
+    public Page<Word> getByEng(String engName, Pageable pageable) {
+        return ((WordRepository) itemRepository).findByBase_EngNameContains(engName, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Word> getByOrgEng(String orgEngName, Pageable pageable) {
+        return ((WordRepository) itemRepository).findByBase_OrgEngNameContains(orgEngName, pageable);
+    }
+
     @Transactional(readOnly = true)
     public Page<Word> getByName(String name, Pageable pageable) {
-        return ((WordRepository) itemRepository).findByWordBase_NameContains(name, pageable);
+        return ((WordRepository) itemRepository).findByBase_NameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public boolean existsByEngName(String engName) {
-        return ((WordRepository) itemRepository).existsByWordBase_EngName(engName);
+        return ((WordRepository) itemRepository).existsByBase_EngName(engName);
     }
 
     @Override
-    public Word save(Word word) {
-        Word save = itemRepository.save(word);
+    @Transactional
+    public Word save(Item word) {
+        Word save = (Word) itemRepository.save(word);
         for (Dict dict : save.getDicts()) {
             dict.setUp();
             dictService.save(dict);
@@ -49,9 +60,9 @@ public class WordService extends ItemServiceImpl<Word> {
     }
 
     @Override
-    public void delete(Word word) {
-        word = get(word.getId());
-        for (Dict dict : word.getDicts()) {
+    public void delete(Item word) throws Throwable {
+        word = get(((Word) word).getId());
+        for (Dict dict : ((Word) word).getDicts()) {
             if (dict.getWords().size() == 1) {
                 dictService.delete(dict);
                 continue;
@@ -63,7 +74,7 @@ public class WordService extends ItemServiceImpl<Word> {
 
         itemRepository.flush();
 
-        for (DictReg dictReg : word.getDictRegs()) {
+        for (DictReg dictReg : ((Word) word).getDictRegs()) {
             dictReg.getWords().remove(word);
             dictRegService.save(dictReg);
         }
@@ -71,7 +82,7 @@ public class WordService extends ItemServiceImpl<Word> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Throwable {
         delete(get(id));
     }
 }

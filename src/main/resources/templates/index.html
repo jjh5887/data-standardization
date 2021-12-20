@@ -1,0 +1,258 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="../static/css/index.css" rel="stylesheet"/>
+    <!--
+    <script src = "js/pagination.js" defer> </script>
+        defer 속성은 페이지가 모두 로드된 후에 해당 외부 스크립트가 실행됨을 명시
+        http://tcpschool.com/html-tag-attrs/script-defer
+    <script type="module" src = "js/main.js"> </script>-->
+    <script type = "text/javascript">
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200){
+                jsonfunc(xhttp.responseText);
+            }
+        }
+        xhttp.open("GET", "../static/json/ex.json", true);
+        xhttp.send();
+
+        function jsonfunc(jsonText) {
+            let json = JSON.parse(jsonText);
+            let dictResult = document.querySelector('#dict').innerHTML;
+            let domainResult = document.querySelector('#domain').innerHTML;
+            let wordResult = document.querySelector('#word').innerHTML;
+            dictResult += '<tbody>'
+            domainResult += '<tbody>'
+            wordResult += '<tbody>'
+            console.log(json.length);
+            for (let i = 0; i < json.length; i++) {
+                if (Object.keys(json[i]).includes('dictBase')) {
+                    dictResult += '<tr onclick="">'
+                        + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="show_dict()">'
+                        + '수정 및 삭제' + '</button>'
+                        + ' </th>'
+                        + '<td>' + json[i].dictBase?.name + '</td>'
+                        + '<td>' + json[i].dictBase?.engName + '</td>'
+                        + '<td>' + json[i].dictBase?.screenName + '</td>'
+                        + '<td>' + json[i].dictBase?.domains + '</td>'
+                        + '<td>' + /*json[i].domains?.dataType */ + '</td>'
+                        + '<td>' + /*json[i].domains?.size */ + '</td>'
+                        + '<td>' + /*json[i].domains?.scale */ + '</td>'
+                        + '<td>' + json[i].dictBase?.nullable  + '</td>'
+                        + '<td>' + json[i].dictBase?.isCommon  + '</td>'
+                        + '<td>' + json[i].dictBase?.caseStyle + '</td>'
+                        + '<td>' + json[i].dictBase?.description + '</td>'
+                        + '<td>' + json[i].status + '</td>'
+                        + '</tr>';
+                } else if (Object.keys(json[i]).includes('domainBase')) {
+                    domainResult += '<tr onclick="">'
+                        + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="show_domain()">'
+                        + '수정 및 삭제' + '</button>'
+                        + ' </th>'
+                        + '<td>' + json[i].domainBase?.name + '</td>'
+                        + '<td>' + json[i].domainBase?.db + '</td>'
+                        + '<td>' + json[i].domainBase?.dataType + '</td>'
+                        + '<td>' + json[i].domainBase?.size + '</td>'
+                        + '<td>' + json[i].domainBase?.scale + '</td>'
+                        + '<td>' + json[i].domainBase?.nullable + '</td>'
+                        + '<td>' + json[i].status+ '</td>'
+
+                        + '</tr>';
+                } else if (Object.keys(json[i]).includes('wordBase')) {
+                    wordResult += '<tr onclick="">'
+                        + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="show_word()">'
+                        + '수정 및 삭제' + '</button>'
+                        + ' </th>'
+                        + '<td>' + json[i].wordBase?.engName + '</td>'
+                        + '<td>' + json[i].wordBase?.name + '</td>'
+                        + '<td>' + json[i].wordBase?.orgEngName + '</td>'
+                        + '<td>' + json[i].status + '</td>'
+                        + '</tr>';
+                }
+            }
+            dictResult += '</tbody>';
+            domainResult += '</tbody>';
+            wordResult += '</tbody>';
+            document.getElementById('dict').innerHTML = dictResult;
+            document.getElementById('domain').innerHTML = domainResult;
+            document.getElementById('word').innerHTML = wordResult;
+        }
+    </script>
+    <script>
+
+        /* 테이블 페이지 전환 */
+
+
+        /* select 설정 */
+        const ALL_VALUE = '0';
+        const DICT_VALUE = '1';
+        const DOMAIN_VALUE = '2';
+        const word_VALUE = '3'
+
+        function categoryFunction(e){
+
+            let add;
+            const target = document.getElementById("mySelect2");
+            const menuSelect = ["------"];
+            const dict = ["한글이름", "영어이름", "전략"];
+            const domain = ["이름","타입", "길이", "정확도","nullable","DB타입", "상태"];
+            const word = ["한글이름", "영어이름"];
+
+            if(e.value == "1"){
+               add = dict;
+            }else if(e.value == "2"){
+                add = domain;
+            }else if(e.value == "3"){
+                add = word;s
+            }else if(e.value == "0"){
+                add = menuSelect;
+            }
+
+        target.options.length = 1;
+            for(let property in add){
+                let opt = document.createElement("option");
+                opt.value = add[property];
+                opt.innerHTML = add[property];
+                target.appendChild(opt);
+            }
+
+            if (e.value == DICT_VALUE) {
+                document.getElementById('dict-wrap').style.display = 'block';
+                document.getElementById('domain-wrap').style.display = 'none';
+                document.getElementById('word-wrap').style.display = 'none';
+            } else if (e.value == DOMAIN_VALUE) {
+                document.getElementById('dict-wrap').style.display = 'none';
+                document.getElementById('domain-wrap').style.display = 'block';
+                document.getElementById('word-wrap').style.display = 'none';
+            } else if (e.value == word_VALUE) {
+                document.getElementById('dict-wrap').style.display = 'none';
+                document.getElementById('domain-wrap').style.display = 'none';
+                document.getElementById('word-wrap').style.display = 'block';
+            } else if (e.value == ALL_VALUE) {
+                document.getElementById('dict-wrap').style.display = 'block';
+                document.getElementById('domain-wrap').style.display = 'block';
+                document.getElementById('word-wrap').style.display = 'block';
+            }
+        }
+
+    </script>
+</head>
+<body>
+<header>
+    <div class="mainTitle">
+        <div class="mainTitle-name" onclick="location.href='index.html'">데이터 표준화 서비스</div>
+
+        <div class="main-menu">
+            <button type="button" class="menu list" type="button" onclick="location.href='requestList.html'">
+                <img src="../static/images/requestListIcon.png" class="list" alt="requestList">
+            </button>
+            <button type="button" class="menu myPage" type="button">
+                <img src="../static/images/mypageIcon.png" class="myPage" alt="requestList">
+            </button>
+        </div>
+
+    </div>
+</header>
+
+<p id="demo"></p>
+<div class="main ">
+    <form>
+        <div class="request-name-box">검색</div>
+        <div class="inner-form">
+            <div class="input-field first-wrap">
+                <select id="mySelect1" name="Total" onchange="categoryFunction(this)">
+                    <option value="0"> ------</option>
+                    <option value="1"> 용어</option>
+                    <option value="2"> 도메인</option>
+                    <option value="3"> 단어</option>
+                </select>
+                <select id="mySelect2" name="Total">
+                    <option value="All"> ------</option>
+                </select>
+            </div>
+            <div class="input-field second-wrap">
+                <input id="search" class="search form-control" type="text" placeholder="search"/>
+            </div>
+            <div class="input-field third-wrap">
+                <button id="btn1" type="button" class="btn-search" type="button">
+                    <img src="../static/images/search.png" class="searchImg" alt="search">
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div id="total-table" class="total-table table-wrap ">
+        <div id="dict-wrap" class="table-box">
+            <span class="name-box">용어</span>
+            <button type="button" class="menu " type="button" onclick="">
+                <img src="../static/images/plus.png" class="plus" alt="requestList">
+            </button>
+            <table id="dict" class="table table-hover results">
+                <thead>
+                <tr>
+                    <th class="col-xs-2">편집</th>
+                    <th class="col-xs-2">한글이름</th>
+                    <th class="col-xs-2">영어이름</th>
+                    <th class="col-xs-1">화면이름</th>
+                    <th class="col-xs-1">도메인</th>
+                    <th class="col-xs-1">타입</th>
+                    <th class="col-xs-1">길이</th>
+                    <th class="col-xs-1">정확도</th>
+                    <th class="col-xs-0">nullable</th>
+                    <th class="col-xs-1"> 공통코드</th>
+                    <th class="col-xs-1"> 전략</th>
+                    <th class="col-xs-1"> 설명</th>
+                    <th class="col-xs-1"> 상태</th>
+                </tr>
+                </thead>
+            </table>
+            <div id="pageNavPosition" class="pager-nav"></div>
+        </div>
+        <div  id="domain-wrap" class="table-box">
+            <span class="name-box">도메인</span>
+            <button type="button" class="menu" type="button" onclick="">
+                <img src="../static/images/plus.png" class="plus" alt="requestList">
+            </button>
+            <table id="domain" class="table table-hover results">
+                <thead>
+                <tr>
+                    <th class="col-xs-2">편집</th>
+                    <th class="col-xs-2">도메인 명</th>
+                    <th class="col-xs-1">DB타입</th>
+                    <th class="col-xs-1">타입</th>
+                    <th class="col-xs-1">길이</th>
+                    <th class="col-xs-1">정확도</th>
+                    <th class="col-xs-1">nullable</th>
+                    <th class="col-xs-1">상태</th>
+                </tr>
+
+                </thead>
+
+            </table>
+        </div>
+        <div  id="word-wrap" class="table-box">
+            <span class="name-box">단어</span>
+            <button type="button" class="menu" type="button" onclick="">
+                <img src="../static/images/plus.png" class="plus" alt="requestList">
+            </button>
+            <table id="word" class="table table-hover results">
+                <thead>
+                <tr>
+                    <th class="col-xs-2">편집</th>
+                    <th class="col-xs-1">약어</th>
+                    <th class="col-xs-2">한글이름</th>
+                    <th class="col-xs-2">영어이름</th>
+                    <th class="col-xs-2">상태</th>
+                </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.account.serialize.AccountSerializer;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
@@ -14,6 +17,7 @@ import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,19 +33,34 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Dict implements Item {
 
-    @Embedded
-    DictBase dictBase;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-    @JsonIgnore
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    Set<DictReg> dictRegs = new HashSet<>();
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue
     @Column(name = "DICT_ID")
     private Long id;
+
+    @Embedded
+    DictBase dictBase;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    Set<DictReg> dictRegs = new HashSet<>();
+
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
+
+    @Column(name = "MODFR_NM")
+    private String modifierName;
+
+    @Column(name = "MODF_TM")
+    private LocalDateTime modifiedTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MODFR_ID", referencedColumnName = "USER_ID")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonSerialize(using = AccountSerializer.class)
+    private Account modifier;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
@@ -87,8 +106,8 @@ public class Dict implements Item {
         String name = "";
         String engName = "";
         for (Word word : words) {
-            name += word.getWordBase().getName() + " ";
-            engName += word.getWordBase().getEngName() + "_";
+            name += word.getBase().getName() + " ";
+            engName += word.getBase().getEngName() + "_";
         }
         this.dictBase.setName(name.substring(0, name.length() - 1));
         this.dictBase.setEngName(engName.substring(0, engName.length() - 1).toUpperCase());
@@ -98,8 +117,8 @@ public class Dict implements Item {
         String name = "";
         String engName = "";
         for (int i = 0; i < words.size(); i++) {
-            String nameBuf = words.get(i).getWordBase().getName() + " ";
-            String engNameBuf = words.get(i).getWordBase().getEngName().toLowerCase();
+            String nameBuf = words.get(i).getBase().getName() + " ";
+            String engNameBuf = words.get(i).getBase().getEngName().toLowerCase();
             if (i > 0) {
                 char c2 = Character.toUpperCase(engNameBuf.charAt(0));
                 engNameBuf = c2 + engNameBuf.substring(1);

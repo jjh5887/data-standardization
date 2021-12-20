@@ -52,7 +52,7 @@ class WordRegServiceTest {
     }
 
     @Test
-    public void registCreateWord() {
+    public void registCreateWord() throws Throwable {
         // When
         // create
         Account account = accountService.getAccount("test@test.com");
@@ -60,7 +60,7 @@ class WordRegServiceTest {
         WordReg wordReg = (WordReg) wordRegService.create(request, account);
 
         // Then
-        Word word = wordService.getWordByEng(request.getBase().getEngName());
+        Word word = wordService.getByEng(request.getBase().getEngName());
         assertThat(wordReg.getItem()).isEqualTo(word);
         assertThat(word.getStatus()).isEqualTo(ProcessType.UNHANDLED);
 
@@ -128,7 +128,7 @@ class WordRegServiceTest {
         WordReg approvedWordReg = (WordReg) wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
 
         // Then
-        Word word = wordService.get(wordReg.getItem().getId());
+        Word word = (Word) wordService.get(wordReg.getItem().getId());
         assertThat(approvedWordReg.getItem().getStatus()).isEqualTo(ProcessType.APPROVED);
         assertThat(word.getStatus()).isEqualTo(ProcessType.APPROVED);
         assertThat(wordRegRepository.count()).isEqualTo(1L);
@@ -145,7 +145,7 @@ class WordRegServiceTest {
         WordReg rejectedWordReg = (WordReg) wordRegService.process(wordReg.getId(), ProcessType.REJECTED, account);
 
         // Then
-        Word word = wordService.get(wordReg.getItem().getId());
+        Word word = (Word) wordService.get(wordReg.getItem().getId());
         assertThat(rejectedWordReg.getItem().getStatus()).isEqualTo(ProcessType.REJECTED);
         assertThat(word.getStatus()).isEqualTo(ProcessType.REJECTED);
         assertThat(wordRegRepository.count()).isEqualTo(1L);
@@ -170,8 +170,8 @@ class WordRegServiceTest {
         WordReg approvedWordReg = (WordReg) wordRegService.process(savedModifyReg.getId(), ProcessType.APPROVED, account);
 
         // Then
-        Word modWord = wordService.get(approvedWordReg.getItem().getId());
-        assertThat(modWord.getWordBase().getEngName()).isEqualTo(newName);
+        Word modWord = (Word) wordService.get(approvedWordReg.getItem().getId());
+        assertThat(modWord.getBase().getEngName()).isEqualTo(newName);
         assertThat(wordRegRepository.count()).isEqualTo(2L);
         assertThat(wordRepository.count()).isEqualTo(1L);
     }
@@ -184,7 +184,7 @@ class WordRegServiceTest {
         Account account = accountService.getAccount("test@test.com");
         WordReg wordReg = (WordReg) wordRegService.create(request, account);
         wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
-        Word word = wordService.get(wordReg.getItem().getId());
+        Word word = (Word) wordService.get(wordReg.getItem().getId());
         // modify
         String newName = "나테스트아님";
         request.getBase().setName(newName);
@@ -194,8 +194,8 @@ class WordRegServiceTest {
         WordReg approvedWordReg = (WordReg) wordRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account);
 
         // Then
-        Word modWord = wordService.get(approvedWordReg.getItem().getId());
-        assertThat(modWord.getWordBase().getName()).isEqualTo(word.getWordBase().getName());
+        Word modWord = (Word) wordService.get(approvedWordReg.getItem().getId());
+        assertThat(modWord.getBase().getName()).isEqualTo(word.getBase().getName());
         assertThat(wordRegRepository.count()).isEqualTo(2L);
         assertThat(wordRepository.count()).isEqualTo(1L);
     }

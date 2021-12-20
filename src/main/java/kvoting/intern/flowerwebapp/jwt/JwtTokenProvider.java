@@ -24,7 +24,6 @@ public class JwtTokenProvider {
         this.accountService = accountService;
     }
 
-
     private String secretKey = "test";
     private long tokenValidTime = 30 * 60 * 1000L;
 

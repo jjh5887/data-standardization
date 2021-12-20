@@ -33,6 +33,9 @@ public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Constraint item;
 
+    @Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)
+    private Long ItemId;
+
     @ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
     private Set<CustomDomain> customDomains = new HashSet<>();
 }

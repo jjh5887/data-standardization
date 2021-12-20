@@ -33,6 +33,9 @@ public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private CommonCode item;
 
+    @Column(name = "CMCD_ID", insertable = false, updatable = false)
+    private Long ItemId;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
@@ -56,7 +59,7 @@ public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
 
         String name = "";
         for (Word word : words) {
-            name += word.getWordBase().getName() + " ";
+            name += word.getBase().getName() + " ";
         }
         this.base.setCodeName(name.substring(0, name.length() - 1));
     }

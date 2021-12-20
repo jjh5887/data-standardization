@@ -12,9 +12,7 @@ public class WordSerializer extends JsonSerializer<Word> {
     public void serialize(Word word, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", word.getId());
-        jsonGenerator.writeStringField("engName", word.getWordBase().getEngName());
-        jsonGenerator.writeStringField("name", word.getWordBase().getName());
-        jsonGenerator.writeStringField("orgEngName", word.getWordBase().getOrgEngName());
+        jsonGenerator.writeObjectField("base", word.getBase());
         jsonGenerator.writeEndObject();
     }
 }

@@ -1,12 +1,11 @@
 package kvoting.intern.flowerwebapp.item;
 
-public interface ItemService<I> {
-    I get(Long id);
+public interface ItemService {
+    Item get(Long id) throws Throwable;
 
-    I save(I item);
+    Item save(Item item);
 
-    void delete(I item);
+    void delete(Item item) throws Throwable;
 
-    void delete(Long id);
-
+    void delete(Long id) throws Throwable;
 }

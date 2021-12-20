@@ -56,7 +56,7 @@ class DomainRegServiceTest {
     }
 
     @Test
-    public void registCreateDomain() {
+    public void registCreateDomain() throws Throwable {
         // When
         // generateWords
         Account account = accountService.getAccount("test@test.com");
@@ -67,8 +67,8 @@ class DomainRegServiceTest {
         DomainReg domainReg = (DomainReg) domainRegService.create(domainRegistRequest, account);
 
         // Then
-        Domain domain = domainService.get(domainReg.getItem().getId());
-        assertThat(domain.getDomainBase().getDataType()).isEqualTo(domainReg.getBase().getDataType());
+        Domain domain = (Domain) domainService.get(domainReg.getItem().getId());
+        assertThat(domain.getBase().getDataType()).isEqualTo(domainReg.getBase().getDataType());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.UNHANDLED);
     }
 
@@ -134,7 +134,7 @@ class DomainRegServiceTest {
         assertThat(domainReg).isEqualTo(approvedDomainReg);
         // 하지만 실제로 처리상태는 다름
         assertThat(domainReg.getProcessType()).isNotEqualTo(approvedDomainReg.getProcessType());
-        Domain domain = domainService.get(domainReg.getItem().getId());
+        Domain domain = (Domain) domainService.get(domainReg.getItem().getId());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.APPROVED);
     }
 
@@ -157,7 +157,7 @@ class DomainRegServiceTest {
         assertThat(domainReg).isEqualTo(rejectedDomainReg);
         // 하지만 실제로 처리상태는 다름
         assertThat(domainReg.getProcessType()).isNotEqualTo(rejectedDomainReg.getProcessType());
-        Domain domain = domainService.get(domainReg.getItem().getId());
+        Domain domain = (Domain) domainService.get(domainReg.getItem().getId());
         assertThat(domain.getStatus()).isEqualTo(ProcessType.REJECTED);
     }
 
@@ -179,9 +179,9 @@ class DomainRegServiceTest {
         DomainReg approvedReg = (DomainReg) domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED, account);
 
         // Then
-        Domain domain = domainService.get(approvedReg.getItem().getId());
+        Domain domain = (Domain) domainService.get(approvedReg.getItem().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
-        assertThat(domain.getDomainBase().getDescription()).isEqualTo(request.getBase().getDescription());
+        assertThat(domain.getBase().getDescription()).isEqualTo(request.getBase().getDescription());
     }
 
     @Test
@@ -202,10 +202,10 @@ class DomainRegServiceTest {
         DomainReg rejectedReg = (DomainReg) domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account);
 
         // Then
-        Domain domain = domainService.get(rejectedReg.getItem().getId());
+        Domain domain = (Domain) domainService.get(rejectedReg.getItem().getId());
         assertThat(domainRepository.count()).isEqualTo(1L);
 
-        Boolean nullable = domain.getDomainBase().getNullable();
+        Boolean nullable = domain.getBase().getNullable();
         assertThat(nullable).isEqualTo(true);
     }
 

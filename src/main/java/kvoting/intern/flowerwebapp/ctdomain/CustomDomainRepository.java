@@ -1,6 +1,4 @@
 package kvoting.intern.flowerwebapp.ctdomain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface CustomDomainRepository extends JpaRepository<CustomDomain, Long> {
+public interface CustomDomainRepository extends org.springframework.data.jpa.repository.JpaRepository<CustomDomain, Long> {
 }

@@ -35,6 +35,9 @@ public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private CustomDomain item;
 
+    @Column(name = "CUSTOM_DOMAIN_ID", insertable = false, updatable = false)
+    private Long ItemId;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_CUSTOM_DOMAIN_REG_CONSTRAINT_TC",

@@ -36,9 +36,7 @@ import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.domain.registration.DomainRegService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
-import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationRepository;
-import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import kvoting.intern.flowerwebapp.type.DB;
 import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.word.Word;
@@ -46,11 +44,11 @@ import kvoting.intern.flowerwebapp.word.WordBase;
 import kvoting.intern.flowerwebapp.word.WordRepository;
 import kvoting.intern.flowerwebapp.word.WordService;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
+import kvoting.intern.flowerwebapp.word.registration.WordRegService;
 import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -78,12 +76,10 @@ public class AppConfig {
             RegistrationRepository registrationRepository;
 
             @Autowired
-            @Qualifier("wordRegService")
-            RegistrationService wordRegService;
+            WordRegService wordRegService;
 
             @Autowired
             AccountService accountService;
-
 
             @Autowired
             DomainRegService domainRegService;
@@ -243,12 +239,12 @@ public class AppConfig {
                 requests.add(makeWordRequest("mb", "사용자", "member"));
                 requests.add(makeWordRequest("desc", "설명", "description"));
 
-                List<Registration> wordRegs = new ArrayList<>();
+                List<WordReg> wordRegs = new ArrayList<>();
                 for (WordRegistRequest request : requests) {
-                    wordRegs.add(wordRegService.create(request, account));
+                    wordRegs.add((WordReg) wordRegService.create(request, account));
                 }
 
-                Registration wordReg = wordRegs.get(0);
+                WordReg wordReg = wordRegs.get(0);
                 WordRegistRequest request = requests.get(0);
 
                 wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
@@ -257,7 +253,7 @@ public class AppConfig {
                 WordReg modify = (WordReg) wordRegService.modify(request, ((WordReg) wordReg).getItem().getId(), account);
                 wordRegService.process(modify.getId(), ProcessType.APPROVED, account);
 
-                for (Registration reg : wordRegs) {
+                for (WordReg reg : wordRegs) {
                     wordRegService.process(reg.getId(), ProcessType.APPROVED, account);
                 }
 
@@ -268,25 +264,24 @@ public class AppConfig {
                 }
 
                 for (int i = 0; i < domainRegs.size(); i++) {
-                    if (i % 2 == 0) {
-                        domainRegService.process(domainRegs.get(i).getId(), ProcessType.APPROVED, account);
-                    }
+                    domainRegService.process(domainRegs.get(i).getId(), ProcessType.APPROVED, account);
                 }
 
-                Word word = wordService.get(words.get(2).getId());
-                word.getWordBase().setEngName("phn");
+                Word word = (Word) wordService.get(words.get(2).getId());
+                word.getBase().setEngName("phn");
                 wordService.save(word);
 
-                Word pass = wordService.getWordByEng("pass");
-                Word us = wordService.getWordByEng("us");
-                Word nm = wordService.getWordByEng("nm");
-                Word mb = wordService.getWordByEng("mb");
+                Word pass = wordService.getByEng("pass");
+                Word us = wordService.getByEng("us");
+                Word nm = wordService.getByEng("nm");
+                Word mb = wordService.getByEng("mb");
 
                 // getDomains
-                Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
-                Domain var = varDomains.getContent().get(0);
-                Page<Domain> numDomains = domainService.getDomainByEngNameContains("num", PageRequest.of(0, 10));
-                Domain num = numDomains.getContent().get(0);
+                Page<Domain> varDomains = domainService.getDomainByEngNameContains("VA", PageRequest.of(0, 10));
+                System.out.println();
+                Domain var = domainRepository.findAll().get(0);
+                Page<Domain> numDomains = domainService.getDomainByEngNameContains("NUM", PageRequest.of(0, 10));
+                Domain num = domainRepository.findAll().get(1);
 
                 // create dict_reg
                 DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "비밀번호", List.of(var));
@@ -296,7 +291,7 @@ public class AppConfig {
                 Dict item = reg.getItem();
 
                 Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
-                Word blb = wordService.getWordByEng("addr");
+                Word blb = wordService.getByEng("addr");
                 CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(blb), dict);
                 CommonCodeReg commonCodeReg = (CommonCodeReg) commonCodeRegService.create(cmcdRegRequest, account);
 

@@ -34,7 +34,7 @@ class CustomDomainRegServiceTest {
     ConstraintRegService constraintRegService;
 
     @Test
-    public void registCreateCustomDomain() {
+    public void registCreateCustomDomain() throws Throwable {
         Account account = accountRepository.findAll().get(0);
         ConstraintReg constraintReg = (ConstraintReg) constraintRegService.create(generateConstraintRegRequest(), account);
         CustomDomainReg customDomainReg = (CustomDomainReg) customDomainRegService.create(generateCustomDomainRegRequest(List.of(constraintReg.getItem())), account);

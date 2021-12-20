@@ -1,6 +1,7 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.domain.Domain;
@@ -30,28 +31,9 @@ public class DomainReg extends Registration<Domain, DomainBase> {
     @JoinColumn(name = "DOMAIN_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonSerialize(using = DomainSerializer.class)
+    @JsonIgnore
     private Domain item;
 
-    @Override
-    public void registered() {
-        super.registered();
-        if (base == null) {
-            return;
-        }
-        String name = base.getDataType().toString();
-        if (base.getSize() != null) {
-            name += base.getSize();
-        }
-        if (base.getScale() != null) {
-            name += "." + base.getScale();
-        }
-        if (base.getNullable() != null) {
-            if (!base.getNullable()) {
-                name += "NN";
-            } else {
-                name += "NY";
-            }
-        }
-        base.setName(name);
-    }
+    @Column(name = "DOMAIN_ID", insertable = false, updatable = false)
+    private Long ItemId;
 }

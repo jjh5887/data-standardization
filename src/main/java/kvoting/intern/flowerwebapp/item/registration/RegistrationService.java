@@ -3,23 +3,25 @@ package kvoting.intern.flowerwebapp.item.registration;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
+import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
-public abstract class RegistrationService<R, I extends Item> {
+public class RegistrationService {
     protected final RegistrationRepository registrationRepository;
     protected final ModelMapper modelMapper;
-    protected final ItemServiceImpl<I> itemService;
+    protected final ItemServiceImpl itemServiceImpl;
 
     protected Class<? extends Registration> regClazz = Registration.class;
-    protected Class<? extends Item> itemClazz;
+    protected Class<? extends Item> itemClazz = Item.class;
+
 
     public Registration save(Registration registration) {
         return (Registration) registrationRepository.save(registration);
@@ -32,24 +34,29 @@ public abstract class RegistrationService<R, I extends Item> {
         });
     }
 
-    public Registration create(R request, Account account) {
-        I item = modelMapper.map(request, (Type) itemClazz);
+    public Registration create(RegRequest request, Account account) {
+        Item item = modelMapper.map(request, (Type) itemClazz);
         item.setStatus(ProcessType.UNHANDLED);
-        item = itemService.save(item);
+        item.setModifier(account);
+        item.setModifierName(account.getName());
+        item.setModifiedTime(LocalDateTime.now());
+        item = itemServiceImpl.save(item);
 
-        return save(generateReg(request, item,
+        Registration save = save(generateReg(request, item,
                 RegistrationType.CREATE, account));
+        return save;
     }
 
-    public Registration modify(R request, Long id, Account account) {
-        I item = itemService.get(id);
+    public Registration modify(RegRequest request, Long id, Account account) throws Throwable {
+        Item item = itemServiceImpl.get(id);
         validateStatus(item);
         return save(generateReg(request, item,
                 RegistrationType.MODIFY, account));
     }
 
-    public Registration delete(Long id, Account account) {
-        I item = itemService.get(id);
+
+    public Registration delete(Long id, Account account) throws Throwable {
+        Item item = itemServiceImpl.get(id);
         validateStatus(item);
         return save(generateDelReg(item, account));
     }
@@ -61,7 +68,7 @@ public abstract class RegistrationService<R, I extends Item> {
             throw new RuntimeException();
         }
         if (registration.getRegistrationType() == RegistrationType.CREATE) {
-            itemService.delete((I) registration.getItem());
+            itemServiceImpl.delete(registration.getItem());
             return;
         }
         registrationRepository.delete(registration);
@@ -69,14 +76,16 @@ public abstract class RegistrationService<R, I extends Item> {
 
     public void executeDelete(Long id, Account account) throws Throwable {
         Registration registration = getRegistration(id);
-        I item = (I) registration.getItem();
+        Item item = registration.getItem();
+        item.setModifier(account);
         if (!registration.getRegistrant().equals(account) ||
                 item.getStatus() != ProcessType.DELETABLE) {
             throw new RuntimeException();
         }
-        itemService.delete(item);
+        itemServiceImpl.delete(item);
     }
 
+    @Transactional
     public Registration process(Long id, ProcessType type, Account account) throws Throwable {
         Registration registration = getRegistration(id);
         registration.setProcessType(type);
@@ -95,22 +104,26 @@ public abstract class RegistrationService<R, I extends Item> {
         return save(registration);
     }
 
+    @Transactional
     public Registration approve(Registration registration) {
+        registration.getItem().setModifier(registration.getRegistrant());
+        registration.getItem().setModifierName(registration.getRegistrant().getName());
+        registration.getItem().setModifiedTime(LocalDateTime.now());
         if (registration.getRegistrationType() == RegistrationType.DELETE) {
             registration.getItem().setStatus(ProcessType.DELETABLE);
             return save(registration);
         }
-        validateItem((I) registration.getItem());
+        validateItem(registration.getItem());
         registration.getItem().setStatus(ProcessType.APPROVED);
         if (registration.getRegistrationType() == RegistrationType.MODIFY) {
-            I item = (I) registration.getItem();
+            Item item = registration.getItem();
             modelMapper.map(registration.getBase(), item);
             update(registration, item);
         }
         return save(registration);
     }
 
-    public Registration generateReg(R request, I item, RegistrationType type, Account account) {
+    public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) {
         Registration registration = modelMapper.map(request, regClazz);
         registration.setItem(item);
         registration.setRegistrationType(type);
@@ -119,7 +132,7 @@ public abstract class RegistrationService<R, I extends Item> {
         return registration;
     }
 
-    public Registration generateDelReg(I item, Account account) {
+    public Registration generateDelReg(Item item, Account account) {
         Registration registration = Registration.builder()
                 .registrationType(RegistrationType.DELETE)
                 .registrant(account)
@@ -130,13 +143,20 @@ public abstract class RegistrationService<R, I extends Item> {
         return registration;
     }
 
-    public void validateStatus(I item) {
+    public void validateStatus(Item item) {
         if (!(item.getStatus() == ProcessType.APPROVED)) {
             throw new RuntimeException();
         }
     }
 
-    public abstract void validateItem(I item);
+    public void validateItem(Item item) {
+    }
 
-    public abstract void update(Registration registration, I item);
+    ;
+
+    public void update(Registration registration, Item item) {
+    }
+
+    ;
+
 }

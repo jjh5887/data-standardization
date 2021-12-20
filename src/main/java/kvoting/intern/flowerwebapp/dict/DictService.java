@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class DictService extends ItemServiceImpl<Dict> {
+public class DictService extends ItemServiceImpl {
     private final WordRepository wordRepository;
 
     public DictService(DictRepository dictRepository, WordRepository wordRepository) {
@@ -53,8 +53,8 @@ public class DictService extends ItemServiceImpl<Dict> {
     }
 
     @Transactional(readOnly = true)
-    public Dict getDetail(Long id) {
-        Dict dict = get(id);
+    public Dict getDetail(Long id) throws Throwable {
+        Dict dict = (Dict) get(id);
         Hibernate.initialize(dict.getWords());
         Hibernate.initialize(dict.getDictRegs());
         Hibernate.initialize(dict.getDomains());

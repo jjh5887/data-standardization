@@ -1,0 +1,146 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="../static/css/index.css" rel="stylesheet"/>
+    <script>
+    </script>
+</head>
+<body>
+<header>
+    <div class="mainTitle">
+        <div class="mainTitle-name" onclick="location.href='index.html'">데이터 표준화 서비스</div>
+
+        <div class="main-menu">
+            <button type="button" class="menu list" type="button" onclick="location.href='requestList.html'">
+                <img src="../static/images/requestListIcon.png" class="list" alt="requestList">
+            </button>
+            <button type="button" class="menu myPage" type="button" onclick="location.href='myPage.html'">
+                <img src="../static/images/mypageIcon.png" class="myPage" alt="requestList">
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="main">
+
+    <form>
+        <div class="request-name-box">신청/요청 리스트</div>
+        <div class="inner-form">
+            <div class="input-field first-wrap">
+                <select id="listSelect" name="Total">
+                    <option value=""> ---전체---</option>
+                    <option value=""> 카테고리</option>
+                    <option value=""> 신청자</option>
+                    <option value=""> 이름</option>
+                    <option value=""> 신청타입</option>
+                </select>
+
+            </div>
+            <div class="input-field second-wrap">
+                <input id="search" class="search form-control" type="text" placeholder="search"/>
+            </div>
+            <div class="input-field third-wrap">
+                <button id="btn1" type="button" class="btn-search" type="button">
+                    <img src="../static/images/search.png" class="searchImg" alt="search">
+                </button>
+            </div>
+        </div>
+    </form>
+    <div id="total-table" class="total-table table-wrap">
+        <div class="table-box">
+            <table id="pager" class="table table-hover results">
+                <thead>
+                <tr onclick="infoPopup1(this)">
+                    <th class="col-xs-1">신청자</th>
+                    <th class="col-xs-1">카테고리</th>
+                    <th class="col-xs-1">이름</th>
+                    <th class="col-xs-2">신청타입</th>
+                    <th class="col-xs-2">신청일</th>
+                    <th class="col-xs-1">처리일</th>
+                    <th class="col-xs-1">상태</th>
+                    <th class="col-xs-3">#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr onclick="infoPopup1(this)">
+                    <td scope="row">김oo</td>
+                    <td scope="row">용어</td>
+                    <td>A_사용자</td>
+                    <td>수정</td>
+                    <td>21.11.12</td>
+                    <td></td>
+                    <td>미처리</td>
+                    <td>
+                        <button name="T_Btn" type="button" class="btn-extension" onclick=""> 요청취소</button>
+                    </td>
+                </tr>
+                <tr onclick="infoPopup1(this)">
+
+                    <td scope="row">김oo</td>
+                    <td scope="row">도메인</td>
+                    <td>var_30</td>
+                    <td>삭제</td>
+                    <td>21.12.05</td>
+                    <td>21.12.06</td>
+                    <td>승인</td>
+                    <td>
+                        <button name="T_Btn" type="button" class="btn-extension" onclick=""> 삭제실행 </button>
+                    </td>
+
+
+                </tr>
+                <tr onclick="infoPopup1(this)">
+                    <td scope="row">박oo</td>
+                    <td scope="row">도메인</td>
+                    <td>var_50</td>
+                    <td>생성</td>
+                    <td>21.11.30</td>
+                    <td>21.12.01</td>
+                    <td>거절</td>
+                    <td>
+                        <button name="T_Btn" type="button" class="btn-extension" onclick=""> 변경/취소</button>
+                    </td>
+
+
+                </tr>
+                <tr onclick="infoPopup1(this)">
+                    <td scope="row">박oo</td>
+                    <td scope="row">단어</td>
+                    <td>사용자</td>
+                    <td>생성</td>
+                    <td>21.12.12</td>
+                    <td>21.12.13</td>
+                    <td>거절</td>
+                    <td>
+                        <button name="T_Btn" type="button" class="btn-extension" onclick=""> 변경/취소</button>
+                    </td>
+
+
+                </tr>
+                <tr onclick="infoPopup1(this)">
+                    <td scope="row">이oo</td>
+                    <td scope="row">단어</td>
+                    <td>비밀번호</td>
+                    <td>생성</td>
+                    <td>21.12.14</td>
+                    <td></td>
+                    <td>미처리</td>
+                    <td>
+                        <button name="T_Btn" type="button" class="btn-extension" onclick=""> 요청취소</button>
+                    </td>
+
+
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>
+</body>
+</html>

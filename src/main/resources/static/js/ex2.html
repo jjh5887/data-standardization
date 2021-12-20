@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- internal css -->
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+        }
+
+        .darkRed {
+            color: darkred;
+        }
+
+        .darkBlue {
+            color: darkblue;
+        }
+
+        .navbar {
+            position: relative;
+            border: 1px solid #080808;
+            background-color: #222;
+            background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+            background-repeat: repeat-x;
+            border-radius: 4px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-brand {
+            float: left;
+            padding: 14px 15px;
+            font-size: 18px;
+            line-height: 20px;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        .navbar-links {
+            font-size: 14px;
+            line-height: 20px;
+            position: relative;
+            margin: 0;
+        }
+
+        .navbar-links li {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .navbar-links li {
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .navbar-links li.active {
+            background-image: #080808;
+            background: #080808;
+            color: #fff;
+            height: 100%;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin: 0;
+        }
+
+        a {
+            color: #9d9d9d;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+
+        #container {
+            padding-top: 10px;
+            padding-left: 50px;
+            width: 90%;
+            font-size: 14px;
+        }
+
+        .demo-zone {
+            display: block;
+            width:60%;
+            min-height: 200px;
+            text-align:left;
+            max-width:1000px;
+        }
+
+        .mini-demo-zone {
+            display: block;
+            width: 100%;
+            min-height: 100px;
+        }
+
+        .btns-active, .btns-inactive {
+            margin-top: 20px;
+        }
+
+        label {
+            display: inline-block;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        button.demo,a.demo {
+            margin-right: 0;
+            margin-left: 4px;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border-radius: 4px;
+            z-index: 1;
+            color: #333;
+            background: white;
+            background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+            border: 1px solid #ccc !important;
+            color: #333;
+            line-height: 20px;
+            font-size: 14px;
+            padding: 4px 12px;
+            margin-bottom: 2px;
+        }
+
+        button.demo:hover {
+            background-image: linear-gradient(to top,#fff 0,#e0e0e0 100%);
+        }
+
+        .presentation {
+            color: #0075FF;
+            line-height: 32px;
+            padding: 8px 0px 8px 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .demo-zone table{
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-bottom:10px;
+            border: 1px solid #ccc;
+            width:100%;
+        }
+
+        .demo-zone tr th  {
+            background-color:#eee;
+        }
+
+        .demo-zone table th, table td {
+            padding: 8px 8px 8px 4px !important;
+            border: 1px solid #ccc;
+        }
+
+        #mobile-title{
+            display:none;
+        }
+
+        #plain-title{
+            display:inline-block;
+        }
+
+        @media screen and (max-width: 1200px) {
+            .demo-zone {
+                display: block;
+                width:75%;
+                min-height: 200px;
+                text-align:left;
+            }
+            #mobile-title{
+                display:none;
+            }
+            #plain-title{
+                display:inline-block;
+            }
+        }
+
+        @media screen and (max-width: 800px) {
+            #container {
+                padding-top: 0px;
+                padding-left: 10px;
+                width: 100%;
+                font-size: 13px;
+            }
+            .demo-zone {
+                display: block;
+                width:90%;
+                min-height: 200px;
+                text-align:left;
+            }
+            .presentation {
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+            #mobile-title{
+                display:none;
+            }
+            #plain-title{
+                display:inline-block;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .navbar{
+                width: calc(100% - 2px);
+                margin:0;
+            }
+            .navbar-brand {
+                width: 100%;
+            }
+
+            .navbar-links {
+                padding-left: 0;
+            }
+
+            button.demo {
+                margin-right: 100% !important;
+            }
+            #mobile-title{
+                display:block;
+                float:right;
+                color: #0075FF;
+                margin-right:40px;
+            }
+            #plain-title{
+                display:none;
+            }
+            .presentation {
+                margin-bottom: 6px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+            vanillaJs <span id="mobile-title">paginateTable()</span>
+        </a>
+    </div>
+    <ul class="navbar-links">
+        <li id="paginateTable" class="active"><a href="#paginateTable">paginateTable</a></li>
+        <li id="repos"><a href="https://github.com/PhilippeMarcMeyer/paginateTable">Github repos</a></li>
+    </ul>
+</nav>
+<div id="container">
+    <div class="presentation">
+        <span id="plain-title">paginateTable()</span>
+        A vanillajs function to paginate an existing TABLE.
+    </div>
+
+    <div class="demo-zone">
+        <table  id="demo-ajax">
+            <thead>
+            <tr style="border-color: inherit;">
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Salary</th>
+            </tr>
+            </thead>
+            <tbody id="demo-ajax-view">
+            <tr><td>1</td><td>Tiger Nixon</td><td>61</td><td>320800</td></tr><tr><td>2</td><td>Garrett Winters</td><td>63</td><td>170750</td></tr><tr><td>3</td><td>Ashton Cox</td><td>66</td><td>86000</td></tr><tr><td>4</td><td>Cedric Kelly</td><td>22</td><td>433060</td></tr><tr><td>5</td><td>Airi Satou</td><td>33</td><td>162700</td></tr><tr><td>6</td><td>Brielle Williamson</td><td>61</td><td>372000</td></tr><tr><td>7</td><td>Herrod Chandler</td><td>59</td><td>137500</td></tr><tr><td>8</td><td>Rhona Davidson</td><td>55</td><td>327900</td></tr><tr><td>9</td><td>Colleen Hurst</td><td>39</td><td>205500</td></tr><tr><td>10</td><td>Sonya Frost</td><td>23</td><td>103600</td></tr><tr><td>11</td><td>Jena Gaines</td><td>30</td><td>90560</td></tr><tr><td>12</td><td>Quinn Flynn</td><td>22</td><td>342000</td></tr><tr><td>13</td><td>Charde Marshall</td><td>36</td><td>470600</td></tr><tr><td>14</td><td>Haley Kennedy</td><td>43</td><td>313500</td></tr><tr><td>15</td><td>Tatyana Fitzpatrick</td><td>19</td><td>385750</td></tr><tr><td>16</td><td>Michael Silva</td><td>66</td><td>198500</td></tr><tr><td>17</td><td>Paul Byrd</td><td>64</td><td>725000</td></tr><tr><td>18</td><td>Gloria Little</td><td>59</td><td>237500</td></tr><tr><td>19</td><td>Bradley Greer</td><td>41</td><td>132000</td></tr><tr><td>20</td><td>Dai Rios</td><td>35</td><td>217500</td></tr><tr><td>21</td><td>Jenette Caldwell</td><td>30</td><td>345000</td></tr><tr><td>22</td><td>Yuri Berry</td><td>40</td><td>675000</td></tr><tr><td>23</td><td>Caesar Vance</td><td>21</td><td>106450</td></tr><tr><td>24</td><td>Doris Wilder</td><td>23</td><td>85600</td></tr>
+            </tbody>
+        </table>
+        <div id="demo-ajax-bottom" style="width:100%;text-align:center;"></div>
+    </div>
+</div>
+
+<script src="../json/ex.json"></script>
+<script>
+    setTableSize();
+    window.onresize = setTableSize;
+    function setTableSize(){
+        var rowHeight = window.innerWidth <= 640 ? 32 : 40;
+        var top = document.getElementById("demo-ajax").getBoundingClientRect().top;
+        var bottom = window.innerWidth <= 640 ? 160 : 100;
+        var availHeight = window.innerHeight - top - bottom;
+        var nr = Math.floor(availHeight / rowHeight);
+        if(nr > 12 ) nr = 12;
+        if(nr < 4) nr = 4;
+        pagineTable("demo-ajax", nr, 0, "demo-ajax-bottom",rowHeight);
+    }
+</script>
+</html>

@@ -1,5 +1,5 @@
 
-function getTableName() {
+function infoPopup() {
     const tableList = document.getElementById('tableList');
     for (let i = 1; i < tableList.rows.length; i++) {
         tableList.rows[i].cells[2].onclick = function () {

@@ -15,4 +15,6 @@ public interface Item {
     void setModifierName(String name);
 
     void setModifiedTime(LocalDateTime localDateTime);
+
+    String getName();
 }

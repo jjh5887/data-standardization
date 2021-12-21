@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     }
 
     private String secretKey = "test";
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private long tokenValidTime = 48 * 30 * 60 * 1000L;
 
     @PostConstruct
     protected void init() {

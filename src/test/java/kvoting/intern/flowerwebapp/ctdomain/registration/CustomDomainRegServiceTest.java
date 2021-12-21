@@ -43,9 +43,9 @@ class CustomDomainRegServiceTest {
 
         for (Constraint constraint : customDomain.getConstraints()) {
             assertThat(constraint).isEqualTo(constraintReg.getItem());
-            System.out.println(constraint.getConstraintBase().getName());
+            System.out.println(constraint.getBase().getName());
         }
-        System.out.println(customDomain.getCustomDomainBase().getName());
+        System.out.println(customDomain.getBase().getName());
     }
 
     private ConstraintRegRequest generateConstraintRegRequest() {

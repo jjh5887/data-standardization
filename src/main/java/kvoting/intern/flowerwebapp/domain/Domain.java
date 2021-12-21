@@ -83,4 +83,9 @@ public class Domain implements Item {
         }
         base.setName(name);
     }
+
+    @Override
+    public String getName() {
+        return base.getName();
+    }
 }

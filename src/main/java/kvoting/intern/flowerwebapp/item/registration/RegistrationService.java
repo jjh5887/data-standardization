@@ -6,6 +6,8 @@ import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,11 @@ public class RegistrationService {
 
     public Registration save(Registration registration) {
         return (Registration) registrationRepository.save(registration);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Registration> getAllRegs(Pageable pageable) {
+        return registrationRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -126,6 +133,7 @@ public class RegistrationService {
     public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) {
         Registration registration = modelMapper.map(request, regClazz);
         registration.setItem(item);
+        registration.setName(item.getName());
         registration.setRegistrationType(type);
         registration.setRegistrant(account);
         registration.setProcessType(ProcessType.UNHANDLED);
@@ -136,6 +144,7 @@ public class RegistrationService {
         Registration registration = Registration.builder()
                 .registrationType(RegistrationType.DELETE)
                 .registrant(account)
+                .name(item.getName())
                 .processType(ProcessType.UNHANDLED)
                 .build();
         registration = modelMapper.map(registration, regClazz);

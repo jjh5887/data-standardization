@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -33,8 +34,7 @@ class AccountServiceTest {
         Account savedAccount = accountService.create(accountCreateRequest);
         assertThat(accountRepository.count()).isEqualTo(1L);
 
-        boolean login = accountService.login(generateLoginRequest(accountCreateRequest.getEmail(), accountCreateRequest.getPassword()));
-        assertThat(login).isEqualTo(true);
+        assertDoesNotThrow(() -> accountService.login(generateLoginRequest(accountCreateRequest.getEmail(), accountCreateRequest.getPassword())));
 
         Account account = accountService.getAccount(accountCreateRequest.getEmail());
         assertThat(savedAccount).isEqualTo(account);

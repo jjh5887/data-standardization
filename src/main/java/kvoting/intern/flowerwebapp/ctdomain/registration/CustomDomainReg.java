@@ -55,13 +55,13 @@ public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase
         constraints.sort(new Comparator<Constraint>() {
             @Override
             public int compare(Constraint o1, Constraint o2) {
-                return o1.getConstraintBase().getName().compareTo(o2.getConstraintBase().getName());
+                return o1.getBase().getName().compareTo(o2.getBase().getName());
             }
         });
 
         if (constraints != null) {
             for (Constraint constraint : constraints) {
-                ConstraintBase base = constraint.getConstraintBase();
+                ConstraintBase base = constraint.getBase();
                 name += base.getName();
                 if (base.getInputType() == InputType.BOOLEAN) {
                     if (base.getValue().equals("0")) {

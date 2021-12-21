@@ -24,7 +24,7 @@ public class SwaggerConfig {
     public Docket api() {
         ParameterBuilder header = new ParameterBuilder();
         Parameter build = header.name("X-AUTH-TOKEN")
-                .description("Access Token")
+                .description("사용자 인증용 토큰")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
                 .required(false)

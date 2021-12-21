@@ -37,7 +37,7 @@ public class CustomDomain implements Item {
     private Long id;
 
     @Embedded
-    private CustomDomainBase customDomainBase;
+    private CustomDomainBase base;
 
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
@@ -74,4 +74,8 @@ public class CustomDomain implements Item {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Set<Dict> dicts = new HashSet<>();
 
+    @Override
+    public String getName() {
+        return base.getName();
+    }
 }

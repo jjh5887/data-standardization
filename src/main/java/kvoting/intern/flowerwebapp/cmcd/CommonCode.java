@@ -35,7 +35,7 @@ public class CommonCode implements Item {
     private Long id;
 
     @Embedded
-    private CommonCodeBase commonCodeBase;
+    private CommonCodeBase base;
 
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
@@ -75,6 +75,11 @@ public class CommonCode implements Item {
         for (Word word : words) {
             name += word.getBase().getName() + " ";
         }
-        this.commonCodeBase.setCodeName(name.substring(0, name.length() - 1));
+        this.base.setCodeName(name.substring(0, name.length() - 1));
+    }
+
+    @Override
+    public String getName() {
+        return base.getCodeName();
     }
 }

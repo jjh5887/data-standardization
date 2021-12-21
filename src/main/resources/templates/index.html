@@ -8,10 +8,10 @@
         defer 속성은 페이지가 모두 로드된 후에 해당 외부 스크립트가 실행됨을 명시
         http://tcpschool.com/html-tag-attrs/script-defer
     <script type="module" src = "js/main.js"> </script>-->
-    <script type = "text/javascript">
+    <script type="text/javascript">
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if(xhttp.readyState == 4 && xhttp.status == 200){
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
                 jsonfunc(xhttp.responseText);
             }
         }
@@ -37,11 +37,11 @@
                         + '<td>' + json[i].dictBase?.engName + '</td>'
                         + '<td>' + json[i].dictBase?.screenName + '</td>'
                         + '<td>' + json[i].dictBase?.domains + '</td>'
-                        + '<td>' + /*json[i].domains?.dataType */ + '</td>'
-                        + '<td>' + /*json[i].domains?.size */ + '</td>'
-                        + '<td>' + /*json[i].domains?.scale */ + '</td>'
-                        + '<td>' + json[i].dictBase?.nullable  + '</td>'
-                        + '<td>' + json[i].dictBase?.isCommon  + '</td>'
+                        + '<td>' + /*json[i].domains?.dataType */ +'</td>'
+                        + '<td>' + /*json[i].domains?.size */ +'</td>'
+                        + '<td>' + /*json[i].domains?.scale */ +'</td>'
+                        + '<td>' + json[i].dictBase?.nullable + '</td>'
+                        + '<td>' + json[i].dictBase?.isCommon + '</td>'
                         + '<td>' + json[i].dictBase?.caseStyle + '</td>'
                         + '<td>' + json[i].dictBase?.description + '</td>'
                         + '<td>' + json[i].status + '</td>'
@@ -57,7 +57,7 @@
                         + '<td>' + json[i].domainBase?.size + '</td>'
                         + '<td>' + json[i].domainBase?.scale + '</td>'
                         + '<td>' + json[i].domainBase?.nullable + '</td>'
-                        + '<td>' + json[i].status+ '</td>'
+                        + '<td>' + json[i].status + '</td>'
 
                         + '</tr>';
                 } else if (Object.keys(json[i]).includes('wordBase')) {
@@ -91,27 +91,28 @@
         const DOMAIN_VALUE = '2';
         const word_VALUE = '3'
 
-        function categoryFunction(e){
+        function categoryFunction(e) {
 
             let add;
             const target = document.getElementById("mySelect2");
             const menuSelect = ["------"];
             const dict = ["한글이름", "영어이름", "전략"];
-            const domain = ["이름","타입", "길이", "정확도","nullable","DB타입", "상태"];
+            const domain = ["이름", "타입", "길이", "정확도", "nullable", "DB타입", "상태"];
             const word = ["한글이름", "영어이름"];
 
-            if(e.value == "1"){
-               add = dict;
-            }else if(e.value == "2"){
+            if (e.value == "1") {
+                add = dict;
+            } else if (e.value == "2") {
                 add = domain;
-            }else if(e.value == "3"){
-                add = word;s
-            }else if(e.value == "0"){
+            } else if (e.value == "3") {
+                add = word;
+                s
+            } else if (e.value == "0") {
                 add = menuSelect;
             }
 
-        target.options.length = 1;
-            for(let property in add){
+            target.options.length = 1;
+            for (let property in add) {
                 let opt = document.createElement("option");
                 opt.value = add[property];
                 opt.innerHTML = add[property];
@@ -210,7 +211,7 @@
             </table>
             <div id="pageNavPosition" class="pager-nav"></div>
         </div>
-        <div  id="domain-wrap" class="table-box">
+        <div id="domain-wrap" class="table-box">
             <span class="name-box">도메인</span>
             <button type="button" class="menu" type="button" onclick="">
                 <img src="../static/images/plus.png" class="plus" alt="requestList">
@@ -232,7 +233,7 @@
 
             </table>
         </div>
-        <div  id="word-wrap" class="table-box">
+        <div id="word-wrap" class="table-box">
             <span class="name-box">단어</span>
             <button type="button" class="menu" type="button" onclick="">
                 <img src="../static/images/plus.png" class="plus" alt="requestList">

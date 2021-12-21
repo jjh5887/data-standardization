@@ -12,7 +12,7 @@ public class DomainSerializer extends JsonSerializer<Domain> {
     public void serialize(Domain domain, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", domain.getId());
-        jsonGenerator.writeObjectField("domainbase", domain.getBase());
+        jsonGenerator.writeObjectField("domainBase", domain.getBase());
         jsonGenerator.writeEndObject();
     }
 }

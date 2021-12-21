@@ -26,17 +26,17 @@ public class DictService extends ItemServiceImpl {
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByName(String name, Pageable pageable) {
-        return ((DictRepository) itemRepository).findByDictBase_NameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByBase_NameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByEngName(String name, Pageable pageable) {
-        return ((DictRepository) itemRepository).findByDictBase_EngNameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByBase_EngNameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Dict> getDictByScreenName(String name, Pageable pageable) {
-        return ((DictRepository) itemRepository).findByDictBase_ScreenNameContains(name, pageable);
+        return ((DictRepository) itemRepository).findByBase_ScreenNameContains(name, pageable);
     }
 
     @Transactional(readOnly = true)

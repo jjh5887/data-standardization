@@ -1,6 +1,5 @@
 package kvoting.intern.flowerwebapp.word;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +14,6 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@ApiModel(value = "단어 정보", description = "영어명(약어), 한글명, 원문영어명")
 public class WordBase {
     @Column(name = "WORD_ENG_NAME", unique = true)
     @ApiModelProperty(value = "영어명(약어)")

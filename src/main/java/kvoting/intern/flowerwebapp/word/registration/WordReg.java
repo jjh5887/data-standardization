@@ -1,7 +1,6 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
@@ -28,7 +27,6 @@ public class WordReg extends Registration<Word, WordBase> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "WORD_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonIgnore
     private Word item;
 
     @Column(name = "WORD_ID", insertable = false, updatable = false)

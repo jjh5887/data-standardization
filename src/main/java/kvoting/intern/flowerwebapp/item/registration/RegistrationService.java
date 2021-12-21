@@ -64,7 +64,7 @@ public class RegistrationService {
     public void cancel(Long id, Account account) throws Throwable {
         Registration registration = getRegistration(id);
         if (registration.getProcessType() == ProcessType.APPROVED ||
-                registration.getRegistrant() != account) {
+                !registration.getRegistrant().equals(account)) {
             throw new RuntimeException();
         }
         if (registration.getRegistrationType() == RegistrationType.CREATE) {
@@ -152,11 +152,7 @@ public class RegistrationService {
     public void validateItem(Item item) {
     }
 
-    ;
-
     public void update(Registration registration, Item item) {
     }
-
-    ;
 
 }

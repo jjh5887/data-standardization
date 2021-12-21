@@ -49,7 +49,6 @@ public class WordService extends ItemServiceImpl {
     }
 
     @Override
-    @Transactional
     public Word save(Item word) {
         Word save = (Word) itemRepository.save(word);
         for (Dict dict : save.getDicts()) {

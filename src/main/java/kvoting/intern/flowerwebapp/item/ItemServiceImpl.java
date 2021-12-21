@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ItemServiceImpl implements ItemService {
     protected final JpaRepository itemRepository;
 

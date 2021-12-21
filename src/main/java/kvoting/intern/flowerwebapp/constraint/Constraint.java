@@ -34,7 +34,7 @@ public class Constraint implements Item {
     private Long id;
 
     @Embedded
-    private ConstraintBase constraintBase;
+    private ConstraintBase base;
 
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
@@ -58,4 +58,9 @@ public class Constraint implements Item {
 
     @ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
     private Set<CustomDomain> customDomains = new HashSet<>();
+
+    @Override
+    public String getName() {
+        return base.getName();
+    }
 }

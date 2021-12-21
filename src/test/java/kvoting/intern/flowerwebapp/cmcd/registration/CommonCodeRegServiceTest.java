@@ -109,9 +109,9 @@ class CommonCodeRegServiceTest {
         CommonCode commonCode = (CommonCode) commonCodeService.get(commonCodeReg.getItem().getId());
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getDescription()).isEqualTo(commonCode.getCommonCodeBase().getDescription());
+        assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+        assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+        assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
         assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
     }
 
@@ -141,9 +141,9 @@ class CommonCodeRegServiceTest {
         dict = (Dict) dictService.get(dict.getId());
         CommonCode commonCode = (CommonCode) commonCodeService.get(commonCodeReg.getItem().getId());
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getDescription()).isEqualTo(commonCode.getCommonCodeBase().getDescription());
+        assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+        assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+        assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
         assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
     }
 
@@ -171,9 +171,9 @@ class CommonCodeRegServiceTest {
         CommonCode commonCode = (CommonCode) commonCodeService.get(commonCodeReg.getItem().getId());
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getDescription()).isEqualTo(commonCode.getCommonCodeBase().getDescription());
+        assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+        assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+        assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
         assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
     }
 
@@ -200,9 +200,9 @@ class CommonCodeRegServiceTest {
         assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getDescription()).isEqualTo(commonCode.getCommonCodeBase().getDescription());
+        assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+        assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+        assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
         assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
         assertThat(commonCode.getStatus()).isEqualTo(ProcessType.APPROVED);
     }
@@ -230,9 +230,9 @@ class CommonCodeRegServiceTest {
         assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
 
         assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCodeName()).isEqualTo(commonCode.getCommonCodeBase().getCodeName());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getCode()).isEqualTo(commonCode.getCommonCodeBase().getCode());
-        assertThat(dict.getCommonCode().getCommonCodeBase().getDescription()).isEqualTo(commonCode.getCommonCodeBase().getDescription());
+        assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+        assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+        assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
         assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
         assertThat(commonCode.getStatus()).isEqualTo(ProcessType.REJECTED);
     }
@@ -259,8 +259,8 @@ class CommonCodeRegServiceTest {
 
         // Then
         CommonCode commonCode = (CommonCode) commonCodeService.get(modify.getItem().getId());
-        assertThat(commonCode.getCommonCodeBase().getCode()).isEqualTo(cmcdRegRequest.getBase().getCode());
-        assertThat(commonCode.getCommonCodeBase().getCodeName()).isEqualTo(clb.getBase().getName());
+        assertThat(commonCode.getBase().getCode()).isEqualTo(cmcdRegRequest.getBase().getCode());
+        assertThat(commonCode.getBase().getCodeName()).isEqualTo(clb.getBase().getName());
     }
 
     @Test
@@ -285,8 +285,8 @@ class CommonCodeRegServiceTest {
 
         // Then
         CommonCode commonCode = (CommonCode) commonCodeService.get(modify.getItem().getId());
-        assertThat(commonCode.getCommonCodeBase().getCode()).isNotEqualTo(cmcdRegRequest.getBase().getCode());
-        assertThat(commonCode.getCommonCodeBase().getCodeName()).isEqualTo(word.getBase().getName());
+        assertThat(commonCode.getBase().getCode()).isNotEqualTo(cmcdRegRequest.getBase().getCode());
+        assertThat(commonCode.getBase().getCodeName()).isEqualTo(word.getBase().getName());
     }
 
     @Test

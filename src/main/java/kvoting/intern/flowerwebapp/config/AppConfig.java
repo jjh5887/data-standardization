@@ -1,5 +1,8 @@
 package kvoting.intern.flowerwebapp.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.account.AccountRole;
 import kvoting.intern.flowerwebapp.account.AccountService;
@@ -66,6 +69,13 @@ public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper()
+                .registerModule(new Hibernate5Module())
+                .registerModule(new JavaTimeModule());
     }
 
     @Bean
@@ -219,7 +229,11 @@ public class AppConfig {
             @Override
             public void run(ApplicationArguments args) {
                 AccountCreateRequest accountCreateRequest = generateCreateRequest("test@test.com", "1234", "관리자", "연구소");
+                AccountCreateRequest suminReq = generateCreateRequest("tnals2322", "1234", "이수민", "연구소");
+                AccountCreateRequest kihoonReq = generateCreateRequest("kihoon0510", "1234", "남기훈", "연구소");
                 Account savedAccount = accountService.create(accountCreateRequest);
+                accountService.create(suminReq);
+                accountService.create(kihoonReq);
                 savedAccount.addRole(AccountRole.ADMIN);
                 Account account = accountService.save(savedAccount);
 

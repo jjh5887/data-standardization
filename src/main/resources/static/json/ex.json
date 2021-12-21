@@ -1,138 +1,129 @@
- [
-    {
-      "id": 2,
-      "wordBase": {
-        "engName": "va",
-        "name": "문자열",
-        "orgEngName": "varchar2"
-      },
-      "dictRegs": [],
-      "dicts": [],
-      "commonCodeRegs": [],
-      "commonCodes": []
-    }
-  ,
-   {
-     "id": 3,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 4,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 5,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 6,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 7,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 8,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-   {
-     "id": 9,
-     "wordBase": {
-       "engName": "va",
-       "name": "문자열",
-       "orgEngName": "varchar2"
-     },
-     "dictRegs": [],
-     "dicts": [],
-     "commonCodeRegs": [],
-     "commonCodes": []
-   }
- ,
-
-    {
-      "id": 29,
-      "domainBase": {
-        "name": "CHAR20NY",
-        "description": "this is test domain",
-        "db": "ORACLE",
-        "dataType": "CHAR",
-        "size": 20,
-        "scale": 0,
-        "nullable": true
-      },
-      "status": "APPROVED",
-      "dictRegs": [],
-      "dicts": []
+[
+  {
+    "id": 2,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
     },
-
-    {
-      "id": 45,
-      "dictBase": {
-        "name": "사용자 비밀번호",
-        "engName": "usPass",
-        "screenName": "헬로~",
-        "isCommon": false,
-        "caseStyle": "CAMEL",
-        "description": null
-      },
-      "status": "UNHANDLED",
-      "domains" : [
-        {}, {}
-      ]
-    }
-  ]
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 3,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 4,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 5,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 6,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 7,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 8,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 9,
+    "wordBase": {
+      "engName": "va",
+      "name": "문자열",
+      "orgEngName": "varchar2"
+    },
+    "dictRegs": [],
+    "dicts": [],
+    "commonCodeRegs": [],
+    "commonCodes": []
+  },
+  {
+    "id": 29,
+    "domainBase": {
+      "name": "CHAR20NY",
+      "description": "this is test domain",
+      "db": "ORACLE",
+      "dataType": "CHAR",
+      "size": 20,
+      "scale": 0,
+      "nullable": true
+    },
+    "status": "APPROVED",
+    "dictRegs": [],
+    "dicts": []
+  },
+  {
+    "id": 45,
+    "dictBase": {
+      "name": "사용자 비밀번호",
+      "engName": "usPass",
+      "screenName": "헬로~",
+      "isCommon": false,
+      "caseStyle": "CAMEL",
+      "description": null
+    },
+    "status": "UNHANDLED",
+    "domains": [
+      {},
+      {}
+    ]
+  }
+]

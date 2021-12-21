@@ -120,7 +120,7 @@ class DictRegServiceTest {
         Page<Dict> dictByWord = dictService.getDictByWord(List.of(pass), PageRequest.of(0, 10));
         assertThat(dictByWord.getTotalElements()).isEqualTo(1L);
         for (Dict dict : dictByWord) {
-            assertThat(dict.getDictBase().getEngName()).containsIgnoringCase(pass.getBase().getEngName());
+            assertThat(dict.getBase().getEngName()).containsIgnoringCase(pass.getBase().getEngName());
         }
 
 
@@ -136,7 +136,7 @@ class DictRegServiceTest {
         assertThat(dictByPass.getTotalElements()).isEqualTo(1L);
         for (Dict byPass : dictByPass) {
             assertThat(Pattern.compile(Pattern.quote(save.getBase().getEngName()),
-                    Pattern.CASE_INSENSITIVE).matcher(byPass.getDictBase().getEngName()).find())
+                    Pattern.CASE_INSENSITIVE).matcher(byPass.getBase().getEngName()).find())
                     .isEqualTo(true);
         }
 
@@ -149,7 +149,7 @@ class DictRegServiceTest {
         // Then word has also been deleted
         for (Dict dict : dictRepository.findAll()) {
             assertThat(Pattern.compile(Pattern.quote(save.getBase().getEngName()),
-                    Pattern.CASE_INSENSITIVE).matcher(dict.getDictBase().getEngName()).find())
+                    Pattern.CASE_INSENSITIVE).matcher(dict.getBase().getEngName()).find())
                     .isEqualTo(false);
         }
 

@@ -18,17 +18,17 @@ public class ConstraintService extends ItemServiceImpl {
 
     @Transactional(readOnly = true)
     public Page<Constraint> getByName(String name, Pageable pageable) {
-        return constraintRepository.findByConstraintBase_Name(name, pageable);
+        return constraintRepository.findByBase_Name(name, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Constraint> getByValue(String value, Pageable pageable) {
-        return constraintRepository.findByConstraintBase_Value(value, pageable);
+        return constraintRepository.findByBase_Value(value, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Constraint> getByInput(InputType inputType, Pageable pageable) {
-        return constraintRepository.findByConstraintBase_InputType(inputType, pageable);
+        return constraintRepository.findByBase_InputType(inputType, pageable);
     }
 
 }

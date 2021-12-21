@@ -2,6 +2,7 @@ package kvoting.intern.flowerwebapp.item.registration;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.account.Account;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "REG_TYPE")
 @EqualsAndHashCode(of = "id")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Registration<I extends Item, B> {
 
     @Id
@@ -29,10 +31,11 @@ public class Registration<I extends Item, B> {
     @Column(name = "REG_ID")
     private Long id;
 
+    @Column(name = "REG_ITEM_NM")
+    private String name;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumns({
-            @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID"),
-            @JoinColumn(name = "REGT_NM", referencedColumnName = "USER_NM")})
+    @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonSerialize(using = AccountSerializer.class)
     private Account registrant;
@@ -43,17 +46,18 @@ public class Registration<I extends Item, B> {
     private LocalDateTime dateRegistered;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumns({
-            @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID"),
-            @JoinColumn(name = "PROCR_NM", referencedColumnName = "USER_NM")})
+    @JoinColumn(name = "PROCR_ID", referencedColumnName = "USER_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonSerialize(using = AccountSerializer.class)
     private Account processor;
+
     @Column(name = "STDZ_PROCR_TPCD")
     private ProcessType processType;
     @Column(name = "PROC_TM")
     private LocalDateTime dateProcessed;
 
+    @Column(name = "REG_TYPE", insertable = false, updatable = false)
+    private String type;
 
     @Column(name = "ERR_CONT", length = 500)
     private String errorMessage;

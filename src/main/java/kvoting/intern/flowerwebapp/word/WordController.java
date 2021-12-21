@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Api("Word API Controller")
+@Api(tags = "단어 API")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/word", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,14 +21,14 @@ public class WordController {
     private final WordService wordService;
 
     @ApiOperation(value = "id로 단어 조회", notes = "단어 정보")
-    @ApiImplicitParam(name = "id", value = "단어 id")
+    @ApiImplicitParam(name = "id", value = "단어 id", type = "number")
     @GetMapping("/{id}")
     public ResponseEntity getWord(@PathVariable Long id) throws Throwable {
         Word body = (Word) wordService.get(id);
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "영어(약어)로 단어 조회", notes = "단어 목록")
+    @ApiOperation(value = "영어(약어)로 단어 조회")
     @ApiImplicitParam(name = "name", value = "단어 영어명(약어)")
     @GetMapping("/eng/{name}")
     public ResponseEntity getWordByEng(@PathVariable String name, Pageable pageable) {
@@ -36,7 +36,14 @@ public class WordController {
         return ResponseEntity.ok(byEng);
     }
 
-    @ApiOperation(value = "한글로 단어 조회", notes = "단어 목록")
+    @ApiOperation(value = "전체 단어 조회")
+    @GetMapping
+    public ResponseEntity getAllWord(Pageable pageable) {
+        Page<Word> byEng = wordService.getAllWord(pageable);
+        return ResponseEntity.ok(byEng);
+    }
+
+    @ApiOperation(value = "한글로 단어 조회")
     @ApiImplicitParam(name = "name", value = "단어 한글명")
     @GetMapping("/name/{name}")
     public ResponseEntity getWordByName(@PathVariable String name, Pageable pageable) {
@@ -44,7 +51,7 @@ public class WordController {
         return ResponseEntity.ok(byName);
     }
 
-    @ApiOperation(value = "영어로 이름 조회", notes = "단어 목록")
+    @ApiOperation(value = "영어로 이름 조회")
     @ApiImplicitParam(name = "name", value = "단어 영어명")
     @GetMapping("/org/{name}")
     public ResponseEntity getWordByOrgEngName(@PathVariable String name, Pageable pageable) {

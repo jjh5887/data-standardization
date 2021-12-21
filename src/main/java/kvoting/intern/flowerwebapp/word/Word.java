@@ -80,4 +80,9 @@ public class Word implements Item {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
     Set<CommonCode> commonCodes = new HashSet<>();
+
+    @Override
+    public String getName() {
+        return base.getEngName();
+    }
 }

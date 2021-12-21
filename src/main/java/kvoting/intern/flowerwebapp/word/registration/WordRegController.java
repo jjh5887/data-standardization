@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("Word Registration API Controller")
+@Api(tags = "단어 요청 API")
 @RestController
 @RequestMapping(value = "/wordReg", produces = MediaType.APPLICATION_JSON_VALUE)
 public class WordRegController extends RegistrationController<WordRegistRequest> {

@@ -40,7 +40,7 @@ public class Dict implements Item {
     private Long id;
 
     @Embedded
-    DictBase dictBase;
+    DictBase base;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -90,7 +90,7 @@ public class Dict implements Item {
 
     @PrePersist
     public void setUp() {
-        switch (getDictBase().getCaseStyle()) {
+        switch (getBase().getCaseStyle()) {
         case SNAKE:
             makeSnakeName();
             break;
@@ -109,8 +109,8 @@ public class Dict implements Item {
             name += word.getBase().getName() + " ";
             engName += word.getBase().getEngName() + "_";
         }
-        this.dictBase.setName(name.substring(0, name.length() - 1));
-        this.dictBase.setEngName(engName.substring(0, engName.length() - 1).toUpperCase());
+        this.base.setName(name.substring(0, name.length() - 1));
+        this.base.setEngName(engName.substring(0, engName.length() - 1).toUpperCase());
     }
 
     public void makeCamelName() {
@@ -126,7 +126,12 @@ public class Dict implements Item {
             name += nameBuf;
             engName += engNameBuf;
         }
-        this.dictBase.setName(name);
-        this.dictBase.setEngName(engName);
+        this.base.setName(name);
+        this.base.setEngName(engName);
+    }
+
+    @Override
+    public String getName() {
+        return base.getEngName();
     }
 }

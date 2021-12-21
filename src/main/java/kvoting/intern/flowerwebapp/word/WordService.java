@@ -29,6 +29,12 @@ public class WordService extends ItemServiceImpl {
         });
     }
 
+    @Transactional(readOnly = true)
+    public Page<Word> getAllWord(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Page<Word> getByEng(String engName, Pageable pageable) {
         return ((WordRepository) itemRepository).findByBase_EngNameContains(engName, pageable);
     }

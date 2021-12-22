@@ -64,7 +64,7 @@ public class CustomDomain implements Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    private Set<CustomDomainReg> customDomainRegs = new HashSet<>();
+    private Set<CustomDomainReg> regs = new HashSet<>();
 
     @ManyToMany(mappedBy = "customDomains", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")

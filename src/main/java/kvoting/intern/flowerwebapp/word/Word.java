@@ -1,10 +1,7 @@
 package kvoting.intern.flowerwebapp.word;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
@@ -12,6 +9,7 @@ import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
+import kvoting.intern.flowerwebapp.view.View;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import lombok.*;
 
@@ -28,6 +26,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonView(View.Public.class)
 public class Word implements Item {
     @EqualsAndHashCode.Include
     @Id
@@ -41,11 +40,6 @@ public class Word implements Item {
     @Column(name = "WORD_PROC_TPCD")
     private ProcessType status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MODFR_ID")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonIgnore
-    private Account modifier;
 
     @Column(name = "MODFR_ID", insertable = false, updatable = false)
     private Long modifierId;
@@ -56,13 +50,17 @@ public class Word implements Item {
     @Column(name = "MODF_TM")
     private LocalDateTime modifiedTime;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item", cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MODFR_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
-    private Set<WordReg> wordRegs = new HashSet<>();
+    private Account modifier;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item", cascade = CascadeType.REMOVE)
+    @JsonView(View.Detail.class)
+    private Set<WordReg> regs = new HashSet<>();
 
     @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
     Set<DictReg> dictRegs = new HashSet<>();
 

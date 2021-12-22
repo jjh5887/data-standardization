@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.item.registration;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -8,6 +9,7 @@ import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import kvoting.intern.flowerwebapp.jwt.JwtTokenProvider;
+import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -27,6 +29,7 @@ public class RegistrationController<R extends RegRequest> {
 
     @ApiOperation(value = "전체 요청 조회")
     @GetMapping
+    @JsonView(View.Public.class)
     public ResponseEntity getAllReg(Pageable pageable) {
         return ResponseEntity.ok(registrationService.getAllRegs(pageable));
     }
@@ -34,15 +37,37 @@ public class RegistrationController<R extends RegRequest> {
     @ApiOperation(value = "id로 등록된 요청 조회")
     @ApiImplicitParam(name = "id", value = "요청 id")
     @GetMapping("/{id}")
+    @JsonView(View.Detail.class)
     public ResponseEntity getReg(@PathVariable Long id) throws Throwable {
-        return ResponseEntity.ok(registrationService.getRegistration(id));
+        return ResponseEntity.ok(registrationService.getRegDetail(id));
     }
 
     @ApiOperation(value = "생성 요청 등록")
     @PostMapping
+    @JsonView(View.Detail.class)
     public ResponseEntity createReg(@RequestBody R request, HttpServletRequest servletRequest) {
         Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
         Registration registration = registrationService.create(request, account);
+        return ResponseEntity.ok(registration);
+    }
+
+    @ApiOperation(value = "수정 요청 등록")
+    @ApiImplicitParam(name = "id", value = "수정하고자 하는 아이템 id")
+    @PostMapping("/modify/{id}")
+    @JsonView(View.Detail.class)
+    public ResponseEntity modifyReg(@PathVariable Long id, @RequestBody R request, HttpServletRequest servletRequest) throws Throwable {
+        Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
+        Registration registration = registrationService.modify(request, id, account);
+        return ResponseEntity.ok(registration);
+    }
+
+    @ApiOperation(value = "삭제 요청 등록")
+    @ApiImplicitParam(name = "id", value = "삭제하고자 하는 아이템 id")
+    @PostMapping("/delete/{id}")
+    @JsonView(View.Public.class)
+    public ResponseEntity deleteReg(@PathVariable Long id, HttpServletRequest request) throws Throwable {
+        Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(request));
+        Registration registration = registrationService.delete(id, account);
         return ResponseEntity.ok(registration);
     }
 
@@ -51,6 +76,7 @@ public class RegistrationController<R extends RegRequest> {
             @ApiImplicitParam(name = "id", value = "승인 또는 거절하고자 하는 요청 id"),
             @ApiImplicitParam(name = "type", value = "처리 상태", dataTypeClass = ProcessType.class)})
     @PutMapping("/{type}/{id}")
+    @JsonView(View.Detail.class)
     public ResponseEntity approveReg(@PathVariable ProcessType type, @PathVariable Long id, HttpServletRequest servletRequest) throws Throwable {
         Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
         Registration registration = registrationService.process(id, type, account);
@@ -64,24 +90,6 @@ public class RegistrationController<R extends RegRequest> {
         Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
         registrationService.cancel(id, account);
         return ResponseEntity.ok("ok");
-    }
-
-    @ApiOperation(value = "수정 요청 등록")
-    @ApiImplicitParam(name = "id", value = "수정하고자 하는 아이템 id")
-    @PostMapping("/modify/{id}")
-    public ResponseEntity modifyReg(@PathVariable Long id, @RequestBody R request, HttpServletRequest servletRequest) throws Throwable {
-        Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
-        Registration registration = registrationService.modify(request, id, account);
-        return ResponseEntity.ok(registration);
-    }
-
-    @ApiOperation(value = "삭제 요청 등록")
-    @ApiImplicitParam(name = "id", value = "삭제하고자 하는 아이템 id")
-    @PostMapping("/delete/{id}")
-    public ResponseEntity deleteReg(@PathVariable Long id, HttpServletRequest request) throws Throwable {
-        Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(request));
-        Registration registration = registrationService.delete(id, account);
-        return ResponseEntity.ok(registration);
     }
 
     @ApiOperation(value = "삭제 요청 실행")

@@ -45,7 +45,7 @@ public class Dict implements Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    Set<DictReg> dictRegs = new HashSet<>();
+    Set<DictReg> regs = new HashSet<>();
 
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;

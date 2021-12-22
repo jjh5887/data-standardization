@@ -54,7 +54,7 @@ public class Constraint implements Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    private Set<ConstraintReg> constraintRegs = new HashSet<>();
+    private Set<ConstraintReg> regs = new HashSet<>();
 
     @ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
     private Set<CustomDomain> customDomains = new HashSet<>();

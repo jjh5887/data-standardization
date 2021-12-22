@@ -56,7 +56,7 @@ public class DictService extends ItemServiceImpl {
     public Dict getDetail(Long id) throws Throwable {
         Dict dict = (Dict) get(id);
         Hibernate.initialize(dict.getWords());
-        Hibernate.initialize(dict.getDictRegs());
+        Hibernate.initialize(dict.getRegs());
         Hibernate.initialize(dict.getDomains());
         return dict;
     }

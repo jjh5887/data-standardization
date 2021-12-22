@@ -2,8 +2,10 @@ package kvoting.intern.flowerwebapp.word.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.view.View;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordBase;
 import lombok.AllArgsConstructor;
@@ -24,14 +26,18 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WordReg extends Registration<Word, WordBase> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "WORD_ID")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    private Word item;
-
     @Column(name = "WORD_ID", insertable = false, updatable = false)
     private Long ItemId;
 
     @Embedded
+    @JsonView(View.Detail.class)
     WordBase base;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "WORD_ID")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    private Word item;
+
+
 }

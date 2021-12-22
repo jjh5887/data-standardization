@@ -5,6 +5,7 @@ import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RegistrationService {
     protected final RegistrationRepository registrationRepository;
     protected final ModelMapper modelMapper;
@@ -41,6 +43,13 @@ public class RegistrationService {
         });
     }
 
+    @Transactional(readOnly = true)
+    public Registration getRegDetail(Long id) throws Throwable {
+        Registration registration = getRegistration(id);
+        Hibernate.initialize(registration.getItem());
+        return registration;
+    }
+
     public Registration create(RegRequest request, Account account) {
         Item item = modelMapper.map(request, (Type) itemClazz);
         item.setStatus(ProcessType.UNHANDLED);
@@ -51,6 +60,7 @@ public class RegistrationService {
 
         Registration save = save(generateReg(request, item,
                 RegistrationType.CREATE, account));
+        save.setType(item.getClass().getSimpleName().toUpperCase());
         return save;
     }
 
@@ -133,7 +143,7 @@ public class RegistrationService {
     public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) {
         Registration registration = modelMapper.map(request, regClazz);
         registration.setItem(item);
-        registration.setName(item.getName());
+        registration.setItemName(item.getName());
         registration.setRegistrationType(type);
         registration.setRegistrant(account);
         registration.setProcessType(ProcessType.UNHANDLED);
@@ -144,7 +154,7 @@ public class RegistrationService {
         Registration registration = Registration.builder()
                 .registrationType(RegistrationType.DELETE)
                 .registrant(account)
-                .name(item.getName())
+                .itemName(item.getName())
                 .processType(ProcessType.UNHANDLED)
                 .build();
         registration = modelMapper.map(registration, regClazz);
@@ -163,5 +173,4 @@ public class RegistrationService {
 
     public void update(Registration registration, Item item) {
     }
-
 }

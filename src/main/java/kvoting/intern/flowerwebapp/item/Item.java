@@ -1,9 +1,11 @@
 package kvoting.intern.flowerwebapp.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public interface Item {
     ProcessType getStatus();
@@ -16,5 +18,8 @@ public interface Item {
 
     void setModifiedTime(LocalDateTime localDateTime);
 
+    @JsonIgnore
     String getName();
+
+    Set<?> getRegs();
 }

@@ -2,12 +2,13 @@ package kvoting.intern.flowerwebapp.item.registration;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.account.serialize.AccountSerializer;
 import kvoting.intern.flowerwebapp.item.Item;
+import kvoting.intern.flowerwebapp.view.View;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "REG_TYPE")
 @EqualsAndHashCode(of = "id")
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonView(View.Public.class)
 public class Registration<I extends Item, B> {
 
     @Id
@@ -32,7 +33,7 @@ public class Registration<I extends Item, B> {
     private Long id;
 
     @Column(name = "REG_ITEM_NM")
-    private String name;
+    private String itemName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID")

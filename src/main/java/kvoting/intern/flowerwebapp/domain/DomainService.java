@@ -6,6 +6,9 @@ import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
+import kvoting.intern.flowerwebapp.type.DB;
+import kvoting.intern.flowerwebapp.type.DataType;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,32 @@ public class DomainService extends ItemServiceImpl {
         this.dictRegService = dictRegService;
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public Page<Domain> getDomainByEngNameContains(String engName, Pageable pageable) {
+    public Domain getDetail(Long id) throws Throwable {
+        Domain item = (Domain) get(id);
+        Hibernate.initialize(item.getRegs());
+        return item;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> getByEngNameContains(String engName, Pageable pageable) {
         return ((DomainRepository) itemRepository).findByBase_NameContains(engName, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> get(DataType dataType, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_DataType(dataType, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> get(DB db, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_Db(db, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> get(DB db, DataType type, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_DbAndBase_DataType(db, type, pageable);
     }
 
     @Override

@@ -11,6 +11,9 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.OperationsSorter;
+import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.HashSet;
@@ -58,6 +61,14 @@ public class SwaggerConfig {
                 .title("API")
                 .description("[DDaJa] REST API")
                 .version("1.0")
+                .build();
+    }
+
+    @Bean
+    public UiConfiguration uiConfig() {
+        return UiConfigurationBuilder
+                .builder()
+                .operationsSorter(OperationsSorter.METHOD)
                 .build();
     }
 }

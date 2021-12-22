@@ -59,6 +59,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -73,9 +74,11 @@ public class AppConfig {
 
     @Bean
     public ObjectMapper objectMapper() {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         return new ObjectMapper()
+                .registerModule(new JavaTimeModule())
                 .registerModule(new Hibernate5Module())
-                .registerModule(new JavaTimeModule());
+                .setDateFormat(df);
     }
 
     @Bean
@@ -155,7 +158,6 @@ public class AppConfig {
             private DomainBase makeDomainBase(int idx) {
                 return DomainBase.builder()
                         .size(20)
-                        .scale(0)
                         .nullable(true)
                         .description("this is test domain")
                         .db(DB.ORACLE)
@@ -291,10 +293,10 @@ public class AppConfig {
                 Word mb = wordService.getByEng("mb");
 
                 // getDomains
-                Page<Domain> varDomains = domainService.getDomainByEngNameContains("VA", PageRequest.of(0, 10));
+                Page<Domain> varDomains = domainService.getByEngNameContains("VA", PageRequest.of(0, 10));
                 System.out.println();
                 Domain var = domainRepository.findAll().get(0);
-                Page<Domain> numDomains = domainService.getDomainByEngNameContains("NUM", PageRequest.of(0, 10));
+                Page<Domain> numDomains = domainService.getByEngNameContains("NUM", PageRequest.of(0, 10));
                 Domain num = domainRepository.findAll().get(1);
 
                 // create dict_reg

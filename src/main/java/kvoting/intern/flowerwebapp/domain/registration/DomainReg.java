@@ -1,11 +1,12 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.view.View;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,16 +22,23 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "DOMAIN")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DomainReg extends Registration<Domain, DomainBase> {
+
+    @Column(name = "DOMAIN_ID", insertable = false, updatable = false)
+    private Long ItemId;
+
     @Embedded
+    @JsonView(View.Detail.class)
     private DomainBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOMAIN_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
     private Domain item;
 
-    @Column(name = "DOMAIN_ID", insertable = false, updatable = false)
-    private Long ItemId;
+    @Override
+    public void registered() {
+        super.registered();
+    }
 }

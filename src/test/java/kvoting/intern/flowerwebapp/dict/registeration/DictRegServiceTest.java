@@ -103,9 +103,9 @@ class DictRegServiceTest {
 
 
         // getDomains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
-        Page<Domain> numDomains = domainService.getDomainByEngNameContains("num", PageRequest.of(0, 10));
+        Page<Domain> numDomains = domainService.getByEngNameContains("num", PageRequest.of(0, 10));
         Domain num = numDomains.getContent().get(0);
 
         // create dict_reg
@@ -178,9 +178,9 @@ class DictRegServiceTest {
         Word nm = wordService.getByEng("nm");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
-        Page<Domain> numDomains = domainService.getDomainByEngNameContains("num", PageRequest.of(0, 10));
+        Page<Domain> numDomains = domainService.getByEngNameContains("num", PageRequest.of(0, 10));
         Domain num = numDomains.getContent().get(0);
 
         // create
@@ -221,7 +221,7 @@ class DictRegServiceTest {
         Word us = wordService.getByEng("us");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
 
         // create
@@ -252,7 +252,7 @@ class DictRegServiceTest {
         Word us = wordService.getByEng("us");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
 
 
@@ -285,7 +285,7 @@ class DictRegServiceTest {
         Word us = wordService.getByEng("us");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
 
         // create
@@ -310,9 +310,9 @@ class DictRegServiceTest {
         Word nm = wordService.getByEng("nm");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
-        Page<Domain> numDomains = domainService.getDomainByEngNameContains("num", PageRequest.of(0, 10));
+        Page<Domain> numDomains = domainService.getByEngNameContains("num", PageRequest.of(0, 10));
         Domain num = numDomains.getContent().get(0);
 
         // create
@@ -357,9 +357,9 @@ class DictRegServiceTest {
         Word nm = wordService.getByEng("nm");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
-        Page<Domain> numDomains = domainService.getDomainByEngNameContains("num", PageRequest.of(0, 10));
+        Page<Domain> numDomains = domainService.getByEngNameContains("num", PageRequest.of(0, 10));
         Domain num = numDomains.getContent().get(0);
 
 
@@ -404,7 +404,7 @@ class DictRegServiceTest {
         Word us = wordService.getByEng("us");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
 
         // create
@@ -442,7 +442,7 @@ class DictRegServiceTest {
         Word us = wordService.getByEng("us");
 
         // get Domains
-        Page<Domain> varDomains = domainService.getDomainByEngNameContains("va", PageRequest.of(0, 10));
+        Page<Domain> varDomains = domainService.getByEngNameContains("va", PageRequest.of(0, 10));
         Domain var = varDomains.getContent().get(0);
 
         // create

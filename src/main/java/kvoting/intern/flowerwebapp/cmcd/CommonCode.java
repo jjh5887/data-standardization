@@ -54,7 +54,7 @@ public class CommonCode implements Item {
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    private Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
+    private Set<CommonCodeReg> regs = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")

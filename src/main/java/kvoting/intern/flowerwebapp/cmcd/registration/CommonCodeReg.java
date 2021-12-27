@@ -1,12 +1,12 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
-import kvoting.intern.flowerwebapp.word.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity(name = "CC_CMCD_REG_TC")
 @Getter
@@ -29,39 +27,47 @@ public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
     @Column(name = "CMCD_ID", insertable = false, updatable = false)
     private Long itemId;
 
+    @Column(name = "DICT_ID", insertable = false, updatable = false)
+    private Long dictId;
+
+    @Column(name = "DICT_NM")
+    private String dictName;
+
+    @Column(name = "HIGH_DICT_ID", insertable = false, updatable = false)
+    private Long highDictId;
+
+    @Column(name = "HIGH_DICT_NM")
+    private String highDictName;
+
+    @Column(name = "HIGH_CMCD_ID", insertable = false, updatable = false)
+    private Long highCmcdId;
+
+    @Column(name = "HIGH_CMCD_NM")
+    private String highCmcdName;
+
     @Embedded
     private CommonCodeBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMCD_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
     private CommonCode item;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
     private Dict dict;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @OrderColumn
-    @JoinTable(name = "CC_CMCD_REG_WORD_TC",
-            joinColumns = @JoinColumn(name = "CMCD_REG_ID"),
-            inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HIGH_DICT_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    private List<Word> words;
+    @JsonIgnore
+    private Dict highDict;
 
-    @Override
-    public void registered() {
-        if (getDateRegistered() == null) {
-            setDateRegistered(LocalDateTime.now());
-        }
-
-        if (words == null) return;
-
-        String name = "";
-        for (Word word : words) {
-            name += word.getBase().getName() + " ";
-        }
-        this.base.setCodeName(name.substring(0, name.length() - 1));
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HIGH_CMCD_ID")
+    @JsonIgnore
+    private CommonCode highCommonCode;
 }

@@ -129,7 +129,6 @@ class CommonCodeRegServiceTest {
         // modify
         cmcdRegRequest.getBase().setCode("B01");
         Word clb = wordService.getByEng("addr");
-        cmcdRegRequest.setWords(List.of(clb));
         CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getItem().getId(), account);
 
         // Then
@@ -251,7 +250,6 @@ class CommonCodeRegServiceTest {
         // modify
         cmcdRegRequest.getBase().setCode("B01");
         Word clb = wordService.getByEng("addr");
-        cmcdRegRequest.setWords(List.of(clb));
         CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getItem().getId(), account);
 
         // approve
@@ -277,7 +275,6 @@ class CommonCodeRegServiceTest {
         // modify
         cmcdRegRequest.getBase().setCode("B01");
         Word clb = wordService.getByEng("addr");
-        cmcdRegRequest.setWords(List.of(clb));
         CommonCodeReg modify = (CommonCodeReg) commonCodeRegService.modify(cmcdRegRequest, commonCodeReg.getItem().getId(), account);
 
         // reject
@@ -341,8 +338,7 @@ class CommonCodeRegServiceTest {
     public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {
         return CmcdRegRequest.builder()
                 .base(generateCommonCodeBase())
-                .words(words)
-                .dict(dict)
+                .dict(dict.getId())
                 .build();
     }
 

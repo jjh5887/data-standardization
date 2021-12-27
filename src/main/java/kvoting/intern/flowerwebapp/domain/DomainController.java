@@ -5,8 +5,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import kvoting.intern.flowerwebapp.type.DB;
-import kvoting.intern.flowerwebapp.type.DataType;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +39,7 @@ public class DomainController {
 
     @ApiOperation(value = "이름으로 도메인 조회")
     @ApiImplicitParam(name = "name", value = "도메인 이름", type = "string")
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     @JsonView(View.Public.class)
     public ResponseEntity getDomainByName(@PathVariable String name, Pageable pageable) {
         return ResponseEntity.ok(domainService.getByEngNameContains(name, pageable));
@@ -49,7 +47,7 @@ public class DomainController {
 
     @ApiOperation(value = "DB로 도메인 조회")
     @ApiImplicitParam(name = "db", value = "도메인 DB 타입", type = "string")
-    @GetMapping("/{db}")
+    @GetMapping("/db/{db}")
     @JsonView(View.Detail.class)
     public ResponseEntity getDomainByDB(@PathVariable DB db, Pageable pageable) {
         return ResponseEntity.ok(domainService.get(db, pageable));
@@ -57,7 +55,7 @@ public class DomainController {
 
     @ApiOperation(value = "데이터 타입으로 도메인 조회")
     @ApiImplicitParam(name = "type", value = "도메인 데이터 타입", type = "string")
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     @JsonView(View.Public.class)
     public ResponseEntity getDomainByType(@PathVariable DataType type, Pageable pageable) {
         return ResponseEntity.ok(domainService.get(type, pageable));

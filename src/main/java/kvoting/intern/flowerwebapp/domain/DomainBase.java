@@ -1,8 +1,6 @@
 package kvoting.intern.flowerwebapp.domain;
 
 import io.swagger.annotations.ApiModelProperty;
-import kvoting.intern.flowerwebapp.type.DB;
-import kvoting.intern.flowerwebapp.type.DataType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

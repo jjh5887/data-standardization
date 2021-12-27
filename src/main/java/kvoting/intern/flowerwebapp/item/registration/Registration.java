@@ -84,6 +84,13 @@ public class Registration<I extends Item, B> {
     public void setItem(I item) {
     }
 
+    public Long getItemId() {
+        return null;
+    }
+
+    public void setItemId(Long id) {
+    }
+
     public B getBase() {
         return null;
     }

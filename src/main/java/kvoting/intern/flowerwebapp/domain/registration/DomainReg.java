@@ -25,7 +25,7 @@ import javax.persistence.*;
 public class DomainReg extends Registration<Domain, DomainBase> {
 
     @Column(name = "DOMAIN_ID", insertable = false, updatable = false)
-    private Long ItemId;
+    private Long itemId;
 
     @Embedded
     @JsonView(View.Detail.class)

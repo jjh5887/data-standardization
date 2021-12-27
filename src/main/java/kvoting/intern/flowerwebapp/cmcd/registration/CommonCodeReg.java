@@ -25,6 +25,10 @@ import java.util.List;
 @AllArgsConstructor
 @DiscriminatorValue(value = "CMCD")
 public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
+
+    @Column(name = "CMCD_ID", insertable = false, updatable = false)
+    private Long itemId;
+
     @Embedded
     private CommonCodeBase base;
 
@@ -32,9 +36,6 @@ public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
     @JoinColumn(name = "CMCD_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private CommonCode item;
-
-    @Column(name = "CMCD_ID", insertable = false, updatable = false)
-    private Long ItemId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DICT_ID")

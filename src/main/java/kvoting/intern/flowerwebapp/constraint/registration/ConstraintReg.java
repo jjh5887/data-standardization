@@ -25,6 +25,9 @@ import java.util.Set;
 @DiscriminatorValue(value = "CONSTRAINT")
 public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
 
+    @Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)
+    private Long itemId;
+
     @Embedded
     ConstraintBase base;
 
@@ -32,9 +35,6 @@ public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
     @JoinColumn(name = "CONSTRAINT_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Constraint item;
-
-    @Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)
-    private Long ItemId;
 
     @ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
     private Set<CustomDomain> customDomains = new HashSet<>();

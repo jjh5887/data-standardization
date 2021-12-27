@@ -25,6 +25,26 @@ public class DictService extends ItemServiceImpl {
     }
 
     @Transactional(readOnly = true)
+    public Page<Dict> get(String name, Pageable pageable) {
+        return ((DictRepository) itemRepository).findByName(name, name, name, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Dict> get(List<Long> ids, Pageable pageable) throws Throwable {
+        HashSet<Dict> set = new HashSet<>();
+        for (Long id : ids) {
+            Word word = wordRepository.findById(id).orElseThrow(() -> {
+                throw new RuntimeException();
+            });
+            set.addAll(word.getDicts());
+        }
+        List<Dict> dicts = new ArrayList<>(set);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), dicts.size());
+        return new PageImpl<>(dicts.subList(start, end), pageable, dicts.size());
+    }
+
+    @Transactional(readOnly = true)
     public Page<Dict> getDictByName(String name, Pageable pageable) {
         return ((DictRepository) itemRepository).findByBase_NameContains(name, pageable);
     }
@@ -39,25 +59,13 @@ public class DictService extends ItemServiceImpl {
         return ((DictRepository) itemRepository).findByBase_ScreenNameContains(name, pageable);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Dict> getDictByWord(List<Word> words, Pageable pageable) {
-        HashSet<Dict> set = new HashSet<>();
-        for (Word word : words) {
-            word = wordRepository.findById(word.getId()).get();
-            set.addAll(word.getDicts());
-        }
-        List<Dict> dicts = new ArrayList<>(set);
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), dicts.size());
-        return new PageImpl<>(dicts.subList(start, end), pageable, dicts.size());
-    }
-
+    @Override
     @Transactional(readOnly = true)
     public Dict getDetail(Long id) throws Throwable {
         Dict dict = (Dict) get(id);
-        Hibernate.initialize(dict.getWords());
-        Hibernate.initialize(dict.getRegs());
         Hibernate.initialize(dict.getDomains());
+        Hibernate.initialize(dict.getCustomDomains());
+        Hibernate.initialize(dict.getCommonCode());
         return dict;
     }
 }

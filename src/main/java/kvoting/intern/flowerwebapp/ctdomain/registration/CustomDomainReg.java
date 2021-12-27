@@ -27,6 +27,9 @@ import java.util.List;
 @DiscriminatorValue(value = "CUSTOM_DOMAIN")
 public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase> {
 
+    @Column(name = "CUSTOM_DOMAIN_ID", insertable = false, updatable = false)
+    private Long itemId;
+
     @Embedded
     private CustomDomainBase base;
 
@@ -34,9 +37,6 @@ public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase
     @JoinColumn(name = "CUSTOM_DOMAIN_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private CustomDomain item;
-
-    @Column(name = "CUSTOM_DOMAIN_ID", insertable = false, updatable = false)
-    private Long ItemId;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn

@@ -56,6 +56,7 @@ public class RegistrationService {
         item.setModifier(account);
         item.setModifierName(account.getName());
         item.setModifiedTime(LocalDateTime.now());
+        updateItem(item, request);
         item = itemServiceImpl.save(item);
 
         Registration save = save(generateReg(request, item,
@@ -64,18 +65,26 @@ public class RegistrationService {
         return save;
     }
 
+    public void updateItem(Item item, RegRequest request) {
+    }
+
     public Registration modify(RegRequest request, Long id, Account account) throws Throwable {
         Item item = itemServiceImpl.get(id);
         validateStatus(item);
-        return save(generateReg(request, item,
-                RegistrationType.MODIFY, account));
+
+        Registration save = generateReg(request, item,
+                RegistrationType.MODIFY, account);
+        save.setType(item.getClass().getSimpleName().toUpperCase());
+        return save(save);
     }
 
 
     public Registration delete(Long id, Account account) throws Throwable {
         Item item = itemServiceImpl.get(id);
         validateStatus(item);
-        return save(generateDelReg(item, account));
+        Registration save = save(generateDelReg(item, account));
+        save.setType(item.getClass().getSimpleName().toUpperCase());
+        return save;
     }
 
     public void cancel(Long id, Account account) throws Throwable {
@@ -143,10 +152,12 @@ public class RegistrationService {
     public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) {
         Registration registration = modelMapper.map(request, regClazz);
         registration.setItem(item);
+        registration.setItemId(item.getId());
         registration.setItemName(item.getName());
         registration.setRegistrationType(type);
         registration.setRegistrant(account);
         registration.setProcessType(ProcessType.UNHANDLED);
+        updateReg(registration, request);
         return registration;
     }
 
@@ -158,6 +169,8 @@ public class RegistrationService {
                 .processType(ProcessType.UNHANDLED)
                 .build();
         registration = modelMapper.map(registration, regClazz);
+        registration.setItemId(item.getId());
+        registration.setItemName(item.getName());
         registration.setItem(item);
         return registration;
     }
@@ -172,5 +185,8 @@ public class RegistrationService {
     }
 
     public void update(Registration registration, Item item) {
+    }
+
+    public void updateReg(Registration registration, RegRequest request) {
     }
 }

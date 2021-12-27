@@ -18,6 +18,8 @@ public interface Item {
 
     void setModifiedTime(LocalDateTime localDateTime);
 
+    Long getId();
+
     @JsonIgnore
     String getName();
 

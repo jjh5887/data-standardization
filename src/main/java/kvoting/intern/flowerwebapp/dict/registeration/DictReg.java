@@ -1,13 +1,13 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
+import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictBase;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.view.View;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +29,10 @@ import java.util.Set;
 @AllArgsConstructor
 @DiscriminatorValue(value = "DICT")
 public class DictReg extends Registration<Dict, DictBase> {
+
+    @Column(name = "DICT_ID", insertable = false, updatable = false)
+    private Long itemId;
+
     @Embedded
     private DictBase base;
 
@@ -38,8 +42,6 @@ public class DictReg extends Registration<Dict, DictBase> {
     @JsonIgnore
     private Dict item;
 
-    @Column(name = "DICT_ID", insertable = false, updatable = false)
-    private Long ItemId;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
@@ -47,6 +49,8 @@ public class DictReg extends Registration<Dict, DictBase> {
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private List<Word> words = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -54,6 +58,8 @@ public class DictReg extends Registration<Dict, DictBase> {
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private Set<Domain> domains = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -61,5 +67,13 @@ public class DictReg extends Registration<Dict, DictBase> {
             joinColumns = @JoinColumn(name = "DICT_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private Set<CustomDomain> customDomains = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
+    private CommonCode commonCode;
 }

@@ -28,6 +28,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -110,14 +111,14 @@ class DictRegServiceTest {
 
         // create dict_reg
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         dictRegService.create(dictRegistRequest, account);
-        DictRegistRequest mb_nm = makeDictRequest(List.of(mb, nm), CaseStyle.SNAKE, "회원 이름", List.of(num));
+        DictRegistRequest mb_nm = makeDictRequest(List.of(mb.getId(), nm.getId()), CaseStyle.SNAKE, "회원 이름", Set.of(num.getId()));
         dictRegService.create(mb_nm, account);
 
         // Then
         assertThat(dictRepository.count()).isEqualTo(2L);
-        Page<Dict> dictByWord = dictService.getDictByWord(List.of(pass), PageRequest.of(0, 10));
+        Page<Dict> dictByWord = dictService.get(List.of(pass.getId()), PageRequest.of(0, 10));
         assertThat(dictByWord.getTotalElements()).isEqualTo(1L);
         for (Dict dict : dictByWord) {
             assertThat(dict.getBase().getEngName()).containsIgnoringCase(pass.getBase().getEngName());
@@ -132,7 +133,7 @@ class DictRegServiceTest {
 
         // Then
         // dict name has also been updated
-        Page<Dict> dictByPass = dictService.getDictByWord(List.of(save), PageRequest.of(0, 10));
+        Page<Dict> dictByPass = dictService.get(List.of(save.getId()), PageRequest.of(0, 10));
         assertThat(dictByPass.getTotalElements()).isEqualTo(1L);
         for (Dict byPass : dictByPass) {
             assertThat(Pattern.compile(Pattern.quote(save.getBase().getEngName()),
@@ -185,7 +186,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -196,8 +197,8 @@ class DictRegServiceTest {
         dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
 
         // modify
-        dictRegistRequest.setWords(List.of(nm, pass));
-        dictRegistRequest.setDomains(List.of(num));
+        dictRegistRequest.setWords(List.of(nm.getId(), pass.getId()));
+        dictRegistRequest.setDomains(Set.of(num.getId()));
         DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
 
         // Then
@@ -226,7 +227,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -258,7 +259,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -290,7 +291,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
 
         // delete
@@ -317,7 +318,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -329,8 +330,8 @@ class DictRegServiceTest {
         dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
 
         // modify
-        dictRegistRequest.setWords(Arrays.asList(nm, pass));
-        dictRegistRequest.setDomains(List.of(num));
+        dictRegistRequest.setWords(Arrays.asList(nm.getId(), pass.getId()));
+        dictRegistRequest.setDomains(Set.of(num.getId()));
         DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
 
         // approve
@@ -365,7 +366,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -376,8 +377,8 @@ class DictRegServiceTest {
 
         dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
         // modify
-        dictRegistRequest.setWords(List.of(nm, pass));
-        dictRegistRequest.setDomains(List.of(num));
+        dictRegistRequest.setWords(List.of(nm.getId(), pass.getId()));
+        dictRegistRequest.setDomains(Set.of(num.getId()));
         DictReg modify = (DictReg) dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
 
         // reject
@@ -409,7 +410,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -447,7 +448,7 @@ class DictRegServiceTest {
 
         // create
         Account account = accountService.getAccount("test@test.com");
-        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "헬로~", List.of(var));
+        DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~", Set.of(var.getId()));
         DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
         List<DomainReg> all = domainRegRepository.findAll();
         for (DomainReg domainReg : all) {
@@ -468,7 +469,7 @@ class DictRegServiceTest {
         assertThat(dictRegRepository.count()).isEqualTo(2L);
     }
 
-    private DictRegistRequest makeDictRequest(List<Word> words, CaseStyle cs, String nm, List<Domain> domains) {
+    private DictRegistRequest makeDictRequest(List<Long> words, CaseStyle cs, String nm, Set<Long> domains) {
         return DictRegistRequest.builder()
                 .words(words)
                 .base(makeDictBase(nm, cs))

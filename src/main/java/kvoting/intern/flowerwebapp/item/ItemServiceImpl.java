@@ -29,7 +29,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Item> getAllItem(Pageable pageable) {
+    public Page<Item> getAllItems(Pageable pageable) {
         return itemRepository.findAll(pageable);
     }
 

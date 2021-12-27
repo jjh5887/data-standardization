@@ -3,7 +3,68 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="../static/css/index.css" rel="stylesheet"/>
-    <script>
+    <script type="text/javascript">
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                jsonfunc(xhttp.responseText);
+            }
+        }
+        xhttp.open("GET", "../static/json/ex.json", true);
+        xhttp.send();
+
+        /*json 불러오기*/
+        function jsonfunc(jsonText) {
+            let json = JSON.parse(jsonText);
+            let dictResult = document.querySelector('#dict').innerHTML;
+            let domainResult = document.querySelector('#domain').innerHTML;
+            let wordResult = document.querySelector('#word').innerHTML;
+            dictResult += '<tbody>'
+            domainResult += '<tbody>'
+            wordResult += '<tbody>'
+            console.log(json.length);
+            for (let i = 0; i < json.length; i++) {
+                if (Object.keys(json[i]).includes('dictBase')) {
+                    dictResult += '<tr onclick="">'
+                        + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="">'
+                        + '상세보기' + '</button>'
+                        + ' </th>'
+                        + '<td>' + json[i].dictBase?.name + '</td>'
+                        + '<td>' + json[i].dictBase?.engName + '</td>'
+                        + '<td>' + json[i].dictBase?.screenName + '</td>'
+                        + '<td>' + json[i].dictBase?.domains + '</td>'
+                        + '<td>' + /*json[i].domains?.dataType */ +'</td>'
+                        + '<td>' + /*json[i].domains?.size */ +'</td>'
+                        + '<td>' + /*json[i].domains?.scale */ +'</td>'
+                        + '<td>' + json[i].dictBase?.nullable + '</td>'
+                        + '<td>' + json[i].dictBase?.isCommon + '</td>'
+                        + '<td>' + json[i].dictBase?.caseStyle + '</td>'
+                        + '<td>' + json[i].dictBase?.description + '</td>'
+                        + '<td>' + json[i].status + '</td>'
+                        + '</tr>';
+                } else if (Object.keys(json[i]).includes('domainBase')) {
+                    domainResult += '<tr onclick="">'
+                        + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="">'
+                        + '상세보기' + '</button>'
+                        + ' </th>'
+                        + '<td>' + json[i].domainBase?.name + '</td>'
+                        + '<td>' + json[i].domainBase?.db + '</td>'
+                        + '<td>' + json[i].domainBase?.dataType + '</td>'
+                        + '<td>' + json[i].domainBase?.size + '</td>'
+                        + '<td>' + json[i].domainBase?.scale + '</td>'
+                        + '<td>' + json[i].domainBase?.nullable + '</td>'
+                        + '<td>' + json[i].status + '</td>'
+
+                        + '</tr>';
+                }
+            }
+            dictResult += '</tbody>';
+            domainResult += '</tbody>';
+            wordResult += '</tbody>';
+            document.getElementById('dict').innerHTML = dictResult;
+            document.getElementById('domain').innerHTML = domainResult;
+            document.getElementById('word').innerHTML = wordResult;
+        }
     </script>
 </head>
 <body>

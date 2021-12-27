@@ -78,7 +78,11 @@
             /*wordResult += '</tbody>';*/
             document.getElementById('dict').innerHTML = dictResult;
             document.getElementById('domain').innerHTML = domainResult;
+<<<<<<< HEAD
             /* document.getElementById('word').innerHTML = wordResult;*/
+=======
+           /* document.getElementById('word').innerHTML = wordResult;*/
+>>>>>>> 5627cf7 (FWF-3)
         }
 
         /*pagination*/
@@ -87,6 +91,7 @@
         const DICT_VALUE = 'dict';
         const DOMAIN_VALUE = 'domain';
         const WORD_VALUE = 'word'
+<<<<<<< HEAD
 
         const Table_Const = [{name: 'dict', value: 'dict'}, {name: 'domain', value: 'domain'}, {
             name: 'word',
@@ -99,6 +104,14 @@
                 name: '정확도',
                 value: ''
             }, {name: 'nullable', value: ''}, {name: 'DB타입', value: ''}, {name: '상태', value: ''}],
+=======
+
+        const Table_Const = [{name: 'dict', value: 'dict'}, {name: 'domain', value: 'domain'}, {name: 'word', value: 'word'}];
+
+        const Field_Const = {
+            DICT: [{name: '한글이름', code: '1'}, {name: '영어이름', code: '2'}, {name: '전략', code: '2'}],
+            DOMAIN: [{name: '이름', value : ''},{name: '타입', value : ''},{name: '길이', value : ''},{name: '정확도', value : ''},{name: 'nullable', value : ''},{name: 'DB타입', value : ''},{name: '상태', value : ''}],
+>>>>>>> 5627cf7 (FWF-3)
             WORD: [{name: '이름', value: 'eng'}, {name: '한글이름', value: 'name'}, {name: '원문영어이름', value: 'org'}]
         }
 
@@ -146,6 +159,7 @@
                 document.getElementById('word-wrap').style.display = 'block';
             }
         }
+<<<<<<< HEAD
 
         /*전체 선택*/
         function selectAll(all) {
@@ -155,6 +169,14 @@
             })
 
         }
+=======
+        /*전체 선택*/
+    function selectAll(all){
+        const checkboxes = document.getElementsByName('mySelect1');
+        checkboxes.forEach((checkbox) => {checkbox.checked = all.checked;})
+
+    }
+>>>>>>> 5627cf7 (FWF-3)
 
     </script>
 </head>
@@ -178,11 +200,19 @@
 <p id="demo"></p>
 <div className="main ">
     <form>
+<<<<<<< HEAD
         <div className="request-name-box">검색</div>
         <div className="inner-form">
             <div className="input-field first-wrap">
 
                 <select id="mySelect1" name="Total" onChange="categoryFunction(this)">
+=======
+        <div class="request-name-box">검색</div>
+        <div class="inner-form">
+            <div class="input-field first-wrap">
+
+                <select id="mySelect1" name="Total" onchange="categoryFunction(this)">
+>>>>>>> 5627cf7 (FWF-3)
                     <option value="all"> ---전체---</option>
                     <option value="dict"> 용어</option>
                     <option value="domain"> 도메인</option>
@@ -192,8 +222,13 @@
                     <option value="All"> 이름</option>
                 </select>
             </div>
+<<<<<<< HEAD
             <div className="input-field second-wrap">
                 <input id="search" className="search form-control" type="text" placeholder="search" onKeyUp=""/>
+=======
+            <div class="input-field second-wrap">
+                <input id="search" class="search form-control" type="text" placeholder="search" onkeyup=""/>
+>>>>>>> 5627cf7 (FWF-3)
             </div>
             <div className="input-field third-wrap">
                 <button id="btn1" type="button" className="btn-search" type="button">
@@ -203,15 +238,24 @@
         </div>
     </form>
 
+<<<<<<< HEAD
     <div id="total-table" className="total-table table-wrap ">
         <div id="dict-wrap" className="table-box" name="dict_table">
             <span className="name-box">용어</span>
             <button type="button" className="menu " type="button" onClick="">
                 <img src="../static/images/plus.png" className="plus" alt="requestList">
+=======
+    <div id="total-table" class="total-table table-wrap ">
+        <div id="dict-wrap" class="table-box" name="dict_table">
+            <span class="name-box">용어</span>
+            <button type="button" class="menu " type="button" onclick="">
+                <img src="../static/images/plus.png" class="plus" alt="requestList">
+>>>>>>> 5627cf7 (FWF-3)
             </button>
             <table id="dict" className="table table-hover results">
                 <thead>
                 <tr>
+<<<<<<< HEAD
                     <th className="col-xs-2">보기</th>
                     <th className="col-xs-2">한글이름</th>
                     <th className="col-xs-2">영어이름</th>
@@ -228,14 +272,40 @@
                 </tr>
                 <tr className="warning no-result">
                     <td colSpan="12">자료 없음</td>
+=======
+                    <th class="col-xs-2">보기</th>
+                    <th class="col-xs-2">한글이름</th>
+                    <th class="col-xs-2">영어이름</th>
+                    <th class="col-xs-1">화면이름</th>
+                    <th class="col-xs-1">도메인</th>
+                    <th class="col-xs-1">타입</th>
+                    <th class="col-xs-1">길이</th>
+                    <th class="col-xs-1">정확도</th>
+                    <th class="col-xs-0">nullable</th>
+                    <th class="col-xs-1"> 공통코드</th>
+                    <th class="col-xs-1"> 전략</th>
+                    <th class="col-xs-1"> 설명</th>
+                    <th class="col-xs-1"> 상태</th>
+>>>>>>> 5627cf7 (FWF-3)
+                </tr>
+                <tr class="warning no-result">
+                    <td colspan="12">자료 없음</td>
                 </tr>
                 </thead>
             </table>
+<<<<<<< HEAD
             <div className="center">
                 <div className="pagination">
                     <div className="pagination">
                         <a href="#" id="button_prev">&laquo;</a>
                         <a href="#" className="active">1</a>
+=======
+            <div class="center">
+                <div class="pagination">
+                    <div class="pagination">
+                        <a href="#" id="button_prev">&laquo;</a>
+                        <a href="#" class="active">1</a>
+>>>>>>> 5627cf7 (FWF-3)
                         <a href="#">2</a>
                         <a href="#">3</a>
                         <a href="#">4</a>
@@ -245,14 +315,22 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
         <div id="domain-wrap" className="table-box" name="domain_table">
             <span className="name-box">도메인</span>
             <button type="button" className="menu" type="button" onClick="">
                 <img src="../static/images/plus.png" className="plus" alt="requestList">
+=======
+        <div id="domain-wrap" class="table-box" name="domain_table">
+            <span class="name-box">도메인</span>
+            <button type="button" class="menu" type="button" onclick="">
+                <img src="../static/images/plus.png" class="plus" alt="requestList">
+>>>>>>> 5627cf7 (FWF-3)
             </button>
             <table id="domain" className="table table-hover results">
                 <thead>
                 <tr>
+<<<<<<< HEAD
                     <th className="col-xs-2">보기</th>
                     <th className="col-xs-2">도메인 명</th>
                     <th className="col-xs-1">DB타입</th>
@@ -264,14 +342,35 @@
                 </tr>
                 <tr className="warning no-result">
                     <td colSpan="12">자료 없음</td>
+=======
+                    <th class="col-xs-2">보기</th>
+                    <th class="col-xs-2">도메인 명</th>
+                    <th class="col-xs-1">DB타입</th>
+                    <th class="col-xs-1">타입</th>
+                    <th class="col-xs-1">길이</th>
+                    <th class="col-xs-1">정확도</th>
+                    <th class="col-xs-1">nullable</th>
+                    <th class="col-xs-1">상태</th>
+>>>>>>> 5627cf7 (FWF-3)
+                </tr>
+                <tr class="warning no-result">
+                    <td colspan="12">자료 없음</td>
                 </tr>
                 </thead>
             </table>
+<<<<<<< HEAD
             <div className="center">
                 <div className="pagination">
                     <div className="pagination">
                         <a href="#" id="domain_button_prev">&laquo;</a>
                         <a href="#" className="active">1</a>
+=======
+            <div class="center">
+                <div class="pagination">
+                    <div class="pagination">
+                        <a href="#" id="domain_button_prev">&laquo;</a>
+                        <a href="#" class="active">1</a>
+>>>>>>> 5627cf7 (FWF-3)
                         <a href="#">2</a>
                         <a href="#">3</a>
                         <a href="#">4</a>
@@ -289,6 +388,7 @@
             <table id="word" className="table table-hover results">
                 <thead>
                 <tr>
+<<<<<<< HEAD
                     <th className="col-xs-2">보기</th>
                     <th className="col-xs-1">이름</th>
                     <th className="col-xs-2">한글이름</th>
@@ -297,15 +397,33 @@
                 </tr>
                 <tr className="warning no-result">
                     <td colSpan="12">자료 없음</td>
+=======
+                    <th class="col-xs-2">보기</th>
+                    <th class="col-xs-1">이름</th>
+                    <th class="col-xs-2">한글이름</th>
+                    <th class="col-xs-2">원문영어이름</th>
+                    <th class="col-xs-2">상태</th>
+>>>>>>> 5627cf7 (FWF-3)
+                </tr>
+                <tr class="warning no-result">
+                    <td colspan="12">자료 없음</td>
                 </tr>
                 </thead>
 
             </table>
+<<<<<<< HEAD
             <div className="center">
                 <div className="pagination">
                     <div className="pagination">
                         <a href="#" id="word_button_prev">&laquo;</a>
                         <a href="#" className="active">1</a>
+=======
+            <div class="center">
+                <div class="pagination">
+                    <div class="pagination">
+                        <a href="#" id="word_button_prev">&laquo;</a>
+                        <a href="#" class="active">1</a>
+>>>>>>> 5627cf7 (FWF-3)
                         <a href="#">2</a>
                         <a href="#">3</a>
                         <a href="#">4</a>

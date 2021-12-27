@@ -52,7 +52,7 @@ public class WordController {
     @GetMapping
     @JsonView(View.Public.class)
     public ResponseEntity getAllWord(Pageable pageable) {
-        Page<Item> byEng = wordService.getAllItem(pageable);
+        Page<Item> byEng = wordService.getAllItems(pageable);
         return ResponseEntity.ok(byEng);
     }
 

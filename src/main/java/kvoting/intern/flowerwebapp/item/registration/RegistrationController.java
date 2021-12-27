@@ -74,10 +74,10 @@ public class RegistrationController<R extends RegRequest> {
     @ApiOperation(value = "요청 처리")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "승인 또는 거절하고자 하는 요청 id"),
-            @ApiImplicitParam(name = "type", value = "처리 상태", dataTypeClass = ProcessType.class)})
+            @ApiImplicitParam(name = "type", value = "처리 상태", allowableValues = "APPROVED, REJECTED")})
     @PutMapping("/{type}/{id}")
-    @JsonView(View.Detail.class)
-    public ResponseEntity approveReg(@PathVariable ProcessType type, @PathVariable Long id, HttpServletRequest servletRequest) throws Throwable {
+    @JsonView(View.Public.class)
+    public ResponseEntity approveReg(@PathVariable Long id, @PathVariable ProcessType type, HttpServletRequest servletRequest) throws Throwable {
         Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
         Registration registration = registrationService.process(id, type, account);
         return ResponseEntity.ok(registration);

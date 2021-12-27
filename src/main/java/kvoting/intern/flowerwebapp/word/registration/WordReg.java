@@ -27,7 +27,7 @@ import javax.persistence.*;
 public class WordReg extends Registration<Word, WordBase> {
 
     @Column(name = "WORD_ID", insertable = false, updatable = false)
-    private Long ItemId;
+    private Long itemId;
 
     @Embedded
     @JsonView(View.Detail.class)

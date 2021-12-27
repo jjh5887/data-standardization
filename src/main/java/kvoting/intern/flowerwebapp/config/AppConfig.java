@@ -51,6 +51,7 @@ import kvoting.intern.flowerwebapp.word.registration.WordRegService;
 import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -63,13 +64,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class AppConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper;
     }
 
     @Bean
@@ -165,7 +169,7 @@ public class AppConfig {
                         .build();
             }
 
-            private DictRegistRequest makeDictRequest(List<Word> words, CaseStyle cs, String nm, List<Domain> domains) {
+            private DictRegistRequest makeDictRequest(List<Long> words, CaseStyle cs, String nm, Set<Long> domains) {
                 return DictRegistRequest.builder()
                         .words(words)
                         .base(makeDictBase(nm, cs))
@@ -300,9 +304,9 @@ public class AppConfig {
                 Domain num = domainRepository.findAll().get(1);
 
                 // create dict_reg
-                DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us, pass), CaseStyle.CAMEL, "비밀번호", List.of(var));
+                DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "비밀번호", Set.of(var.getId()));
                 DictReg dictReg = (DictReg) dictRegService.create(dictRegistRequest, account);
-                DictRegistRequest mb_nm = makeDictRequest(List.of(mb, nm), CaseStyle.SNAKE, "회원 이름", List.of(num));
+                DictRegistRequest mb_nm = makeDictRequest(List.of(mb.getId(), nm.getId()), CaseStyle.SNAKE, "회원 이름", Set.of(num.getId()));
                 DictReg reg = (DictReg) dictRegService.create(mb_nm, account);
                 Dict item = reg.getItem();
 
@@ -320,7 +324,7 @@ public class AppConfig {
                 CustomDomain customDomain = customDomainService.getDetail(customDomainReg.getItem().getId());
                 constraintRegService.process(constraintReg.getId(), ProcessType.APPROVED, account);
                 customDomainRegService.process(customDomainReg.getId(), ProcessType.APPROVED, account);
-                mb_nm.getCustomDomains().add(customDomain);
+                mb_nm.getCustomDomains().add(customDomain.getId());
                 DictReg modifyDictReg = (DictReg) dictRegService.modify(mb_nm, item.getId(), account);
                 dictRegService.process(modifyDictReg.getId(), ProcessType.APPROVED, account);
             }

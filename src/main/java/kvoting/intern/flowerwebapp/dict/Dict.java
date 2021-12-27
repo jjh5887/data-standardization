@@ -1,18 +1,14 @@
 package kvoting.intern.flowerwebapp.dict;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.account.Account;
-import kvoting.intern.flowerwebapp.account.serialize.AccountSerializer;
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
+import kvoting.intern.flowerwebapp.view.View;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
@@ -31,6 +27,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonView(View.Public.class)
 public class Dict implements Item {
 
     @EqualsAndHashCode.Include
@@ -42,13 +39,11 @@ public class Dict implements Item {
     @Embedded
     DictBase base;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-    @JsonIgnore
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    Set<DictReg> regs = new HashSet<>();
-
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
+
+    @Column(name = "MODFR_ID", insertable = false, updatable = false)
+    private Long modifierId;
 
     @Column(name = "MODFR_NM")
     private String modifierName;
@@ -59,8 +54,13 @@ public class Dict implements Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODFR_ID", referencedColumnName = "USER_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonSerialize(using = AccountSerializer.class)
+    @JsonIgnore
     private Account modifier;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
+    private Set<DictReg> regs = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
@@ -68,6 +68,7 @@ public class Dict implements Item {
             joinColumns = @JoinColumn(name = "DICT_ID"),
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
     private List<Word> words = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -75,6 +76,8 @@ public class Dict implements Item {
             joinColumns = @JoinColumn(name = "DICT_ID"),
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private Set<Domain> domains = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -82,10 +85,14 @@ public class Dict implements Item {
             joinColumns = @JoinColumn(name = "DICT_ID"),
             inverseJoinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private Set<CustomDomain> customDomains = new HashSet<>();
 
     @OneToOne(mappedBy = "dict", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonView(View.Detail.class)
+    @JsonIgnoreProperties({"regs"})
     private CommonCode commonCode;
 
     @PrePersist

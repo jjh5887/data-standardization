@@ -40,7 +40,6 @@ public class Word implements Item {
     @Column(name = "WORD_PROC_TPCD")
     private ProcessType status;
 
-
     @Column(name = "MODFR_ID", insertable = false, updatable = false)
     private Long modifierId;
 

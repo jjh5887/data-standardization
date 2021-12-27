@@ -25,11 +25,10 @@ public class DomainController {
     private final DomainService domainService;
 
     @ApiOperation(value = "전체 도메인 조회")
-    @ApiImplicitParam(name = "id", value = "도메인 id", type = "number")
     @GetMapping
     @JsonView(View.Public.class)
     public ResponseEntity getAllDomain(Pageable pageable) {
-        return ResponseEntity.ok(domainService.getAllItem(pageable));
+        return ResponseEntity.ok(domainService.getAllItems(pageable));
     }
 
     @ApiOperation(value = "id로 도메인 상세 조회")

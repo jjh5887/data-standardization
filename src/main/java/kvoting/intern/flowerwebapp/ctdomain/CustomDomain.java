@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kvoting.intern.flowerwebapp.account.Account;
-import kvoting.intern.flowerwebapp.account.serialize.AccountSerializer;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
@@ -51,7 +49,7 @@ public class CustomDomain implements Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODFR_ID", referencedColumnName = "USER_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonSerialize(using = AccountSerializer.class)
+    @JsonIgnore
     private Account modifier;
 
     @ManyToMany(fetch = FetchType.LAZY)

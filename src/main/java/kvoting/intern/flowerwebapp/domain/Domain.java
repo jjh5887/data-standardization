@@ -37,7 +37,6 @@ public class Domain implements Item {
     @Embedded
     private DomainBase base;
 
-
     @Column(name = "STDZ_PROC_TPCD")
     private ProcessType status;
 

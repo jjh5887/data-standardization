@@ -62,7 +62,7 @@ public class WordService extends ItemServiceImpl {
 
     @Override
     public void delete(Item word) throws Throwable {
-        word = get(((Word) word).getId());
+        word = get(word.getId());
         for (Dict dict : ((Word) word).getDicts()) {
             if (dict.getWords().size() == 1) {
                 dictService.delete(dict);

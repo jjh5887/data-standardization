@@ -6,8 +6,6 @@ import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
-import kvoting.intern.flowerwebapp.type.DB;
-import kvoting.intern.flowerwebapp.type.DataType;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

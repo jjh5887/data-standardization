@@ -3,8 +3,6 @@ package kvoting.intern.flowerwebapp.word;
 
 import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.account.Account;
-import kvoting.intern.flowerwebapp.cmcd.CommonCode;
-import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.item.Item;
@@ -67,16 +65,6 @@ public class Word implements Item {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
     Set<Dict> dicts = new HashSet<>();
-
-    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonIgnore
-    Set<CommonCodeReg> commonCodeRegs = new HashSet<>();
-
-    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonIgnore
-    Set<CommonCode> commonCodes = new HashSet<>();
 
     @Override
     public String getName() {

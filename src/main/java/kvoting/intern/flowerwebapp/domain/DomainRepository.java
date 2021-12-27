@@ -1,7 +1,5 @@
 package kvoting.intern.flowerwebapp.domain;
 
-import kvoting.intern.flowerwebapp.type.DB;
-import kvoting.intern.flowerwebapp.type.DataType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

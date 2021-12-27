@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-@Transactional
 public class DictService extends ItemServiceImpl {
     private final WordRepository wordRepository;
 

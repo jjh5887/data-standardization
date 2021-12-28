@@ -5,6 +5,7 @@ import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -36,20 +37,22 @@ public abstract class RegistrationService {
         return registrationRepository.findAll(pageable);
     }
 
+    @SneakyThrows
     @Transactional(readOnly = true)
-    public Registration getRegistration(Long id) throws Throwable {
+    public Registration getRegistration(Long id) {
         return (Registration) registrationRepository.findById(id).orElseThrow(() -> {
             throw new RuntimeException();
         });
     }
 
     @Transactional(readOnly = true)
-    public Registration getRegDetail(Long id) throws Throwable {
+    public Registration getRegDetail(Long id) {
         Registration registration = getRegistration(id);
         Hibernate.initialize(registration.getItem());
         return registration;
     }
 
+    @SneakyThrows
     public Registration create(RegRequest request, Account account) {
         Item item = modelMapper.map(request, (Type) itemClazz);
         item.setStatus(ProcessType.UNHANDLED);
@@ -149,7 +152,7 @@ public abstract class RegistrationService {
         return save(registration);
     }
 
-    public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) {
+    public Registration generateReg(RegRequest request, Item item, RegistrationType type, Account account) throws Throwable {
         Registration registration = modelMapper.map(request, regClazz);
         registration.setItem(item);
         registration.setItemId(item.getId());
@@ -185,5 +188,5 @@ public abstract class RegistrationService {
 
     public abstract void update(Registration registration, Item item);
 
-    public abstract void updateReg(Registration registration, RegRequest request);
+    public abstract void updateReg(Registration registration, RegRequest request) throws Throwable;
 }

@@ -64,7 +64,8 @@ public class DictService extends ItemServiceImpl {
         Dict dict = (Dict) get(id);
         Hibernate.initialize(dict.getDomains());
         Hibernate.initialize(dict.getCustomDomains());
-        Hibernate.initialize(dict.getCommonCode());
+        Hibernate.initialize(dict.getCommonCode().getLowCommonCodes());
+        Hibernate.initialize(dict.getCommonCode().getHighCommonCode());
         return dict;
     }
 }

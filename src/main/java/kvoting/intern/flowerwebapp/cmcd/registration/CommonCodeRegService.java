@@ -1,27 +1,32 @@
 package kvoting.intern.flowerwebapp.cmcd.registration;
 
 import kvoting.intern.flowerwebapp.cmcd.CommonCode;
-import kvoting.intern.flowerwebapp.cmcd.CommonCodeRepository;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeService;
 import kvoting.intern.flowerwebapp.cmcd.registration.request.CmcdRegRequest;
-import kvoting.intern.flowerwebapp.dict.DictRepository;
+import kvoting.intern.flowerwebapp.dict.Dict;
+import kvoting.intern.flowerwebapp.dict.DictService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommonCodeRegService extends RegistrationService {
-    private final DictRepository dictRepository;
-    private final CommonCodeRepository commonCodeRepository;
 
-    public CommonCodeRegService(CommonCodeRegRepository commonCodeRegRepository, ModelMapper modelMapper, CommonCodeService commonCodeService, DictRepository dictRepository, CommonCodeRepository commonCodeRepository) {
+    private final DictService dictService;
+    private final CommonCodeService commonCodeService;
+
+    public CommonCodeRegService(CommonCodeRegRepository commonCodeRegRepository,
+        ModelMapper modelMapper, @Lazy CommonCodeService commonCodeService,
+        @Lazy DictService dictService,
+        CommonCodeService commonCodeService1) {
         super(commonCodeRegRepository, modelMapper, commonCodeService);
-        this.dictRepository = dictRepository;
-        this.commonCodeRepository = commonCodeRepository;
+        this.dictService = dictService;
+        this.commonCodeService = commonCodeService1;
         this.regClazz = CommonCodeReg.class;
         this.itemClazz = CommonCode.class;
     }
@@ -34,56 +39,44 @@ public class CommonCodeRegService extends RegistrationService {
     }
 
     @Override
-    public void updateItem(Item item, RegRequest request) {
-        CmcdRegRequest cmcdRegRequest = (CmcdRegRequest) request;
+    public void updateItem(Item item, RegRequest regRequest) {
+        CmcdRegRequest request = (CmcdRegRequest) regRequest;
         CommonCode commonCode = (CommonCode) item;
-        if (cmcdRegRequest.getDict() != null) {
-            commonCode.setDict(dictRepository.findById(cmcdRegRequest.getDict())
-                    .orElseThrow(() -> {
-                        throw new RuntimeException();
-                    }));
-            commonCode.setDictId(((CmcdRegRequest) request).getDict());
+        if (request.getDict() != null) {
+            commonCode.setDict((Dict) dictService.get(request.getDict()));
+            commonCode.setDictId(commonCode.getDict().getId());
             commonCode.setDictName(commonCode.getDict().getName());
         }
-        if (cmcdRegRequest.getHighDict() != null) {
-            commonCode.setHighDict(dictRepository.findById(cmcdRegRequest.getHighDict())
-                    .orElseThrow(() -> {
-                        throw new RuntimeException();
-                    }));
-            commonCode.setHighDictId(((CmcdRegRequest) request).getHighDict());
+        if (request.getHighDict() != null) {
+            commonCode.setHighDict((Dict) dictService.get(request.getHighDict()));
+            commonCode.setHighDictId(commonCode.getHighDict().getId());
             commonCode.setHighDictName(commonCode.getHighDict().getName());
         }
-
-        if (cmcdRegRequest.getHighCommonCode() != null) {
-            commonCode.setHighCommonCode(commonCodeRepository.findById(cmcdRegRequest.getHighCommonCode()).orElse(null));
+        if (request.getHighCommonCode() != null) {
+            commonCode.setHighCommonCode(
+                (CommonCode) commonCodeService.get(request.getHighCommonCode()));
             commonCode.setHighCmcdId(commonCode.getHighCommonCode().getId());
             commonCode.setHighCmcdName(commonCode.getHighCommonCode().getName());
         }
     }
 
     @Override
-    public void updateReg(Registration registration, RegRequest request) {
-        CmcdRegRequest cmcdRegRequest = (CmcdRegRequest) request;
+    public void updateReg(Registration registration, RegRequest regRequest) {
+        CmcdRegRequest request = (CmcdRegRequest) regRequest;
         CommonCodeReg commonCodeReg = (CommonCodeReg) registration;
-        if (cmcdRegRequest.getDict() != null) {
-            commonCodeReg.setDict(dictRepository.findById(cmcdRegRequest.getDict())
-                    .orElseThrow(() -> {
-                        throw new RuntimeException();
-                    }));
-            commonCodeReg.setDictId(((CmcdRegRequest) request).getDict());
+        if (request.getDict() != null) {
+            commonCodeReg.setDict((Dict) dictService.get(request.getDict()));
+            commonCodeReg.setDictId(commonCodeReg.getDict().getId());
             commonCodeReg.setDictName(commonCodeReg.getDict().getName());
         }
-        if (cmcdRegRequest.getHighDict() != null) {
-            commonCodeReg.setHighDict(dictRepository.findById(cmcdRegRequest.getHighDict())
-                    .orElseThrow(() -> {
-                        throw new RuntimeException();
-                    }));
-            commonCodeReg.setHighDictId(((CmcdRegRequest) request).getHighDict());
+        if (request.getHighDict() != null) {
+            commonCodeReg.setHighDict((Dict) dictService.get(request.getHighDict()));
+            commonCodeReg.setHighDictId(commonCodeReg.getHighDict().getId());
             commonCodeReg.setHighDictName(commonCodeReg.getHighDict().getName());
         }
-
-        if (cmcdRegRequest.getHighCommonCode() != null) {
-            commonCodeReg.setHighCommonCode(commonCodeRepository.findById(cmcdRegRequest.getHighCommonCode()).orElse(null));
+        if (request.getHighCommonCode() != null) {
+            commonCodeReg.setHighCommonCode(
+                (CommonCode) commonCodeService.get(request.getHighCommonCode()));
             commonCodeReg.setHighCmcdId(commonCodeReg.getHighCommonCode().getId());
             commonCodeReg.setHighCmcdName(commonCodeReg.getHighCommonCode().getName());
         }

@@ -45,7 +45,7 @@ public class RegistrationController<R extends RegRequest> {
     @ApiOperation(value = "생성 요청 등록")
     @PostMapping
     @JsonView(View.Detail.class)
-    public ResponseEntity createReg(@RequestBody R request, HttpServletRequest servletRequest) {
+    public ResponseEntity createReg(@RequestBody R request, HttpServletRequest servletRequest) throws Throwable {
         Account account = accountService.getAccount(jwtTokenProvider.getUserEmail(servletRequest));
         Registration registration = registrationService.create(request, account);
         return ResponseEntity.ok(registration);

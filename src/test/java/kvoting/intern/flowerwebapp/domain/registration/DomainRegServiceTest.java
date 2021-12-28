@@ -275,7 +275,7 @@ class DomainRegServiceTest {
                 .build();
     }
 
-    public void generateWords(Account account) {
+    public void generateWords(Account account) throws Throwable {
         List<WordRegistRequest> requests = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             requests.add(makeRequest(i));

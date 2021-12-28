@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.domain.registration;
 
+import java.util.stream.Collectors;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
@@ -9,46 +10,40 @@ import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import kvoting.intern.flowerwebapp.word.Word;
-import kvoting.intern.flowerwebapp.word.WordRepository;
+import kvoting.intern.flowerwebapp.word.WordService;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class DomainRegService extends RegistrationService {
-    private final WordRepository wordRepository;
 
-    public DomainRegService(DomainRegRepository domainRegRepository, ModelMapper modelMapper, DomainService domainService, WordRepository wordRepository) {
+    private final WordService wordService;
+
+    public DomainRegService(DomainRegRepository domainRegRepository, ModelMapper modelMapper,
+        DomainService domainService, @Lazy WordService wordService) {
         super(domainRegRepository, modelMapper, domainService);
-        this.wordRepository = wordRepository;
+        this.wordService = wordService;
         this.regClazz = DomainReg.class;
         this.itemClazz = Domain.class;
     }
 
     @Override
-    public void updateItem(Item item, RegRequest request) {
+    public void updateItem(Item item, RegRequest regRequest) {
         Domain domain = (Domain) item;
-        domain.setWords(new ArrayList<>());
-        DomainRegistRequest domainRegistRequest = (DomainRegistRequest) request;
-        for (Long word : domainRegistRequest.getWords()) {
-            domain.getWords().add(wordRepository.findById(word).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
+        DomainRegistRequest request = (DomainRegistRequest) regRequest;
+        domain.setWords(request.getWords().stream().map(id -> (Word) wordService.get(id)).collect(
+            Collectors.toList()));
     }
 
     @Override
-    public void updateReg(Registration registration, RegRequest request) {
+    public void updateReg(Registration registration, RegRequest regRequest) {
         DomainReg domainReg = (DomainReg) registration;
-        domainReg.setWords(new ArrayList<>());
-        DomainRegistRequest domainRegistRequest = (DomainRegistRequest) request;
-        for (Long word : domainRegistRequest.getWords()) {
-            domainReg.getWords().add(wordRepository.findById(word).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
+        DomainRegistRequest request = (DomainRegistRequest) regRequest;
+        domainReg.setWords(
+            request.getWords().stream().map(id -> (Word) wordService.get(id)).collect(
+                Collectors.toList()));
     }
 
     @Override
@@ -62,15 +57,13 @@ public class DomainRegService extends RegistrationService {
     @Override
     public void validateItem(Item item) {
         Domain domain = (Domain) item;
-        for (Word word : domain.getWords()) {
-            if (word.getStatus() != ProcessType.APPROVED) {
-                throw new RuntimeException();
-            }
+        if (domain.getWords().stream().anyMatch(word -> ProcessType.APPROVED != word.getStatus())) {
+            throw new RuntimeException();
         }
     }
 
     @Override
-    public Registration getRegDetail(Long id) throws Throwable {
+    public Registration getRegDetail(Long id) {
         DomainReg domainReg = (DomainReg) getRegistration(id);
         Hibernate.initialize(domainReg.getWords());
         return domainReg;

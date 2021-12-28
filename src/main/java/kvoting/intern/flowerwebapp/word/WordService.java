@@ -51,6 +51,11 @@ public class WordService extends ItemServiceImpl {
     }
 
     @Override
+    public Item getDetail(Long id) {
+        return get(id);
+    }
+
+    @Override
     public Word save(Item word) {
         Word save = (Word) itemRepository.save(word);
         for (Dict dict : save.getDicts()) {

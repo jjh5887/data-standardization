@@ -1,9 +1,6 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.view.View;
 import kvoting.intern.flowerwebapp.word.Word;
@@ -24,6 +21,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @DiscriminatorValue(value = "WORD")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "WORD_ID"}))
 public class WordReg extends Registration<Word, WordBase> {
 
     @Column(name = "WORD_ID", insertable = false, updatable = false)
@@ -36,7 +34,8 @@ public class WordReg extends Registration<Word, WordBase> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "WORD_ID")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-    @JsonView(View.Detail.class)
+
+    @JsonIgnore
     private Word item;
 
 

@@ -35,7 +35,7 @@ public class CommonCodeService extends ItemServiceImpl {
 
     @Transactional(readOnly = true)
     public Page<CommonCode> getByHighCmcd(Long id, Pageable pageable) {
-        return ((CommonCodeRepository) itemRepository).findByHighCommonCodeId(id, pageable);
+        return ((CommonCodeRepository) itemRepository).findByHighCommonCodeIdOrderByBase_Order(id, pageable);
     }
 
 }

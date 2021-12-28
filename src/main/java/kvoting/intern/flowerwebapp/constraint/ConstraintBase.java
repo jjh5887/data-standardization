@@ -6,14 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"CONSTRAINT_NAME", "CONSTRAINT_INPUT_TYPE", "CONSTRAINT_VALUE"}))
 public class ConstraintBase {
     @Column(name = "CONSTRAINT_NAME")
     private String name;

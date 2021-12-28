@@ -51,9 +51,24 @@ public class DomainService extends ItemServiceImpl {
         return ((DomainRepository) itemRepository).findByBase_DbAndBase_DataType(db, type, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Domain> getBySize(Integer size, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_Size(size, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> getByScale(Integer scale, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_Scale(scale, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Domain> getByNullable(Boolean nullable, Pageable pageable) {
+        return ((DomainRepository) itemRepository).findByBase_Nullable(nullable, pageable);
+    }
+
     @Override
     public void delete(Item domain) throws Throwable {
-        domain = get(((Domain) domain).getId());
+        domain = get(domain.getId());
         for (Dict dict : ((Domain) domain).getDicts()) {
             if (dict.getDomains().size() == 1 && dict.getCustomDomains().size() == 0) {
                 dictService.delete(dict);

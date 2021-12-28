@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
+import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.view.View;
@@ -25,6 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonView(View.Public.class)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"WORD_ENG_NAME", "WORD_NAME", "WORD_ORG_ENG_NAME"}))
 public class Word implements Item {
     @EqualsAndHashCode.Include
     @Id
@@ -59,12 +61,17 @@ public class Word implements Item {
 
     @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
     @JsonIgnore
-    Set<DictReg> dictRegs = new HashSet<>();
+    private Set<DictReg> dictRegs = new HashSet<>();
 
     @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
-    Set<Dict> dicts = new HashSet<>();
+    private Set<Dict> dicts = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
+    private Set<Domain> domains = new HashSet<>();
 
     @Override
     public String getName() {

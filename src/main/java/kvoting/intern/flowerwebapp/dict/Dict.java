@@ -28,6 +28,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonView(View.Public.class)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"DICT_ENG_NAME"}))
 public class Dict implements Item {
 
     @EqualsAndHashCode.Include
@@ -77,7 +78,7 @@ public class Dict implements Item {
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonView(View.Detail.class)
-    @JsonIgnoreProperties({"regs"})
+    @JsonIncludeProperties({"id", "base", "status"})
     private Set<Domain> domains = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

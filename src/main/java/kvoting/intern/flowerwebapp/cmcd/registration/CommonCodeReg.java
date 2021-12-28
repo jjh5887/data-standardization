@@ -22,6 +22,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "CMCD")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CMCD_ID"}))
 public class CommonCodeReg extends Registration<CommonCode, CommonCodeBase> {
 
     @Column(name = "CMCD_ID", insertable = false, updatable = false)

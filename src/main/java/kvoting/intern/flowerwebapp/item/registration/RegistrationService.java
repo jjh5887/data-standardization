@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class RegistrationService {
+public abstract class RegistrationService {
     protected final RegistrationRepository registrationRepository;
     protected final ModelMapper modelMapper;
     protected final ItemServiceImpl itemServiceImpl;
@@ -181,12 +181,9 @@ public class RegistrationService {
         }
     }
 
-    public void validateItem(Item item) {
-    }
+    public abstract void validateItem(Item item);
 
-    public void update(Registration registration, Item item) {
-    }
+    public abstract void update(Registration registration, Item item);
 
-    public void updateReg(Registration registration, RegRequest request) {
-    }
+    public abstract void updateReg(Registration registration, RegRequest request);
 }

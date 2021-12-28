@@ -28,6 +28,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "DICT")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "DICT_ID"}))
 public class DictReg extends Registration<Dict, DictBase> {
 
     @Column(name = "DICT_ID", insertable = false, updatable = false)
@@ -42,7 +43,6 @@ public class DictReg extends Registration<Dict, DictBase> {
     @JsonIgnore
     private Dict item;
 
-
     @ManyToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinTable(name = "CC_DICT_REG_WORD_TC",
@@ -50,7 +50,7 @@ public class DictReg extends Registration<Dict, DictBase> {
             inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonView(View.Detail.class)
-    @JsonIgnoreProperties({"regs"})
+    @JsonIncludeProperties({"id", "base", "status"})
     private List<Word> words = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -59,7 +59,7 @@ public class DictReg extends Registration<Dict, DictBase> {
             inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonView(View.Detail.class)
-    @JsonIgnoreProperties({"regs"})
+    @JsonIncludeProperties({"id", "base", "status"})
     private Set<Domain> domains = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

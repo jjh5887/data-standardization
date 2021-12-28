@@ -23,6 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "CONSTRAINT")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CONSTRAINT_ID"}))
 public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
 
     @Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)

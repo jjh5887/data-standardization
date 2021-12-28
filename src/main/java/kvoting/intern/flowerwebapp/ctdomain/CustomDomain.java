@@ -27,6 +27,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"CUSTOM_DOMAIN_NAME"}))
 public class CustomDomain implements Item {
     @Id
     @GeneratedValue

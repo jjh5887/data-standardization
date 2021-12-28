@@ -3,12 +3,15 @@ package kvoting.intern.flowerwebapp.word.registration;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
+import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordService;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
+@Primary
 public class WordRegService extends RegistrationService {
     public WordRegService(WordRegRepository wordRegRepository, ModelMapper modelMapper, WordService wordService) {
         super(wordRegRepository, modelMapper, wordService);
@@ -23,6 +26,11 @@ public class WordRegService extends RegistrationService {
 
     @Override
     public void update(Registration registration, Item item) {
+
+    }
+
+    @Override
+    public void updateReg(Registration registration, RegRequest request) {
 
     }
 }

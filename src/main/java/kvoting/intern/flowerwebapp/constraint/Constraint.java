@@ -26,6 +26,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"CONSTRAINT_NAME", "CONSTRAINT_INPUT_TYPE", "CONSTRAINT_VALUE"}))
 public class Constraint implements Item {
     @Id
     @GeneratedValue

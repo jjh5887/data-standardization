@@ -15,7 +15,7 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @Data
 public class WordBase {
-    @Column(name = "WORD_ENG_NAME", unique = true)
+    @Column(name = "WORD_ENG_NAME")
     @ApiModelProperty(value = "영어명(약어)")
     private String engName;
     @Column(name = "WORD_NAME")

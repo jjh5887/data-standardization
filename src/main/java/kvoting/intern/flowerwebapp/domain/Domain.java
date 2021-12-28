@@ -11,11 +11,14 @@ import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.view.View;
+import kvoting.intern.flowerwebapp.word.Word;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "CC_DOMAIN_TC")
@@ -26,6 +29,8 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonView(View.Public.class)
+@Table(uniqueConstraints =
+@UniqueConstraint(columnNames = {"DOMAIN_NAME", "DB_TPCD", "DATA_TPCD"}))
 public class Domain implements Item {
 
     @Id
@@ -55,6 +60,15 @@ public class Domain implements Item {
     @JsonIgnore
     private Account modifier;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OrderColumn
+    @JoinTable(name = "CC_DOMAIN_WORD_TC",
+            joinColumns = @JoinColumn(name = "DOMAIN_ID"),
+            inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
+    private List<Word> words = new ArrayList<>();
+
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonView(View.Detail.class)
@@ -70,30 +84,31 @@ public class Domain implements Item {
     @JsonIgnore
     private Set<Dict> dicts = new HashSet<>();
 
-    @PrePersist
-    public void registered() {
-        if (base == null) {
-            return;
-        }
-        String name = base.getDataType().toString();
-        if (base.getSize() != null) {
-            name += base.getSize();
-        }
-        if (base.getScale() != null) {
-            name += "." + base.getScale();
-        }
-        if (base.getNullable() != null) {
-            if (!base.getNullable()) {
-                name += "NN";
-            } else {
-                name += "NY";
-            }
-        }
-        base.setName(name);
-    }
-
     @Override
     public String getName() {
         return base.getName();
+    }
+
+    @PrePersist
+    public void setUp() {
+        StringBuilder name = new StringBuilder();
+        for (Word word : words) {
+            name.append(word.getBase().getName()).append(" ");
+        }
+        if (base.getSize() != null) {
+            name.append("L").append(base.getSize());
+            if (base.getScale() != null && base.getScale() != 0) {
+                name.append(".").append(base.getScale());
+            }
+            name.append(" ");
+        }
+        if (base.getNullable() != null) {
+            if (base.getNullable()) {
+                name.append("NY ");
+            } else {
+                name.append("NN ");
+            }
+        }
+        base.setName(name.substring(0, name.length() - 1));
     }
 }

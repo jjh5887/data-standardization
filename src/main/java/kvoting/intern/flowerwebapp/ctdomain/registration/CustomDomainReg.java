@@ -25,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "CUSTOM_DOMAIN")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CUSTOM_DOMAIN_ID"}))
 public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase> {
 
     @Column(name = "CUSTOM_DOMAIN_ID", insertable = false, updatable = false)

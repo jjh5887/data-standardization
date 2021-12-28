@@ -7,6 +7,7 @@ import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
+import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public class CustomDomainRegService extends RegistrationService {
     public void update(Registration registration, Item item) {
         ((CustomDomain) item).getConstraints().clear();
         ((CustomDomain) item).getConstraints().addAll(((CustomDomainReg) registration).getConstraints());
+    }
+
+    @Override
+    public void updateReg(Registration registration, RegRequest request) {
+
     }
 
     @Override

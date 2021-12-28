@@ -26,12 +26,12 @@ public class DomainBase {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "DBTYPE_TPCD")
+    @Column(name = "DB_TPCD")
     @ApiModelProperty(value = "디비 종류")
     private DB db;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "DATATYPE_TPCD")
+    @Column(name = "DATA_TPCD")
     @ApiModelProperty(value = "데이터 타입")
     private DataType dataType;
 

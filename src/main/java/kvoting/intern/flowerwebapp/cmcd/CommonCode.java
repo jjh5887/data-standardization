@@ -25,6 +25,10 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonView(View.Public.class)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"CMCD_CD_VALUE", "DICT_ID"}),
+        @UniqueConstraint(columnNames = {"CMCD_CD_ORDER", "DICT_ID"})
+})
 public class CommonCode implements Item {
 
     @EqualsAndHashCode.Include

@@ -119,7 +119,7 @@ public class DictRegService extends RegistrationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public void validateItem(Item item) {
         for (Word word : ((Dict) item).getWords()) {
             if (word.getStatus() != ProcessType.APPROVED) {

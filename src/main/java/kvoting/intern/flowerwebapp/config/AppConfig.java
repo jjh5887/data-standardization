@@ -152,9 +152,10 @@ public class AppConfig {
                         .build();
             }
 
-            private DomainRegistRequest makeDomainRequest(int idx) {
+            private DomainRegistRequest makeDomainRequest(int idx, List<Long> ids) {
                 return DomainRegistRequest.builder()
                         .base(makeDomainBase(idx))
+                        .words(ids)
                         .build();
             }
 
@@ -269,17 +270,22 @@ public class AppConfig {
                 wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
                 request.getBase().setEngName("shd");
 
-                WordReg modify = (WordReg) wordRegService.modify(request, ((WordReg) wordReg).getItem().getId(), account);
+                WordReg modify = (WordReg) wordRegService.modify(request, wordReg.getItem().getId(), account);
                 wordRegService.process(modify.getId(), ProcessType.APPROVED, account);
 
                 for (WordReg reg : wordRegs) {
                     wordRegService.process(reg.getId(), ProcessType.APPROVED, account);
                 }
 
+                Word pass = wordService.getByEng("pass");
+                Word us = wordService.getByEng("us");
+                Word nm = wordService.getByEng("nm");
+                Word mb = wordService.getByEng("mb");
                 List<Word> words = wordRepository.findAll();
                 List<DomainReg> domainRegs = new ArrayList<>();
                 for (int i = 0; i < DataType.values().length; i++) {
-                    domainRegs.add((DomainReg) domainRegService.create(makeDomainRequest(i), account));
+                    domainRegs.add((DomainReg) domainRegService
+                            .create(makeDomainRequest(i, List.of(us.getId(), pass.getId())), account));
                 }
 
                 for (int i = 0; i < domainRegs.size(); i++) {
@@ -290,10 +296,6 @@ public class AppConfig {
                 word.getBase().setEngName("phn");
                 wordService.save(word);
 
-                Word pass = wordService.getByEng("pass");
-                Word us = wordService.getByEng("us");
-                Word nm = wordService.getByEng("nm");
-                Word mb = wordService.getByEng("mb");
 
                 // getDomains
                 Page<Domain> varDomains = domainService.getByEngNameContains("VA", PageRequest.of(0, 10));

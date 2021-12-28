@@ -61,6 +61,30 @@ public class DomainController {
         return ResponseEntity.ok(domainService.get(type, pageable));
     }
 
+    @ApiOperation(value = "데이터 길이로 도메인 조회")
+    @ApiImplicitParam(name = "length", value = "도메인 데이터 길이", type = "number")
+    @GetMapping("/length/{length}")
+    @JsonView(View.Public.class)
+    public ResponseEntity getDomainBySize(@PathVariable Integer length, Pageable pageable) {
+        return ResponseEntity.ok(domainService.getBySize(length, pageable));
+    }
+
+    @ApiOperation(value = "데이터 정화도(소수점 자리수)로 도메인 조회")
+    @ApiImplicitParam(name = "scale", value = "도메인 데이터 정확도(소수점 자리수)", type = "number")
+    @GetMapping("/scale/{scale}")
+    @JsonView(View.Public.class)
+    public ResponseEntity getDomainByScale(@PathVariable Integer scale, Pageable pageable) {
+        return ResponseEntity.ok(domainService.getByScale(scale, pageable));
+    }
+
+    @ApiOperation(value = "null 가능 여부로 도메인 조회")
+    @ApiImplicitParam(name = "nullable", value = "null 가능 여부", type = "boolean", allowableValues = "true, false")
+    @GetMapping("/nullable/{nullable}")
+    @JsonView(View.Public.class)
+    public ResponseEntity getDomainByNullable(@PathVariable Boolean nullable, Pageable pageable) {
+        return ResponseEntity.ok(domainService.getByNullable(nullable, pageable));
+    }
+
     @ApiOperation(value = "DB와 데이터 타입으로 도메인 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "db", value = "도메인 DB 타입", type = "string"),

@@ -5,6 +5,7 @@ import kvoting.intern.flowerwebapp.constraint.ConstraintService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
+import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,11 @@ public class ConstraintRegService extends RegistrationService {
 
     @Override
     public void update(Registration registration, Item item) {
+
+    }
+
+    @Override
+    public void updateReg(Registration registration, RegRequest request) {
 
     }
 }

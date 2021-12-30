@@ -182,49 +182,5 @@
   "domains" : [
     {}, {}
   ]
-},  {
-  "id": 3,
-  "registrationType": "CREATE",
-  "dateRegistered": "2021-12-16T17:04:14.758916",
-  "processType": "APPROVED",
-  "dateProcessed": "2021-12-16T17:04:15.226327",
-  "errorMessage": null,
-  "wordBase": {
-    "engName": "var",
-    "name": "문자열",
-    "orgEngName": "varchar2"
-  }
-},{
-  "id": 30,
-  "registrationType": "CREATE",
-  "dateRegistered": "2021-12-16T17:04:15.337519",
-  "processType": "APPROVED",
-  "dateProcessed": "2021-12-16T17:04:15.637188",
-  "errorMessage": null,
-  "domainBase": {
-    "engName": "CHAR20NY",
-    "description": "this is test domain",
-    "db": "ORACLE",
-    "dataType": "CHAR",
-    "size": 20,
-    "scale": 0,
-    "nullable": true
-  }
-}, {
-  "id": 46,
-  "registrationType": "CREATE",
-  "dateRegistered": "2021-12-16T17: 12:32.574845",
-  "processType": "UNHANDLED",
-  "dateProcessed": null,
-  "errorMessage": null,
-  "dictBase": {
-    "name": "사용자 비밀번호",
-    "engName": "usPass",
-    "screenName": "헬로~",
-    "isCommon": false,
-    "caseStyle": "CAMEL",
-    "description": null
-  },
-  "commonCode": null
 }
 ]

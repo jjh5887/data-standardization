@@ -1,33 +1,99 @@
 var input = document.getElementById("search");
+const THead_Word = document.querySelector('#word').innerHTML;
+const THead_Domain = document.querySelector('#domain').innerHTML;
+const THead_Dict = document.querySelector('#dict').innerHTML;
+
+const params = {
+    pageNumber: 0,
+    pageSize: 20,
+    paged: true,
+    unpaged: false
+}
+
+window.addEventListener('load', () => {
+
+});
+
+const fetchMethod = (url, tableCode) => {
+    console.log(url)
+     fetch(url).then((res => res.json())).then(result => {
+
+     })
+}
+
+const getURL = (tableName, searchType) => {
+    const key = Object.keys(Field_Const).find((item) => item == tableName.toUpperCase());
+    const searchValue = Object.values(Field_Const[key]).find((item) => item.name == searchType);
+    const target_Value = searchValue.code;
+
+    let query = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])) .join('&');
+    let url;
+    switch (tableName) {
+        case TABLE_CODE.DICT:
+            break;
+        case TABLE_CODE.DOMAIN:
+            url = `http://localhost:8080/${tableName}/${target_Value}/${input.value}?` + query + `&sort.sorted=false&sort.unsorted=true`;
+            break;
+        case TABLE_CODE.WORD:
+            url = `http://localhost:8080/${tableName}/${target_Value}/${input.value}?` + query + `&sort.sorted=false&sort.unsorted=true`;
+            break;
+        default:
+            break;
+    }
+    return url;
+}
 
 document.getElementById('btn1').onclick = function(){
-    let no, filter, tr, td, i, txtValue;
     const select1 = document.getElementById('mySelect1');
     const select2 = document.getElementById('mySelect2');
 
-    const table = Table_Const.find((item) => item.value === select1.value);
-    const target = table.name;
-
-    const word = Field_Const.WORD.find((item) => item.name === select2.value);
-    const target_word = word.value;
-
-    const params = {
-        pageNumber: 0,
-        pageSize: 20,
-        paged: true,
-        unpaged: false
-    }
-    let query = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])) .join('&');
-    const url = `http://localhost:8080/${target}/${target_word}/${input.value}?` + query + `&sort.sorted=false&sort.unsorted=true`;
+    const url = getURL(select1.value, select2.value)
     fetch(url)
         .then(response => response.json())
         .then(result => {
-            console.log(result.content.length);
-            let wordResult = document.querySelector('#word').innerHTML;
+            let wordResult = THead_Word;
+            let domainResult = THead_Domain;
+            let dictResult = THead_Dict;
+
             wordResult += '<tbody>'
-            for (let i = 0; i < result.content.length; i++) {
-                if (Object.keys(result.content[i]).includes('base')) {
-                    wordResult += '<tr onclick="">'
+            domainResult += '<tbody>'
+            dictResult += '<tbody>'
+            for (let i = 0; i < result.content?.length; i++) {
+               /* if (Object.keys(json[i]).includes('dictBase')){
+                    dictResult += '<tr onclick="">'
+                    + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="">'
+                    + '상세보기' + '</button>'
+                    + ' </th>'
+                    + '<td>' + json[i].dictBase?.name + '</td>'
+                    + '<td>' + json[i].dictBase?.engName + '</td>'
+                    + '<td>' + json[i].dictBase?.screenName + '</td>'
+                    + '<td>' + json[i].dictBase?.domains + '</td>'
+                    + '<td>' + /!*json[i].domains?.dataType *!/ +'</td>'
+                    + '<td>' + /!*json[i].domains?.size *!/ +'</td>'
+                    + '<td>' + /!*json[i].domains?.scale *!/ +'</td>'
+                    + '<td>' + json[i].dictBase?.nullable + '</td>'
+                    + '<td>' + json[i].dictBase?.isCommon + '</td>'
+                    + '<td>' + json[i].dictBase?.caseStyle + '</td>'
+                    + '<td>' + json[i].dictBase?.description + '</td>'
+                    + '<td>' + json[i].status + '</td>'
+                    + '</tr>';
+            } else*/ if (Object.keys(result.content[i].base).includes('db')) {
+                domainResult += '<tr>'
+                    + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="">'
+                    + '상세보기' + '</button>'
+                    + ' </th>'
+                    + '<td>' + result.content[i].base?.name + '</td>'
+                    + '<td>' + result.content[i].base?.db + '</td>'
+                    + '<td>' + result.content[i].base?.dataType + '</td>'
+                    + '<td>' + result.content[i].base?.size + '</td>'
+                    + '<td>' + result.content[i].base?.scale + '</td>'
+                    + '<td>' + result.content[i].base?.nullable + '</td>'
+                    + '<td>' + result.content[i].status + '</td>'
+
+                    + '</tr>';
+            }
+                else if (Object.keys(result.content[i]).includes('base')) {
+                    wordResult += '<tr>'
                         + '<th>' + '<button name="T_Btn" type="button" class="btn-extension" onClick="">'
                         + '상세보기' + '</button>'
                         + ' </th>'
@@ -38,10 +104,15 @@ document.getElementById('btn1').onclick = function(){
                         + '</tr>';
                 }
             }
+            dictResult += '</tbody>';
+            domainResult += '</tbody>';
             wordResult += '</tbody>';
+            document.getElementById('dict').innerHTML = dictResult;
+            document.getElementById('domain').innerHTML = domainResult;
             document.getElementById('word').innerHTML = wordResult;
 
         });
+
 
 }
 input.onkeydown = function (event) {
@@ -49,10 +120,9 @@ input.onkeydown = function (event) {
         document.getElementById("btn1").click();
         event.preventDefault();
     }
-
 }
 
-/* 페이징 */
+/*/!* 페이징 *!/
 function pagination(){
     fetch(url)
         .then(response => response.json())
@@ -60,9 +130,4 @@ function pagination(){
 
 
         });
-}
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 5627cf7 (FWF-3)
+}*/

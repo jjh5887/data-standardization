@@ -25,14 +25,6 @@ public class DomainService extends ItemServiceImpl {
         this.dictRegService = dictRegService;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Domain getDetail(Long id) {
-        Domain item = (Domain) get(id);
-        Hibernate.initialize(item.getRegs());
-        return item;
-    }
-
     @Transactional(readOnly = true)
     public Page<Domain> getByEngNameContains(String engName, Pageable pageable) {
         return ((DomainRepository) itemRepository).findByBase_NameContains(engName, pageable);
@@ -70,7 +62,12 @@ public class DomainService extends ItemServiceImpl {
     }
 
     @Override
-    public void delete(Item domain) throws Throwable {
+    public Item getDetail(Long id) {
+        return get(id);
+    }
+
+    @Override
+    public void delete(Item domain) {
         domain = get(domain.getId());
         for (Dict dict : ((Domain) domain).getDicts()) {
             if (dict.getDomains().size() == 1 && dict.getCustomDomains().size() == 0) {

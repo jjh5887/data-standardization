@@ -1,13 +1,15 @@
 package kvoting.intern.flowerwebapp.ctdomain.registration;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.constraint.ConstraintBase;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainBase;
-import kvoting.intern.flowerwebapp.ctdomain.InputType;
+import kvoting.intern.flowerwebapp.constraint.InputType;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.word.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +17,12 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "CC_CUSTOM_DOMAIN_REG_TC")
 @Getter
@@ -44,41 +50,14 @@ public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase
     @JoinTable(name = "CC_CUSTOM_DOMAIN_REG_CONSTRAINT_TC",
             joinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_REG_ID"),
             inverseJoinColumns = @JoinColumn(name = "CONSTRAINT_ID"))
-    private List<Constraint> constraints;
+    private Set<Constraint> constraints = new HashSet<>();
 
-    @Override
-    public void registered() {
-        super.registered();
-        if (base == null) {
-            return;
-        }
-        String name = base.getDataType();
-        constraints.sort(new Comparator<Constraint>() {
-            @Override
-            public int compare(Constraint o1, Constraint o2) {
-                return o1.getBase().getName().compareTo(o2.getBase().getName());
-            }
-        });
-
-        if (constraints != null) {
-            for (Constraint constraint : constraints) {
-                ConstraintBase base = constraint.getBase();
-                name += base.getName();
-                if (base.getInputType() == InputType.BOOLEAN) {
-                    if (base.getValue().equals("0")) {
-                        name += "N";
-                        continue;
-                    }
-                    if (base.getValue().equals("1")) {
-                        name += "Y";
-                        continue;
-                    }
-                    throw new RuntimeException();
-                }
-                name += base.getValue();
-            }
-        }
-        base.setName(name);
-    }
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OrderColumn
+    @JoinTable(name = "CC_CUSTOM_DOMAIN_REG_WORD_TC",
+        joinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_REG_ID"),
+        inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
+    private List<Word> words = new ArrayList<>();
 }

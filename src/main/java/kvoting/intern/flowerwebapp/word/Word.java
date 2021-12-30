@@ -3,9 +3,12 @@ package kvoting.intern.flowerwebapp.word;
 
 import com.fasterxml.jackson.annotation.*;
 import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
+import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainReg;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.registeration.DictReg;
 import kvoting.intern.flowerwebapp.domain.Domain;
+import kvoting.intern.flowerwebapp.domain.registration.DomainReg;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.view.View;
@@ -72,6 +75,19 @@ public class Word implements Item {
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @JsonIgnore
     private Set<Domain> domains = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<DomainReg> domainRegs = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+    @JsonIgnore
+    private Set<CustomDomain> customDomains = new HashSet<>();
+
+    @ManyToMany(mappedBy = "words", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<CustomDomainReg> customDomainRegs = new HashSet<>();
 
     @Override
     public String getName() {

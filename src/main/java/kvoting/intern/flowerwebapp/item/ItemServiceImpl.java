@@ -35,7 +35,7 @@ public abstract class ItemServiceImpl implements ItemService {
 		return (Item)itemRepository.save(item);
 	}
 
-	public void delete(Item item) throws Throwable {
+	public void delete(Item item) {
 		itemRepository.delete(item);
 	}
 

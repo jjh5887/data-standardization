@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "용어 요청 API")
 @RestController
-@RequestMapping(value = "/dictReg", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/dict-reg", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DictRegController extends RegistrationController<DictRegistRequest> {
     public DictRegController(DictRegService registrationService, AccountService accountService, JwtTokenProvider jwtTokenProvider) {
         super(registrationService, accountService, jwtTokenProvider);

@@ -29,7 +29,7 @@ public class DictService extends ItemServiceImpl {
     }
 
     @Transactional(readOnly = true)
-    public Page<Dict> get(List<Long> ids, Pageable pageable) throws Throwable {
+    public Page<Dict> get(List<Long> ids, Pageable pageable) {
         HashSet<Dict> set = new HashSet<>();
         for (Long id : ids) {
             Word word = wordRepository.findById(id).orElseThrow(() -> {
@@ -60,7 +60,7 @@ public class DictService extends ItemServiceImpl {
 
     @Override
     @Transactional(readOnly = true)
-    public Dict getDetail(Long id) throws Throwable {
+    public Dict getDetail(Long id) {
         Dict dict = (Dict) get(id);
         Hibernate.initialize(dict.getDomains());
         Hibernate.initialize(dict.getCustomDomains());

@@ -33,7 +33,7 @@ public class DomainController {
     @ApiImplicitParam(name = "id", value = "도메인 id", type = "number")
     @GetMapping("/{id}")
     @JsonView(View.Detail.class)
-    public ResponseEntity getDomain(@PathVariable Long id) throws Throwable {
+    public ResponseEntity getDomain(@PathVariable Long id) {
         return ResponseEntity.ok(domainService.getDetail(id));
     }
 

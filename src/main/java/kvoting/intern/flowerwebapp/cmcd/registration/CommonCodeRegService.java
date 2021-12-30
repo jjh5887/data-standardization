@@ -89,5 +89,6 @@ public class CommonCodeRegService extends RegistrationService {
         commonCode.setDict(commonCodeReg.getDict());
         commonCode.setHighDict(((CommonCodeReg) registration).getHighDict());
         commonCode.setHighCommonCode(commonCodeReg.getHighCommonCode());
+        commonCode.setBase(commonCodeReg.getBase());
     }
 }

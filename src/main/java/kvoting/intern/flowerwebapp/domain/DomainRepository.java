@@ -21,6 +21,4 @@ public interface DomainRepository extends JpaRepository<Domain, Long> {
     Page<Domain> findByBase_Nullable(Boolean nullable, Pageable pageable);
 
     Page<Domain> findByStatus(ProcessType status, Pageable pageable);
-
-
 }

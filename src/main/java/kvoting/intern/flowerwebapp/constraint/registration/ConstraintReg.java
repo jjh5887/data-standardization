@@ -16,12 +16,14 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.constraint.ConstraintBase;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
+import kvoting.intern.flowerwebapp.view.View;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,10 +40,13 @@ import lombok.experimental.SuperBuilder;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CONSTRAINT_ID"}))
 public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
 
-	@Embedded
-	ConstraintBase base;
 	@Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)
 	private Long itemId;
+
+	@Embedded
+	@JsonView(View.Detail.class)
+	ConstraintBase base;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CONSTRAINT_ID")
 	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
@@ -49,5 +54,6 @@ public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
 	private Constraint item;
 
 	@ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Set<CustomDomain> customDomains = new HashSet<>();
 }

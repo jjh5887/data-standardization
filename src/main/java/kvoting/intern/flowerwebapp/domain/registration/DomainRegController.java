@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "도메인 요청 API")
 @RestController
-@RequestMapping(value = "/domainReg", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/domain-reg", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DomainRegController extends RegistrationController<DomainRegistRequest> {
     public DomainRegController(DomainRegService registrationService, AccountService accountService, JwtTokenProvider jwtTokenProvider) {
         super(registrationService, accountService, jwtTokenProvider);

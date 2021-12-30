@@ -35,6 +35,7 @@ public class DictReg extends Registration<Dict, DictBase> {
     private Long itemId;
 
     @Embedded
+    @JsonView(View.Detail.class)
     private DictBase base;
 
     @ManyToOne(fetch = FetchType.LAZY)

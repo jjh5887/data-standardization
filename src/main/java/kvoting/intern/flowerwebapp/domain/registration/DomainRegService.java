@@ -52,6 +52,7 @@ public class DomainRegService extends RegistrationService {
         Domain domain = (Domain) item;
         domain.getWords().clear();
         domain.getWords().addAll(domainReg.getWords());
+        domain.setBase(domainReg.getBase());
     }
 
     @Override

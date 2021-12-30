@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kvoting.intern.flowerwebapp.ctdomain.InputType;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 
@@ -21,7 +20,7 @@ public class ConstraintService extends ItemServiceImpl {
 
 	@Transactional(readOnly = true)
 	public Page<Constraint> getByName(String name, Pageable pageable) {
-		return constraintRepository.findByBase_Name(name, pageable);
+		return constraintRepository.findByBase_NameContains(name, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -32,6 +31,11 @@ public class ConstraintService extends ItemServiceImpl {
 	@Transactional(readOnly = true)
 	public Page<Constraint> getByInput(InputType inputType, Pageable pageable) {
 		return constraintRepository.findByBase_InputType(inputType, pageable);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Constraint> getByNameAndType(String name, InputType type, Pageable pageable) {
+		return constraintRepository.findByBase_NameAndBase_InputType(name, type, pageable);
 	}
 
 	@Override

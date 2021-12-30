@@ -9,7 +9,7 @@ import kvoting.intern.flowerwebapp.constraint.ConstraintRepository;
 import kvoting.intern.flowerwebapp.constraint.ConstraintService;
 import kvoting.intern.flowerwebapp.constraint.registration.request.ConstraintRegRequest;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainRepository;
-import kvoting.intern.flowerwebapp.ctdomain.InputType;
+import kvoting.intern.flowerwebapp.constraint.InputType;
 import kvoting.intern.flowerwebapp.dict.DictRepository;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import org.junit.jupiter.api.BeforeEach;

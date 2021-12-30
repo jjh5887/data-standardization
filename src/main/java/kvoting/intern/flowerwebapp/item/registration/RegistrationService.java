@@ -68,9 +68,6 @@ public abstract class RegistrationService {
         return save;
     }
 
-    public void updateItem(Item item, RegRequest request) {
-    }
-
     public Registration modify(RegRequest request, Long id, Account account) throws Throwable {
         Item item = itemServiceImpl.get(id);
         validateStatus(item);
@@ -146,8 +143,8 @@ public abstract class RegistrationService {
         registration.getItem().setStatus(ProcessType.APPROVED);
         if (registration.getRegistrationType() == RegistrationType.MODIFY) {
             Item item = registration.getItem();
-            modelMapper.map(registration.getBase(), item);
             update(registration, item);
+            itemServiceImpl.save(item);
         }
         return save(registration);
     }
@@ -183,6 +180,8 @@ public abstract class RegistrationService {
             throw new RuntimeException();
         }
     }
+
+    public abstract void updateItem(Item item, RegRequest regRequest);
 
     public abstract void validateItem(Item item);
 

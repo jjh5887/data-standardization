@@ -83,12 +83,15 @@ public class DictRegService extends RegistrationService {
 
     @Override
     public void update(Registration registration, Item item) {
-        ((Dict) item).getWords().clear();
-        ((Dict) item).getWords().addAll(((DictReg) registration).getWords());
-        ((Dict) item).getDomains().clear();
-        ((Dict) item).getDomains().addAll(((DictReg) registration).getDomains());
-        ((Dict) item).getCustomDomains().clear();
-        ((Dict) item).getCustomDomains().addAll(((DictReg) registration).getCustomDomains());
+        Dict dict = (Dict)item;
+        DictReg dictReg = (DictReg)registration;
+        dict.getWords().clear();
+        dict.getWords().addAll(dictReg.getWords());
+        dict.getDomains().clear();
+        dict.getDomains().addAll(dictReg.getDomains());
+        dict.getCustomDomains().clear();
+        dict.getCustomDomains().addAll(dictReg.getCustomDomains());
+        dict.setBase(dictReg.getBase());
     }
 
     @Override

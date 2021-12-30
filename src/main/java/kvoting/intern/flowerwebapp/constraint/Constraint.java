@@ -21,6 +21,7 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -81,7 +82,7 @@ public class Constraint implements Item {
 
 	@ManyToMany(mappedBy = "constraints", fetch = FetchType.LAZY)
 	@JsonView(View.Detail.class)
-
+	@JsonIncludeProperties({"id", "base", "status"})
 	private Set<CustomDomain> customDomains = new HashSet<>();
 
 	@Override

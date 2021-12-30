@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.constraint.registration;
 
+import org.apache.tomcat.util.bcel.Const;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,19 @@ public class ConstraintRegService extends RegistrationService {
 	}
 
 	@Override
+	public void updateItem(Item item, RegRequest regRequest) {
+
+	}
+
+	@Override
 	public void validateItem(Item item) {
 	}
 
 	@Override
 	public void update(Registration registration, Item item) {
+		Constraint constraint = (Constraint)item;
+		ConstraintReg constraintReg = (ConstraintReg)registration;
+		constraint.setBase(constraintReg.getBase());
 	}
 
 	@Override

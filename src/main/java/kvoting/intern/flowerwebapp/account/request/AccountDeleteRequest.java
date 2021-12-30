@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDeleteRequest {
-    @ApiModelProperty(value = "비밀번호")
-    private String password;
+	@ApiModelProperty(value = "비밀번호")
+	private String password;
 }

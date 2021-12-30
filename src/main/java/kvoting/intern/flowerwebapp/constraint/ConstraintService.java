@@ -20,12 +20,12 @@ public class ConstraintService extends ItemServiceImpl {
 
 	@Transactional(readOnly = true)
 	public Page<Constraint> getByName(String name, Pageable pageable) {
-		return constraintRepository.findByBase_NameContains(name, pageable);
+		return constraintRepository.findByBase_NameIgnoreCaseContains(name, pageable);
 	}
 
 	@Transactional(readOnly = true)
 	public Page<Constraint> getByValue(String value, Pageable pageable) {
-		return constraintRepository.findByBase_Value(value, pageable);
+		return constraintRepository.findByBase_ValueContains(value, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -35,7 +35,7 @@ public class ConstraintService extends ItemServiceImpl {
 
 	@Transactional(readOnly = true)
 	public Page<Constraint> getByNameAndType(String name, InputType type, Pageable pageable) {
-		return constraintRepository.findByBase_NameAndBase_InputType(name, type, pageable);
+		return constraintRepository.findByBase_NameIgnoreCaseContainsAndBase_InputType(name, type, pageable);
 	}
 
 	@Override

@@ -1,27 +1,28 @@
 package kvoting.intern.flowerwebapp.item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import kvoting.intern.flowerwebapp.account.Account;
-import kvoting.intern.flowerwebapp.item.registration.ProcessType;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import kvoting.intern.flowerwebapp.account.Account;
+import kvoting.intern.flowerwebapp.item.registration.ProcessType;
+
 public interface Item {
-    ProcessType getStatus();
+	ProcessType getStatus();
 
-    void setStatus(ProcessType type);
+	void setStatus(ProcessType type);
 
-    void setModifier(Account account);
+	void setModifier(Account account);
 
-    void setModifierName(String name);
+	void setModifierName(String name);
 
-    void setModifiedTime(LocalDateTime localDateTime);
+	void setModifiedTime(LocalDateTime localDateTime);
 
-    Long getId();
+	Long getId();
 
-    @JsonIgnore
-    String getName();
+	@JsonIgnore
+	String getName();
 
-    Set<?> getRegs();
+	Set<?> getRegs();
 }

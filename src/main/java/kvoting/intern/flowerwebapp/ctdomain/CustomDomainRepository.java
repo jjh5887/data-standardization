@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomDomainRepository
 	extends org.springframework.data.jpa.repository.JpaRepository<CustomDomain, Long> {
-	Page<CustomDomain> findByBase_NameContains(String engName, Pageable pageable);
+	Page<CustomDomain> findByBase_NameIgnoreCaseContains(String engName, Pageable pageable);
 }

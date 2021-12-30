@@ -43,29 +43,29 @@ public class WordService extends ItemServiceImpl {
 
 	@Transactional(readOnly = true)
 	public Word getByEng(String engName) {
-		return ((WordRepository)itemRepository).findByBase_EngName(engName).orElseThrow(() -> {
+		return ((WordRepository)itemRepository).findByBase_IgnoreCaseEngName(engName).orElseThrow(() -> {
 			throw new RuntimeException();
 		});
 	}
 
 	@Transactional(readOnly = true)
 	public Page<Word> getByEng(String engName, Pageable pageable) {
-		return ((WordRepository)itemRepository).findByBase_EngNameContains(engName, pageable);
+		return ((WordRepository)itemRepository).findByBase_EngNameIgnoreCaseContains(engName, pageable);
 	}
 
 	@Transactional(readOnly = true)
 	public Page<Word> getByOrgEng(String orgEngName, Pageable pageable) {
-		return ((WordRepository)itemRepository).findByBase_OrgEngNameContains(orgEngName, pageable);
+		return ((WordRepository)itemRepository).findByBase_OrgEngNameIgnoreCaseContains(orgEngName, pageable);
 	}
 
 	@Transactional(readOnly = true)
 	public Page<Word> getByName(String name, Pageable pageable) {
-		return ((WordRepository)itemRepository).findByBase_NameContains(name, pageable);
+		return ((WordRepository)itemRepository).findByBase_NameIgnoreCaseContains(name, pageable);
 	}
 
 	@Transactional(readOnly = true)
 	public boolean existsByEngName(String engName) {
-		return ((WordRepository)itemRepository).existsByBase_EngName(engName);
+		return ((WordRepository)itemRepository).existsByBase_EngNameIgnoreCase(engName);
 	}
 
 	@Override

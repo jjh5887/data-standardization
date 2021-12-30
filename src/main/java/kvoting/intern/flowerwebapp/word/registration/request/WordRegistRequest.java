@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @ApiModel(value = "단어 요청")
 public class WordRegistRequest extends RegRequest {
-    private WordBase base;
+	private WordBase base;
 }

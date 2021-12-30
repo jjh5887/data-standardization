@@ -13,7 +13,6 @@ import kvoting.intern.flowerwebapp.constraint.ConstraintService;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainService;
 import kvoting.intern.flowerwebapp.ctdomain.registration.request.CustomDomainRegRequest;
-import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
@@ -47,7 +46,7 @@ public class CustomDomainRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateReg(Registration registration, RegRequest regRequest) {
+	public void setUpReg(Registration registration, RegRequest regRequest) {
 		CustomDomainRegRequest request = (CustomDomainRegRequest)regRequest;
 		CustomDomainReg customDomainReg = (CustomDomainReg)registration;
 		customDomainReg.setWords(request.getWords()
@@ -61,7 +60,7 @@ public class CustomDomainRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateItem(Item item, RegRequest regRequest) {
+	public void setUpItem(Item item, RegRequest regRequest) {
 		CustomDomainRegRequest request = (CustomDomainRegRequest)regRequest;
 		CustomDomain customDomain = (CustomDomain)item;
 		customDomain.setWords(request.getWords()
@@ -79,7 +78,7 @@ public class CustomDomainRegService extends RegistrationService {
 		CustomDomain customDomain = (CustomDomain)item;
 		List<Item> list = new ArrayList<>(customDomain.getWords());
 		list.addAll(customDomain.getConstraints());
-		if(list.stream().anyMatch(i -> ProcessType.APPROVED != i.getStatus())){
+		if (list.stream().anyMatch(i -> ProcessType.APPROVED != i.getStatus())) {
 			throw new RuntimeException();
 		}
 	}

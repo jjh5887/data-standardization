@@ -14,21 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DomainService extends ItemServiceImpl {
+
     private final DictService dictService;
     private final DictRegService dictRegService;
 
-    public DomainService(DomainRepository domainRepository, DictService dictService, DictRegService dictRegService) {
+    public DomainService(DomainRepository domainRepository, DictService dictService,
+        DictRegService dictRegService) {
         super(domainRepository);
         this.dictService = dictService;
         this.dictRegService = dictRegService;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Domain getDetail(Long id) throws Throwable {
-        Domain item = (Domain) get(id);
-        Hibernate.initialize(item.getRegs());
-        return item;
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +42,8 @@ public class DomainService extends ItemServiceImpl {
 
     @Transactional(readOnly = true)
     public Page<Domain> get(DB db, DataType type, Pageable pageable) {
-        return ((DomainRepository) itemRepository).findByBase_DbAndBase_DataType(db, type, pageable);
+        return ((DomainRepository) itemRepository).findByBase_DbAndBase_DataType(db, type,
+            pageable);
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +62,12 @@ public class DomainService extends ItemServiceImpl {
     }
 
     @Override
-    public void delete(Item domain) throws Throwable {
+    public Item getDetail(Long id) {
+        return get(id);
+    }
+
+    @Override
+    public void delete(Item domain) {
         domain = get(domain.getId());
         for (Dict dict : ((Domain) domain).getDicts()) {
             if (dict.getDomains().size() == 1 && dict.getCustomDomains().size() == 0) {

@@ -35,7 +35,7 @@ public class DictController {
     @ApiImplicitParam(name = "id", value = "용어 id", type = "number")
     @GetMapping("/{id}")
     @JsonView(View.Detail.class)
-    public ResponseEntity getDict(@PathVariable Long id) throws Throwable {
+    public ResponseEntity getDict(@PathVariable Long id) {
         return ResponseEntity.ok(dictService.getDetail(id));
     }
 
@@ -51,7 +51,7 @@ public class DictController {
     @ApiImplicitParam(name = "ids", value = "단어 id 리스트", type = "string")
     @GetMapping("/words")
     @JsonView(View.Public.class)
-    public ResponseEntity getDictByWord(@RequestParam List<Long> ids, Pageable pageable) throws Throwable {
+    public ResponseEntity getDictByWord(@RequestParam List<Long> ids, Pageable pageable) {
         return ResponseEntity.ok(dictService.get(ids, pageable));
     }
 }

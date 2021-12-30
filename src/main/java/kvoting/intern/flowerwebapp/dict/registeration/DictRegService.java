@@ -1,105 +1,78 @@
 package kvoting.intern.flowerwebapp.dict.registeration;
 
-import kvoting.intern.flowerwebapp.cmcd.CommonCodeRepository;
+import kvoting.intern.flowerwebapp.cmcd.CommonCode;
+import kvoting.intern.flowerwebapp.cmcd.CommonCodeService;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
-import kvoting.intern.flowerwebapp.ctdomain.CustomDomainRepository;
+import kvoting.intern.flowerwebapp.ctdomain.CustomDomainService;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictService;
 import kvoting.intern.flowerwebapp.dict.registeration.request.DictRegistRequest;
 import kvoting.intern.flowerwebapp.domain.Domain;
-import kvoting.intern.flowerwebapp.domain.DomainRepository;
+import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.registration.ProcessType;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.item.registration.RegistrationService;
 import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 import kvoting.intern.flowerwebapp.word.Word;
-import kvoting.intern.flowerwebapp.word.WordRepository;
+import kvoting.intern.flowerwebapp.word.WordService;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DictRegService extends RegistrationService {
-    private final WordRepository wordRepository;
-    private final DomainRepository domainRepository;
-    private final CustomDomainRepository customDomainRepository;
-    private final CommonCodeRepository commonCodeRepository;
+    private final WordService wordService;
+    private final DomainService domainService;
+    private final CustomDomainService customDomainService;
+    private final CommonCodeService commonCodeService;
 
-    public DictRegService(DictRegRepository dictRegRepository, ModelMapper modelMapper, DictService dictService, WordRepository wordRepository, DomainRepository domainRepository, CustomDomainRepository customDomainRepository, CommonCodeRepository commonCodeRepository) {
+    public DictRegService(DictRegRepository dictRegRepository, ModelMapper modelMapper, DictService dictService,
+                          @Lazy WordService wordService,
+                          @Lazy DomainService domainService,
+                          @Lazy CustomDomainService customDomainService,
+                          @Lazy CommonCodeService commonCodeService) {
         super(dictRegRepository, modelMapper, dictService);
-        this.wordRepository = wordRepository;
-        this.domainRepository = domainRepository;
-        this.customDomainRepository = customDomainRepository;
-        this.commonCodeRepository = commonCodeRepository;
+        this.wordService = wordService;
+        this.domainService = domainService;
+        this.customDomainService = customDomainService;
+        this.commonCodeService = commonCodeService;
         this.regClazz = DictReg.class;
         this.itemClazz = Dict.class;
     }
 
     @Override
-    public void updateItem(Item item, RegRequest request) {
-        DictRegistRequest registRequest = (DictRegistRequest) request;
+    public void updateItem(Item item, RegRequest regRequest) {
+        DictRegistRequest request = (DictRegistRequest) regRequest;
         Dict dict = (Dict) item;
-        dict.setWords(new ArrayList<>());
-        dict.setDomains(new HashSet<>());
-        dict.setCustomDomains(new HashSet<>());
-        for (Long id : registRequest.getWords()) {
-            dict.getWords().add(wordRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        for (Long id : registRequest.getDomains()) {
-            dict.getDomains().add(domainRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        for (Long id : registRequest.getCustomDomains()) {
-            dict.getCustomDomains().add(customDomainRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        if (registRequest.getCommonCode() != null) {
-            dict.setCommonCode(commonCodeRepository.findById(registRequest.getCommonCode()).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
+        dict.setWords(request.getWords().stream().map(id -> (Word) wordService.get(id)).collect(Collectors.toList()));
+        dict.setDomains(request.getDomains().stream().map(id -> (Domain) domainService.get(id)).collect(Collectors.toSet()));
+        dict.setCustomDomains(request.getCustomDomains().stream().map(id -> (CustomDomain) customDomainService.get(id)).collect(Collectors.toSet()));
+        if (request.getCommonCode() != null) {
+            dict.setCommonCode((CommonCode) commonCodeService.get(request.getCommonCode()));
         }
     }
 
     @Override
-    public void updateReg(Registration registration, RegRequest request) {
+    public void updateReg(Registration registration, RegRequest regRequest) {
         DictReg dictReg = (DictReg) registration;
-        DictRegistRequest registRequest = (DictRegistRequest) request;
-        dictReg.setWords(new ArrayList<>());
-        dictReg.setDomains(new HashSet<>());
-        dictReg.setCustomDomains(new HashSet<>());
-        for (Long id : registRequest.getWords()) {
-            dictReg.getWords().add(wordRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        for (Long id : registRequest.getDomains()) {
-            dictReg.getDomains().add(domainRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        for (Long id : registRequest.getCustomDomains()) {
-            dictReg.getCustomDomains().add(customDomainRepository.findById(id).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
-        }
-        if (registRequest.getCommonCode() != null) {
-            dictReg.setCommonCode(commonCodeRepository.findById(registRequest.getCommonCode()).orElseThrow(() -> {
-                throw new RuntimeException();
-            }));
+        DictRegistRequest request = (DictRegistRequest) regRequest;
+        dictReg.setWords(request.getWords().stream().map(id -> (Word) wordService.get(id)).collect(Collectors.toList()));
+        dictReg.setDomains(request.getDomains().stream().map(id -> (Domain) domainService.get(id)).collect(Collectors.toSet()));
+        dictReg.setCustomDomains(request.getCustomDomains().stream().map(id -> (CustomDomain) customDomainService.get(id)).collect(Collectors.toSet()));
+        if (request.getCommonCode() != null) {
+            dictReg.setCommonCode((CommonCode) commonCodeService.get(request.getCommonCode()));
         }
     }
 
     @Override
-    public Registration getRegDetail(Long id) throws Throwable {
+    public Registration getRegDetail(Long id) {
         DictReg registration = (DictReg) getRegistration(id);
         Hibernate.initialize(registration.getWords());
         Hibernate.initialize(registration.getDomains());
@@ -110,31 +83,25 @@ public class DictRegService extends RegistrationService {
 
     @Override
     public void update(Registration registration, Item item) {
-        ((Dict) item).getWords().clear();
-        ((Dict) item).getWords().addAll(((DictReg) registration).getWords());
-        ((Dict) item).getDomains().clear();
-        ((Dict) item).getDomains().addAll(((DictReg) registration).getDomains());
-        ((Dict) item).getCustomDomains().clear();
-        ((Dict) item).getCustomDomains().addAll(((DictReg) registration).getCustomDomains());
+        Dict dict = (Dict)item;
+        DictReg dictReg = (DictReg)registration;
+        dict.getWords().clear();
+        dict.getWords().addAll(dictReg.getWords());
+        dict.getDomains().clear();
+        dict.getDomains().addAll(dictReg.getDomains());
+        dict.getCustomDomains().clear();
+        dict.getCustomDomains().addAll(dictReg.getCustomDomains());
+        dict.setBase(dictReg.getBase());
     }
 
     @Override
     @Transactional(readOnly = true)
     public void validateItem(Item item) {
-        for (Word word : ((Dict) item).getWords()) {
-            if (word.getStatus() != ProcessType.APPROVED) {
-                throw new RuntimeException();
-            }
-        }
-        for (Domain domain : ((Dict) item).getDomains()) {
-            if (domain.getStatus() != ProcessType.APPROVED) {
-                throw new RuntimeException();
-            }
-        }
-        for (CustomDomain customDomain : ((Dict) item).getCustomDomains()) {
-            if (customDomain.getStatus() != ProcessType.APPROVED) {
-                throw new RuntimeException();
-            }
+        List<Item> list = new ArrayList<>(((Dict) item).getWords());
+        list.addAll(((Dict) item).getDomains());
+        list.addAll(((Dict) item).getCustomDomains());
+        if(list.stream().anyMatch(i -> ProcessType.APPROVED != i.getStatus())){
+            throw new RuntimeException();
         }
     }
 }

@@ -7,6 +7,8 @@ import kvoting.intern.flowerwebapp.dict.registeration.DictRegService;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +24,19 @@ public class CustomDomainService extends ItemServiceImpl {
     }
 
     @Transactional(readOnly = true)
-    public CustomDomain getDetail(Long id) throws Throwable {
+    public CustomDomain getDetail(Long id) {
         CustomDomain customDomain = (CustomDomain) get(id);
         Hibernate.initialize(customDomain.getConstraints());
-        Hibernate.initialize(customDomain.getDicts());
-        Hibernate.initialize(customDomain.getDictRegs());
         return customDomain;
     }
 
+    @Transactional(readOnly = true)
+    public Page<CustomDomain> getByName(String name, Pageable pageable) {
+        return ((CustomDomainRepository)itemRepository).findByBase_NameContains(name, pageable);
+    }
+
     @Override
-    public void delete(Item item) throws Throwable {
+    public void delete(Item item) {
         for (Dict dict : ((CustomDomain) item).getDicts()) {
             if (dict.getCustomDomains().size() == 1 && dict.getDomains().size() == 0) {
                 dictService.delete(dict);

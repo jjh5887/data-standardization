@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "단어 요청 API")
 @RestController
-@RequestMapping(value = "/wordReg", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/word-reg", produces = MediaType.APPLICATION_JSON_VALUE)
 public class WordRegController extends RegistrationController<WordRegistRequest> {
     public WordRegController(WordRegService registrationService, AccountService accountService, JwtTokenProvider jwtTokenProvider) {
         super(registrationService, accountService, jwtTokenProvider);

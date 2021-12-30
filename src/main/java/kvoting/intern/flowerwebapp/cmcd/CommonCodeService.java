@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommonCodeService extends ItemServiceImpl {
+
     public CommonCodeService(CommonCodeRepository commonCodeRepository) {
         super(commonCodeRepository);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CommonCode getDetail(Long id) throws Throwable {
+    public CommonCode getDetail(Long id) {
         CommonCode commonCode = (CommonCode) get(id);
         Hibernate.initialize(commonCode.getDict());
         Hibernate.initialize(commonCode.getHighCommonCode());
@@ -30,12 +31,14 @@ public class CommonCodeService extends ItemServiceImpl {
 
     @Transactional(readOnly = true)
     public Page<CommonCode> getByCodeName(String codeName, Pageable pageable) {
-        return ((CommonCodeRepository) itemRepository).findByBase_CodeNameContains(codeName, pageable);
+        return ((CommonCodeRepository) itemRepository).findByBase_CodeNameContains(codeName,
+            pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<CommonCode> getByHighCmcd(Long id, Pageable pageable) {
-        return ((CommonCodeRepository) itemRepository).findByHighCommonCodeIdOrderByBase_Order(id, pageable);
+        return ((CommonCodeRepository) itemRepository).findByHighCommonCodeIdOrderByBase_Order(id,
+            pageable);
     }
 
 }

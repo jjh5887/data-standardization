@@ -1,4 +1,9 @@
 package kvoting.intern.flowerwebapp.ctdomain;
 
-public interface CustomDomainRepository extends org.springframework.data.jpa.repository.JpaRepository<CustomDomain, Long> {
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public interface CustomDomainRepository
+	extends org.springframework.data.jpa.repository.JpaRepository<CustomDomain, Long> {
+	Page<CustomDomain> findByBase_NameContains(String engName, Pageable pageable);
 }

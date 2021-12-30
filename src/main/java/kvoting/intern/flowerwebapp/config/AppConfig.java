@@ -177,7 +177,8 @@ public class AppConfig {
 					.build();
 			}
 
-			private DictRegistRequest generateDictRequest(List<Long> words, CaseStyle cs, String nm, Set<Long> domains) {
+			private DictRegistRequest generateDictRequest(List<Long> words, CaseStyle cs, String nm,
+				Set<Long> domains) {
 				return DictRegistRequest.builder()
 					.words(words)
 					.base(generateDictBase(nm, cs))

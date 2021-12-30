@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @ApiModel(value = "제약사항 요청")
 public class ConstraintRegRequest extends RegRequest {
-    private ConstraintBase base;
+	private ConstraintBase base;
 }

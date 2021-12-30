@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDuplicateResponse {
-    private Boolean isDuplicate;
+	private Boolean isDuplicate;
 }

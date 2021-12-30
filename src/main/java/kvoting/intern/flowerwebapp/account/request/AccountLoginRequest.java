@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountLoginRequest {
-    @ApiModelProperty(value = "이메일")
-    private String email;
-    @ApiModelProperty(value = "비밀번호")
-    private String password;
+	@ApiModelProperty(value = "이메일")
+	private String email;
+	@ApiModelProperty(value = "비밀번호")
+	private String password;
 }

@@ -1,5 +1,7 @@
 package kvoting.intern.flowerwebapp.domain.registration.request;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import kvoting.intern.flowerwebapp.domain.DomainBase;
@@ -9,15 +11,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "도메인 요청")
 public class DomainRegistRequest extends RegRequest {
-    private DomainBase base;
-    @ApiModelProperty(value = "단어 id 리스트 (순서 중요)")
-    private List<Long> words;
+	private DomainBase base;
+	@ApiModelProperty(value = "단어 id 리스트 (순서 중요)")
+	private List<Long> words;
 }

@@ -5,11 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConstraintRepository extends JpaRepository<Constraint, Long> {
-	Page<Constraint> findByBase_NameContains(String name, Pageable pageable);
+	Page<Constraint> findByBase_NameIgnoreCaseContains(String name, Pageable pageable);
 
 	Page<Constraint> findByBase_InputType(InputType inputType, Pageable pageable);
 
-	Page<Constraint> findByBase_Value(String value, Pageable pageable);
+	Page<Constraint> findByBase_ValueContains(String value, Pageable pageable);
 
-	Page<Constraint> findByBase_NameAndBase_InputType(String base_name, InputType base_inputType, Pageable pageable);
+	Page<Constraint> findByBase_NameIgnoreCaseContainsAndBase_InputType(String base_name, InputType base_inputType,
+		Pageable pageable);
 }

@@ -5,19 +5,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-
 public interface DictRepository extends JpaRepository<Dict, Long> {
-    Page<Dict> findByBase_NameContains(String name, Pageable pageable);
+	Page<Dict> findByBase_NameIgnoreCaseContains(String name, Pageable pageable);
 
-    Page<Dict> findByBase_EngNameContains(String engName, Pageable pageable);
+	Page<Dict> findByBase_EngNameIgnoreCaseContains(String engName, Pageable pageable);
 
-    Page<Dict> findByBase_ScreenNameContains(String screenName, Pageable pageable);
+	Page<Dict> findByBase_ScreenNameIgnoreCaseContains(String screenName, Pageable pageable);
 
-    @Query("select distinct c from CC_DICT_TC c where c.base.engName like concat('%', ?1, '%') or c.base.name like concat('%', ?2, '%') or c.base.screenName like concat('%', ?3, '%')")
-    Page<Dict> findByName(String engName, String name, String screenName, Pageable pageable);
+	default Page<Dict> findByName(String name, Pageable pageable) {
+		return findByBase_NameIgnoreCaseContainsOrBase_EngNameIgnoreCaseContainsOrBase_ScreenNameIgnoreCaseContains(
+			name, name, name, pageable);
+	}
 
-    @Query(value = "select * from cc_dict_word_tc d where d.WORD_ID = ?1",
-            countQuery = "select count(*) from cc_dict_word_tc d where d.WORD_ID = ?1",
-            nativeQuery = true)
-    Page<Dict> findByWord(Long id, Pageable pageable);
+	Page<Dict> findByBase_NameIgnoreCaseContainsOrBase_EngNameIgnoreCaseContainsOrBase_ScreenNameIgnoreCaseContains(
+		String base_name, String base_engName, String base_screenName, Pageable pageable);
+
+	@Query(value = "select * from cc_dict_word_tc d where d.WORD_ID = ?1",
+		countQuery = "select count(*) from cc_dict_word_tc d where d.WORD_ID = ?1",
+		nativeQuery = true)
+	Page<Dict> findByWord(Long id, Pageable pageable);
 }

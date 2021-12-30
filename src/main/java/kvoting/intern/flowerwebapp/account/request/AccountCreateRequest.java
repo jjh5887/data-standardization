@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountCreateRequest {
-    @ApiModelProperty(value = "이름")
-    private String name;
-    @ApiModelProperty(value = "이메일")
-    private String email;
-    @ApiModelProperty(value = "비밀번호")
-    private String password;
-    @ApiModelProperty(value = "소속")
-    private String department;
+	@ApiModelProperty(value = "이름")
+	private String name;
+	@ApiModelProperty(value = "이메일")
+	private String email;
+	@ApiModelProperty(value = "비밀번호")
+	private String password;
+	@ApiModelProperty(value = "소속")
+	private String department;
 }

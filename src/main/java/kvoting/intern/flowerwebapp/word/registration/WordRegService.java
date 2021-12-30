@@ -21,7 +21,7 @@ public class WordRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateItem(Item item, RegRequest regRequest) {
+	public void setUpItem(Item item, RegRequest regRequest) {
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class WordRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateReg(Registration registration, RegRequest request) {
+	public void setUpReg(Registration registration, RegRequest request) {
 
 	}
 }

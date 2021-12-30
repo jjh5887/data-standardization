@@ -1,6 +1,5 @@
 package kvoting.intern.flowerwebapp.constraint.registration;
 
-import org.apache.tomcat.util.bcel.Const;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class ConstraintRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateItem(Item item, RegRequest regRequest) {
+	public void setUpItem(Item item, RegRequest regRequest) {
 
 	}
 
@@ -38,6 +37,6 @@ public class ConstraintRegService extends RegistrationService {
 	}
 
 	@Override
-	public void updateReg(Registration registration, RegRequest request) {
+	public void setUpReg(Registration registration, RegRequest request) {
 	}
 }

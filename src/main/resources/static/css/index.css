@@ -243,13 +243,6 @@ body {
     display: table-row;
 }
 
-input[type=checkbox] {
-    -ms-transform: scale(0.2); /* IE */
-    -moz-transform: scale(0.2); /* FF */
-    -webkit-transform: scale(0.2); /* Safari and Chrome */
-    -o-transform: scale(0.2); /* Opera */
-    padding: 10px;
-}
 
 .counter {
     padding: 8px;
@@ -292,7 +285,7 @@ input[type=checkbox] {
 }
 
 .main .total-table {
-    max-width: 70%;
+    max-width: 75%;
 
 }
 
@@ -380,7 +373,7 @@ td{
     -o-text-overflow:ellipsis;
     overflow:hidden;
     word-wrap:break-word;
-    max-width:80px;
+    max-width:140px;
 }
 thead {
     border-bottom: 1px solid black !important;
@@ -464,7 +457,7 @@ tbody tr:hover{
 }
 
 .col-xs-0 {
-    width: 2.5%
+    width: 8%
 }
 /*popup*/
 .popup{

@@ -1,14 +1,11 @@
 package kvoting.intern.flowerwebapp.word.registration;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,11 +31,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @DiscriminatorValue(value = "WORD")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "WORD_ID"}))
 public class WordReg extends Registration<Word, WordBase> {
-
-	@Column(name = "WORD_ID", insertable = false, updatable = false)
-	private Long itemId;
 
 	@Embedded
 	@JsonView(View.Detail.class)
@@ -46,8 +39,6 @@ public class WordReg extends Registration<Word, WordBase> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "WORD_ID")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-
 	@JsonIgnore
 	private Word item;
 

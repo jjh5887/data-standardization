@@ -13,13 +13,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import kvoting.intern.flowerwebapp.config.ItemUrl;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "공통코드 API")
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/cmcd", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ItemUrl.COMMON_CODE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CommonCodeController {
 	private final CommonCodeService commonCodeService;
 
@@ -34,7 +35,7 @@ public class CommonCodeController {
 	@ApiImplicitParam(name = "id", value = "공통코드 id", type = "number")
 	@GetMapping("/{id}")
 	@JsonView(View.Detail.class)
-	public ResponseEntity getCmcd(@PathVariable Long id) throws Throwable {
+	public ResponseEntity getCmcd(@PathVariable Long id) {
 		return ResponseEntity.ok(commonCodeService.getDetail(id));
 	}
 
@@ -54,11 +55,11 @@ public class CommonCodeController {
 		return ResponseEntity.ok(commonCodeService.getByCodeName(name, pageable));
 	}
 
-	@ApiOperation(value = "상위 공통코드로 공통코드 조회")
-	@ApiImplicitParam(name = "id", value = "상위 공통코드 id", type = "number")
-	@GetMapping("/high/{id}")
-	@JsonView(View.Public.class)
-	public ResponseEntity getByHighCmcd(@PathVariable Long id, Pageable pageable) {
-		return ResponseEntity.ok(commonCodeService.getByHighCmcd(id, pageable));
-	}
+	// @ApiOperation(value = "상위 공통코드로 공통코드 조회")
+	// @ApiImplicitParam(name = "id", value = "상위 공통코드 id", type = "number")
+	// @GetMapping("/high/{id}")
+	// @JsonView(View.Public.class)
+	// public ResponseEntity getByHighCmcd(@PathVariable Long id, Pageable pageable) {
+	// 	return ResponseEntity.ok(commonCodeService.getByHighCmcd(id, pageable));
+	// }
 }

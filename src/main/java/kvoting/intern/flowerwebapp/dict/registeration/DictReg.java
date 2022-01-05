@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,8 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -47,11 +45,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "DICT")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "DICT_ID"}))
 public class DictReg extends Registration<Dict, DictBase> {
-
-	@Column(name = "DICT_ID", insertable = false, updatable = false)
-	private Long itemId;
 
 	@Embedded
 	@JsonView(View.Detail.class)
@@ -59,7 +53,6 @@ public class DictReg extends Registration<Dict, DictBase> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "DICT_ID")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonIgnore
 	private Dict item;
 
@@ -68,7 +61,6 @@ public class DictReg extends Registration<Dict, DictBase> {
 	@JoinTable(name = "CC_DICT_REG_WORD_TC",
 		joinColumns = @JoinColumn(name = "DICT_REG_ID"),
 		inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonView(View.Detail.class)
 	@JsonIncludeProperties({"id", "base", "status"})
 	private List<Word> words = new ArrayList<>();
@@ -77,7 +69,6 @@ public class DictReg extends Registration<Dict, DictBase> {
 	@JoinTable(name = "CC_DICT_REG_DOMAIN_TC",
 		joinColumns = @JoinColumn(name = "DICT_REG_ID"),
 		inverseJoinColumns = @JoinColumn(name = "DOMAIN_ID"))
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonView(View.Detail.class)
 	@JsonIncludeProperties({"id", "base", "status"})
 	private Set<Domain> domains = new HashSet<>();
@@ -86,14 +77,16 @@ public class DictReg extends Registration<Dict, DictBase> {
 	@JoinTable(name = "CC_DICT_REG_CUSTOM_DOMAIN_TC",
 		joinColumns = @JoinColumn(name = "DICT_REG_ID"),
 		inverseJoinColumns = @JoinColumn(name = "CUSTOM_DOMAIN_ID"))
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonView(View.Detail.class)
 	@JsonIgnoreProperties({"regs"})
 	private Set<CustomDomain> customDomains = new HashSet<>();
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+	@ManyToMany(fetch = FetchType.LAZY)
+	@OrderColumn
+	@JoinTable(name = "CC_DICT_REG_CMCD_TC",
+		joinColumns = @JoinColumn(name = "DICT_REG_ID"),
+		inverseJoinColumns = @JoinColumn(name = "CMCD_ID"))
 	@JsonView(View.Detail.class)
 	@JsonIgnoreProperties({"regs"})
-	private CommonCode commonCode;
+	private List<CommonCode> commonCodes = new ArrayList<>();
 }

@@ -18,7 +18,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -82,12 +81,10 @@ public class Dict implements Item {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODFR_ID", referencedColumnName = "USER_ID")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonIgnore
 	private Account modifier;
 
 	@OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonIgnore
 	private Set<DictReg> regs = new HashSet<>();
 
@@ -96,7 +93,6 @@ public class Dict implements Item {
 	@JoinTable(name = "CC_DICT_WORD_TC",
 		joinColumns = @JoinColumn(name = "DICT_ID"),
 		inverseJoinColumns = @JoinColumn(name = "WORD_ID"))
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonIgnore
 	private List<Word> words = new ArrayList<>();
 
@@ -118,11 +114,15 @@ public class Dict implements Item {
 	@JsonIgnoreProperties({"regs"})
 	private Set<CustomDomain> customDomains = new HashSet<>();
 
-	@OneToOne(mappedBy = "dict", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OrderColumn
+	@JoinTable(name = "CC_DICT_CMCD_TC",
+		joinColumns = @JoinColumn(name = "DICT_ID"),
+		inverseJoinColumns = @JoinColumn(name = "CMCD_ID"))
 	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 	@JsonView(View.Detail.class)
 	@JsonIgnoreProperties({"regs"})
-	private CommonCode commonCode;
+	private List<CommonCode> commonCodes = new ArrayList<>();
 
 	@PrePersist
 	public void setUp() {

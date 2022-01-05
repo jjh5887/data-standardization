@@ -16,13 +16,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import kvoting.intern.flowerwebapp.config.ItemUrl;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "용어 API")
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/dict", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ItemUrl.DICT, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DictController {
 	private final DictService dictService;
 

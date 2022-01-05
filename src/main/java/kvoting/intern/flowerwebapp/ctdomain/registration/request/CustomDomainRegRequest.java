@@ -3,6 +3,8 @@ package kvoting.intern.flowerwebapp.ctdomain.registration.request;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainBase;
@@ -20,9 +22,11 @@ import lombok.experimental.SuperBuilder;
 public class CustomDomainRegRequest extends RegRequest {
 	private CustomDomainBase base;
 
+	@NotBlank
 	@ApiModelProperty(value = "제약사항 id 리스트")
 	private Set<Long> constraints;
 
+	@NotBlank
 	@ApiModelProperty(value = "단어 id 리스트(순서 중요)")
 	private List<Long> words;
 }

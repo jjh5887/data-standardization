@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 import kvoting.intern.flowerwebapp.word.Word;
 import kvoting.intern.flowerwebapp.word.WordRepository;
@@ -65,8 +66,13 @@ public class DictService extends ItemServiceImpl {
 		Dict dict = (Dict)get(id);
 		Hibernate.initialize(dict.getDomains());
 		Hibernate.initialize(dict.getCustomDomains());
-		Hibernate.initialize(dict.getCommonCode().getLowCommonCodes());
-		Hibernate.initialize(dict.getCommonCode().getHighCommonCode());
+		Hibernate.initialize(dict.getCommonCodes());
 		return dict;
+	}
+
+	@Override
+	public boolean exists(Item item) {
+		Dict dict = (Dict)item;
+		return ((DictRepository)itemRepository).existsByBase_EngNameIgnoreCase(dict.getBase().getEngName());
 	}
 }

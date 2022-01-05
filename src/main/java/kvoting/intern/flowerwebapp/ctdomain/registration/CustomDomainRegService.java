@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.constraint.ConstraintService;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
@@ -28,8 +29,8 @@ public class CustomDomainRegService extends RegistrationService {
 
 	public CustomDomainRegService(CustomDomainRegRepository customDomainRegRepository, ModelMapper modelMapper,
 		CustomDomainService customDomainService,
-		@Lazy ConstraintService constraintService, @Lazy WordService wordService) {
-		super(customDomainRegRepository, modelMapper, customDomainService);
+		@Lazy ConstraintService constraintService, @Lazy WordService wordService, AccountService accountService) {
+		super(customDomainRegRepository, modelMapper, customDomainService, accountService);
 		this.constraintService = constraintService;
 		this.wordService = wordService;
 		this.regClazz = CustomDomainReg.class;

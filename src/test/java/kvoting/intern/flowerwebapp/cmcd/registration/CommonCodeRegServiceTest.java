@@ -101,19 +101,19 @@ class CommonCodeRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
-		assertThat(commonCodeReg.getDict()).isEqualTo(dict);
+		// assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 		dict = (Dict)dictService.get(dict.getId());
 		CommonCode commonCode = (CommonCode)commonCodeService.get(commonCodeReg.getItem().getId());
 
-		assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-		assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
-		assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
-		assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
-		assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
+		assertThat(dict.getCommonCodes().get(0)).isEqualTo(commonCode);
+		assertThat(dict.getCommonCodes().get(0).getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+		assertThat(dict.getCommonCodes().get(0).getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+		assertThat(dict.getCommonCodes().get(0).getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
+		assertThat(dict.getCommonCodes().get(0).getStatus()).isEqualTo(commonCode.getStatus());
 	}
 
 	@Test
@@ -124,28 +124,28 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// modify
 		cmcdRegRequest.getBase().setCode("B01");
 		Word clb = wordService.getByEng("addr");
 		CommonCodeReg modify = (CommonCodeReg)commonCodeRegService.modify(cmcdRegRequest,
-			commonCodeReg.getItem().getId(), account);
+			commonCodeReg.getItem().getId(), account.getEmail());
 
 		// Then
 		CommonCodeReg modifyReg = (CommonCodeReg)commonCodeRegService.getRegistration(modify.getId());
 
 		assertThat(modifyReg.getBase().getCodeName()).isEqualTo(clb.getBase().getName());
-		assertThat(commonCodeReg.getDict()).isEqualTo(dict);
+		// assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 
 		dict = (Dict)dictService.get(dict.getId());
 		CommonCode commonCode = (CommonCode)commonCodeService.get(commonCodeReg.getItem().getId());
-		assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-		assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
-		assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
-		assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
-		assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
+		assertThat(dict.getCommonCodes().get(0)).isEqualTo(commonCode);
+		assertThat(dict.getCommonCodes().get(0).getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+		assertThat(dict.getCommonCodes().get(0).getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+		assertThat(dict.getCommonCodes().get(0).getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
+		assertThat(dict.getCommonCodes().get(0).getStatus()).isEqualTo(commonCode.getStatus());
 	}
 
 	@Test
@@ -156,25 +156,25 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("addr");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		commonCodeRegService.delete(commonCodeReg.getItem().getId(), account);
+		commonCodeRegService.delete(commonCodeReg.getItem().getId(), account.getEmail());
 
 		// Then
 		assertThat(commonCodeRegRepository.count()).isEqualTo(2L);
 		assertThat(commonCodeRepository.count()).isEqualTo(1L);
 
-		assertThat(commonCodeReg.getDict()).isEqualTo(dict);
+		// assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 		dict = (Dict)dictService.get(dict.getId());
 		CommonCode commonCode = (CommonCode)commonCodeService.get(commonCodeReg.getItem().getId());
 
-		assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-		assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
-		assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
-		assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
-		assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
+		assertThat(dict.getCommonCodes().get(0)).isEqualTo(commonCode);
+		assertThat(dict.getCommonCodes().get(0).getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+		assertThat(dict.getCommonCodes().get(0).getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+		assertThat(dict.getCommonCodes().get(0).getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
+		assertThat(dict.getCommonCodes().get(0).getStatus()).isEqualTo(commonCode.getStatus());
 	}
 
 	@Test
@@ -185,25 +185,25 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// approve
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
-		assertThat(commonCodeReg.getDict()).isEqualTo(dict);
+		// assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 		dict = (Dict)dictService.get(dict.getId());
 		CommonCode commonCode = (CommonCode)commonCodeService.get(commonCodeReg.getItem().getId());
 
 		assertThat(commonCodeRepository.count()).isEqualTo(1L);
 		assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
 
-		assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-		assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
-		assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
-		assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
-		assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
+		assertThat(dict.getCommonCodes().get(0)).isEqualTo(commonCode);
+		assertThat(dict.getCommonCodes().get(0).getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+		assertThat(dict.getCommonCodes().get(0).getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+		assertThat(dict.getCommonCodes().get(0).getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
+		assertThat(dict.getCommonCodes().get(0).getStatus()).isEqualTo(commonCode.getStatus());
 		assertThat(commonCode.getStatus()).isEqualTo(ProcessType.APPROVED);
 	}
 
@@ -215,25 +215,25 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// reject
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.REJECTED, account);
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
-		assertThat(commonCodeReg.getDict()).isEqualTo(dict);
+		// assertThat(commonCodeReg.getDict()).isEqualTo(dict);
 		dict = (Dict)dictService.get(dict.getId());
 		CommonCode commonCode = (CommonCode)commonCodeService.get(commonCodeReg.getItem().getId());
 
 		assertThat(commonCodeRepository.count()).isEqualTo(1L);
 		assertThat(commonCodeRegRepository.count()).isEqualTo(1L);
 
-		assertThat(dict.getCommonCode()).isEqualTo(commonCode);
-		assertThat(dict.getCommonCode().getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
-		assertThat(dict.getCommonCode().getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
-		assertThat(dict.getCommonCode().getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
-		assertThat(dict.getCommonCode().getStatus()).isEqualTo(commonCode.getStatus());
+		assertThat(dict.getCommonCodes().get(0)).isEqualTo(commonCode);
+		assertThat(dict.getCommonCodes().get(0).getBase().getCodeName()).isEqualTo(commonCode.getBase().getCodeName());
+		assertThat(dict.getCommonCodes().get(0).getBase().getCode()).isEqualTo(commonCode.getBase().getCode());
+		assertThat(dict.getCommonCodes().get(0).getBase().getDescription()).isEqualTo(commonCode.getBase().getDescription());
+		assertThat(dict.getCommonCodes().get(0).getStatus()).isEqualTo(commonCode.getStatus());
 		assertThat(commonCode.getStatus()).isEqualTo(ProcessType.REJECTED);
 	}
 
@@ -245,17 +245,17 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
 		Account account = accountService.getAccount("test@test.com");
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// modify
 		cmcdRegRequest.getBase().setCode("B01");
 		Word clb = wordService.getByEng("addr");
 		CommonCodeReg modify = (CommonCodeReg)commonCodeRegService.modify(cmcdRegRequest,
-			commonCodeReg.getItem().getId(), account);
+			commonCodeReg.getItem().getId(), account.getEmail());
 
 		// approve
-		commonCodeRegService.process(modify.getId(), ProcessType.APPROVED, account);
+		commonCodeRegService.process(modify.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
 		CommonCode commonCode = (CommonCode)commonCodeService.get(modify.getItem().getId());
@@ -271,17 +271,17 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// modify
 		cmcdRegRequest.getBase().setCode("B01");
 		Word clb = wordService.getByEng("addr");
 		CommonCodeReg modify = (CommonCodeReg)commonCodeRegService.modify(cmcdRegRequest,
-			commonCodeReg.getItem().getId(), account);
+			commonCodeReg.getItem().getId(), account.getEmail());
 
 		// reject
-		commonCodeRegService.process(modify.getId(), ProcessType.REJECTED, account);
+		commonCodeRegService.process(modify.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		CommonCode commonCode = (CommonCode)commonCodeService.get(modify.getItem().getId());
@@ -297,21 +297,22 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("phn");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		CommonCodeReg delete = (CommonCodeReg)commonCodeRegService.delete(commonCodeReg.getItem().getId(), account);
+		CommonCodeReg delete = (CommonCodeReg)commonCodeRegService.delete(commonCodeReg.getItem().getId(),
+			account.getEmail());
 
 		// approve
 		CommonCodeReg process = (CommonCodeReg)commonCodeRegService.process(delete.getId(), ProcessType.APPROVED,
-			account);
+			account.getEmail());
 
 		// Then
 		assertThat(commonCodeRegRepository.count()).isEqualTo(2L);
 		assertThat(commonCodeRepository.count()).isEqualTo(1L);
 		assertThat(process.getItem().getStatus()).isEqualTo(ProcessType.DELETABLE);
-		commonCodeRegService.executeDelete(process.getId(), account);
+		commonCodeRegService.executeDelete(process.getId(), account.getEmail());
 	}
 
 	@Test
@@ -322,14 +323,15 @@ class CommonCodeRegServiceTest {
 		Word word = wordService.getByEng("addr");
 		Account account = accountService.getAccount("test@test.com");
 		CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(word), dict);
-		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
-		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+		CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account.getEmail());
+		commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		CommonCodeReg delete = (CommonCodeReg)commonCodeRegService.delete(commonCodeReg.getItem().getId(), account);
+		CommonCodeReg delete = (CommonCodeReg)commonCodeRegService.delete(commonCodeReg.getItem().getId(),
+			account.getEmail());
 
 		// reject
-		commonCodeRegService.process(delete.getId(), ProcessType.REJECTED, account);
+		commonCodeRegService.process(delete.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		assertThat(commonCodeRegRepository.count()).isEqualTo(2L);
@@ -342,7 +344,7 @@ class CommonCodeRegServiceTest {
 	public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {
 		return CmcdRegRequest.builder()
 			.base(generateCommonCodeBase())
-			.dict(dict.getId())
+			// .dict(dict.getId())
 			.build();
 	}
 

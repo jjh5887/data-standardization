@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.domain.Domain;
 import kvoting.intern.flowerwebapp.domain.DomainService;
 import kvoting.intern.flowerwebapp.domain.registration.request.DomainRegistRequest;
@@ -24,8 +25,8 @@ public class DomainRegService extends RegistrationService {
 	private final WordService wordService;
 
 	public DomainRegService(DomainRegRepository domainRegRepository, ModelMapper modelMapper,
-		DomainService domainService, @Lazy WordService wordService) {
-		super(domainRegRepository, modelMapper, domainService);
+		DomainService domainService, @Lazy WordService wordService, AccountService accountService) {
+		super(domainRegRepository, modelMapper, domainService, accountService);
 		this.wordService = wordService;
 		this.regClazz = DomainReg.class;
 		this.itemClazz = Domain.class;

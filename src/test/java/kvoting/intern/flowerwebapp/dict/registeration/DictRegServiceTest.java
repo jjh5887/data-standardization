@@ -117,10 +117,10 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		dictRegService.create(dictRegistRequest, account);
+		dictRegService.create(dictRegistRequest, account.getEmail());
 		DictRegistRequest mb_nm = makeDictRequest(List.of(mb.getId(), nm.getId()), CaseStyle.SNAKE, "회원 이름",
 			Set.of(num.getId()));
-		dictRegService.create(mb_nm, account);
+		dictRegService.create(mb_nm, account.getEmail());
 
 		// Then
 		assertThat(dictRepository.count()).isEqualTo(2L);
@@ -134,7 +134,7 @@ class DictRegServiceTest {
 		// update word
 		Word word = (Word)wordService.get(pass.getId());
 		word.getBase().setEngName("password");
-		Word save = wordService.save(word);
+		Word save = wordService.create(word);
 
 		// Then
 		// dict name has also been updated
@@ -192,19 +192,20 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// modify
 		dictRegistRequest.setWords(List.of(nm.getId(), pass.getId()));
 		dictRegistRequest.setDomains(Set.of(num.getId()));
-		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
+		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(),
+			account.getEmail());
 
 		// Then
 		Dict dict = modify.getItem();
@@ -234,17 +235,17 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		dictRegService.delete(dictReg.getItem().getId(), account);
+		dictRegService.delete(dictReg.getItem().getId(), account.getEmail());
 
 		// Then
 		assertThat(dictRepository.count()).isEqualTo(1L);
@@ -266,18 +267,18 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
 
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// approve
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
 		assertThat(dictRegRepository.count()).isEqualTo(1L);
@@ -299,10 +300,10 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 
 		// delete
-		dictRegService.process(dictReg.getId(), ProcessType.REJECTED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		assertThat(dictRegRepository.count()).isEqualTo(1L);
@@ -327,23 +328,24 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
 
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// modify
 		dictRegistRequest.setWords(Arrays.asList(nm.getId(), pass.getId()));
 		dictRegistRequest.setDomains(Set.of(num.getId()));
-		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
+		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(),
+			account.getEmail());
 
 		// approve
-		dictRegService.process(modify.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(modify.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
 		Dict dict = dictService.getDetail(modify.getItem().getId());
@@ -375,22 +377,23 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
 
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// modify
 		dictRegistRequest.setWords(List.of(nm.getId(), pass.getId()));
 		dictRegistRequest.setDomains(Set.of(num.getId()));
-		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(), account);
+		DictReg modify = (DictReg)dictRegService.modify(dictRegistRequest, dictReg.getItem().getId(),
+			account.getEmail());
 
 		// reject
-		dictRegService.process(modify.getId(), ProcessType.REJECTED, account);
+		dictRegService.process(modify.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		Dict dict = modify.getItem();
@@ -420,26 +423,26 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		DictReg delete = (DictReg)dictRegService.delete(dictReg.getItem().getId(), account);
+		DictReg delete = (DictReg)dictRegService.delete(dictReg.getItem().getId(), account.getEmail());
 
 		// approve
-		DictReg process = (DictReg)dictRegService.process(delete.getId(), ProcessType.APPROVED, account);
+		DictReg process = (DictReg)dictRegService.process(delete.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// Then
 		assertThat(dictRegRepository.count()).isEqualTo(2L);
 		assertThat(dictRepository.count()).isEqualTo(1L);
 		assertThat(process.getItem().getStatus()).isEqualTo(ProcessType.DELETABLE);
-		dictRegService.executeDelete(process.getId(), account);
+		dictRegService.executeDelete(process.getId(), account.getEmail());
 		assertThat(dictRegRepository.count()).isEqualTo(0L);
 		assertThat(dictRepository.count()).isEqualTo(0L);
 	}
@@ -459,20 +462,20 @@ class DictRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		DictRegistRequest dictRegistRequest = makeDictRequest(List.of(us.getId(), pass.getId()), CaseStyle.CAMEL, "헬로~",
 			Set.of(var.getId()));
-		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account);
+		DictReg dictReg = (DictReg)dictRegService.create(dictRegistRequest, account.getEmail());
 		List<DomainReg> all = domainRegRepository.findAll();
 		for (DomainReg domainReg : all) {
 			if (domainReg.getRegistrationType() == RegistrationType.CREATE) {
-				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+				domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 			}
 		}
-		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account);
+		dictRegService.process(dictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		DictReg delete = (DictReg)dictRegService.delete(dictReg.getItem().getId(), account);
+		DictReg delete = (DictReg)dictRegService.delete(dictReg.getItem().getId(), account.getEmail());
 
 		// reject
-		dictRegService.process(delete.getId(), ProcessType.REJECTED, account);
+		dictRegService.process(delete.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		assertThat(dictRepository.count()).isEqualTo(1L);

@@ -1,5 +1,6 @@
 package kvoting.intern.flowerwebapp.word;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainService;
+import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainReg;
 import kvoting.intern.flowerwebapp.ctdomain.registration.CustomDomainRegService;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.dict.DictService;
@@ -20,6 +22,7 @@ import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.item.ItemServiceImpl;
 
 @Service
+@Primary
 public class WordService extends ItemServiceImpl {
 	private final DomainService domainService;
 	private final DomainRegService domainRegService;
@@ -63,33 +66,38 @@ public class WordService extends ItemServiceImpl {
 		return ((WordRepository)itemRepository).findByBase_NameIgnoreCaseContains(name, pageable);
 	}
 
-	@Transactional(readOnly = true)
-	public boolean existsByEngName(String engName) {
-		return ((WordRepository)itemRepository).existsByBase_EngNameIgnoreCase(engName);
-	}
-
 	@Override
 	public Item getDetail(Long id) {
 		return get(id);
 	}
 
 	@Override
-	public Word save(Item word) {
-		Word save = (Word)itemRepository.save(word);
+	public Word create(Item item) {
+		Word word = (Word)super.create(item);
+		reflectModifying(word);
+		return word;
+	}
+
+	@Override
+	public Item update(Item item) {
+		Word word = (Word)super.update(item);
+		reflectModifying(word);
+		return word;
+	}
+
+	private void reflectModifying(Word save) {
 		for (Dict dict : save.getDicts()) {
 			dict.setUp();
-			dictService.save(dict);
+			dictService.update(dict);
 		}
 		for (Domain domain : save.getDomains()) {
 			domain.setUp();
-			domainService.save(domain);
+			domainService.update(domain);
 		}
 		for (CustomDomain customDomain : save.getCustomDomains()) {
 			customDomain.setUp();
-			customDomainService.save(customDomain);
+			customDomainService.update(customDomain);
 		}
-
-		return save;
 	}
 
 	@Override
@@ -102,18 +110,17 @@ public class WordService extends ItemServiceImpl {
 			}
 			domain.getWords().remove(domain);
 			domain.setUp();
-			domainService.save(domain);
-		}
-
-		itemRepository.flush();
-
-		for (DomainReg domainReg : word.getDomainRegs()) {
-			domainReg.getWords().remove(domainReg);
-			domainRegService.save(domainReg);
+			domainService.create(domain);
 		}
 
 		for (CustomDomain customDomain : word.getCustomDomains()) {
-
+			if (customDomain.getWords().size() == 1) {
+				customDomainService.delete(customDomain);
+				continue;
+			}
+			customDomain.getWords().remove(customDomain);
+			customDomain.setUp();
+			customDomainService.create(customDomain);
 		}
 
 		for (Dict dict : word.getDicts()) {
@@ -123,10 +130,20 @@ public class WordService extends ItemServiceImpl {
 			}
 			dict.getWords().remove(item);
 			dict.setUp();
-			dictService.save(dict);
+			dictService.create(dict);
 		}
 
 		itemRepository.flush();
+
+		for (DomainReg domainReg : word.getDomainRegs()) {
+			domainReg.getWords().remove(domainReg);
+			domainRegService.save(domainReg);
+		}
+
+		for (CustomDomainReg customDomainReg : word.getCustomDomainRegs()) {
+			customDomainReg.getWords().remove(customDomainReg);
+			customDomainRegService.save(customDomainReg);
+		}
 
 		for (DictReg dictReg : word.getDictRegs()) {
 			dictReg.getWords().remove(item);
@@ -136,7 +153,16 @@ public class WordService extends ItemServiceImpl {
 	}
 
 	@Override
-	public void delete(Long id) throws Throwable {
+	public void delete(Long id) {
 		delete(get(id));
+	}
+
+	@Override
+	public boolean exists(Item item) {
+		Word word = (Word)item;
+		return ((WordRepository)itemRepository)
+			.exists(word.getBase().getEngName(),
+				word.getBase().getName(),
+				word.getBase().getOrgEngName());
 	}
 }

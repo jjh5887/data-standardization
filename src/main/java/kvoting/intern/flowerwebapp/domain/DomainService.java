@@ -75,7 +75,7 @@ public class DomainService extends ItemServiceImpl {
 				continue;
 			}
 			dict.getDomains().remove(domain);
-			dictService.save(dict);
+			dictService.create(dict);
 		}
 
 		itemRepository.flush();
@@ -88,7 +88,16 @@ public class DomainService extends ItemServiceImpl {
 	}
 
 	@Override
-	public void delete(Long id) throws Throwable {
+	public void delete(Long id) {
 		delete(get(id));
+	}
+
+	@Override
+	public boolean exists(Item item) {
+		Domain domain = (Domain)item;
+		return ((DomainRepository)itemRepository)
+			.exists(domain.getBase().getDb(),
+				domain.getBase().getDataType(),
+				domain.getBase().getName());
 	}
 }

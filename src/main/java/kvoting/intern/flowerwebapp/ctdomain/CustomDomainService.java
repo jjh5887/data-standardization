@@ -45,7 +45,7 @@ public class CustomDomainService extends ItemServiceImpl {
 				continue;
 			}
 			dict.getCustomDomains().remove(item);
-			dictService.save(dict);
+			dictService.create(dict);
 		}
 
 		itemRepository.flush();
@@ -58,7 +58,16 @@ public class CustomDomainService extends ItemServiceImpl {
 	}
 
 	@Override
-	public void delete(Long id) throws Throwable {
+	public void delete(Long id) {
 		delete(get(id));
+	}
+
+	@Override
+	public boolean exists(Item item) {
+		CustomDomain customDomain = (CustomDomain)item;
+		return ((CustomDomainRepository)itemRepository)
+			.exists(customDomain.getBase().getName(),
+				customDomain.getBase().getDb(),
+				customDomain.getBase().getDataType());
 	}
 }

@@ -24,7 +24,4 @@ public class CommonCodeBase {
 	@ApiModelProperty(value = "코드 설명")
 	@Column(name = "CMCD_CD_DESC_CONT")
 	private String description;
-	@ApiModelProperty(value = "코드 순서")
-	@Column(name = "CMCD_CD_ORDER")
-	private Long order;
 }

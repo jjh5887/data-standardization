@@ -13,13 +13,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import kvoting.intern.flowerwebapp.config.ItemUrl;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "커스텀 도메인 API")
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/custom-domain", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ItemUrl.CUSTOM_DOMAIN, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CustomDomainController {
 
 	private final CustomDomainService customDomainService;

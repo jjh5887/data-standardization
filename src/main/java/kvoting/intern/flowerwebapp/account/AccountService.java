@@ -18,6 +18,8 @@ import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.dict.Dict;
 import kvoting.intern.flowerwebapp.domain.Domain;
+import kvoting.intern.flowerwebapp.exception.WebException;
+import kvoting.intern.flowerwebapp.exception.code.AccountErrorCode;
 import kvoting.intern.flowerwebapp.item.registration.Registration;
 import kvoting.intern.flowerwebapp.word.Word;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,7 @@ public class AccountService implements UserDetailsService {
 
 	public Account create(AccountCreateRequest request) {
 		if (exist(request.getEmail())) {
-			throw new RuntimeException();
+			throw new WebException(AccountErrorCode.DuplicatedEmail);
 		}
 		Account account = modelMapper.map(request, Account.class);
 		account.addRole(AccountRole.USER);
@@ -67,14 +69,14 @@ public class AccountService implements UserDetailsService {
 	@Transactional(readOnly = true)
 	public Account getAccount(String email) {
 		return accountRepository.findByEmail(email).orElseThrow(() -> {
-			throw new RuntimeException();
+			throw new WebException(AccountErrorCode.UserNotFound);
 		});
 	}
 
 	@Transactional(readOnly = true)
 	public Account getAccount(Long id) {
 		return accountRepository.findById(id).orElseThrow(() -> {
-			throw new RuntimeException();
+			throw new WebException(AccountErrorCode.UserNotFound);
 		});
 	}
 
@@ -133,11 +135,12 @@ public class AccountService implements UserDetailsService {
 
 	private void verifyPassword(Account account, String password) {
 		if (!passwordEncoder.matches(password, account.getPassword())) {
-			throw new RuntimeException();
+			throw new WebException(AccountErrorCode.BadCredentials);
 		}
 	}
 
 	private void initialize(Account account) {
+		account = getAccount(account.getId());
 		Hibernate.initialize(account.getRegs());
 		Hibernate.initialize(account.getProcessRegs());
 	}

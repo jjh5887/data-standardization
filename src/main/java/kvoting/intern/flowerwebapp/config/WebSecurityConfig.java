@@ -1,7 +1,10 @@
 package kvoting.intern.flowerwebapp.config;
 
+import java.lang.reflect.Field;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import kvoting.intern.flowerwebapp.account.AccountRole;
 import kvoting.intern.flowerwebapp.jwt.JwtAuthenticationFilter;
 import kvoting.intern.flowerwebapp.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +46,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		;
 
+		for (Field field : RegUrl.class.getFields()) {
+			String url = (String)field.get(ItemUrl.class);
+			http.authorizeRequests()
+				.antMatchers(HttpMethod.PUT, url + "/**")
+				.hasRole(AccountRole.ADMIN.name())
+				.antMatchers(url + "/**")
+				.authenticated();
+		}
+
 		http
 			.authorizeRequests()
 			.anyRequest().permitAll()
@@ -50,6 +63,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 		http
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 		;
-
 	}
 }

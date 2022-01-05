@@ -3,6 +3,9 @@ package kvoting.intern.flowerwebapp.dict.registeration.request;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import kvoting.intern.flowerwebapp.dict.DictBase;
@@ -18,13 +21,22 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @ApiModel(value = "용어 요청")
 public class DictRegistRequest extends RegRequest {
+
 	private DictBase base;
+
+	@NotBlank
 	@ApiModelProperty(value = "단어 id 리스트 (순서 중요)")
 	private List<Long> words;
+
+	@NotNull
 	@ApiModelProperty(value = "도메인 id 리스트")
 	private Set<Long> domains;
+
+	@NotNull
 	@ApiModelProperty(value = "커스텀 도메인 id 리스트")
 	private Set<Long> customDomains;
-	@ApiModelProperty(value = "공통 코드 id")
-	private Long commonCode;
+
+	@NotNull
+	@ApiModelProperty(value = "공통코드 id 리스트(순서 중요)")
+	private List<Long> commonCodes;
 }

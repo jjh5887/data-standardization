@@ -1,9 +1,7 @@
 package kvoting.intern.flowerwebapp.cmcd;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,15 +12,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -48,8 +45,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonView(View.Public.class)
 @Table(uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"CMCD_CD_VALUE", "DICT_ID"}),
-	@UniqueConstraint(columnNames = {"CMCD_CD_ORDER", "DICT_ID"})
+	@UniqueConstraint(columnNames = {"CMCD_CD_VALUE", "CMCD_CD_NAME"})
 })
 public class CommonCode implements Item {
 
@@ -85,46 +81,9 @@ public class CommonCode implements Item {
 	@JsonIgnore
 	private Set<CommonCodeReg> regs = new HashSet<>();
 
-	@Column(name = "DICT_ID", insertable = false, updatable = false)
-	private Long dictId;
-
-	@Column(name = "DICT_NM")
-	private String dictName;
-
-	@Column(name = "HIGH_DICT_ID", insertable = false, updatable = false)
-	private Long highDictId;
-
-	@Column(name = "HIGH_DICT_NM")
-	private String highDictName;
-
-	@Column(name = "HIGH_CMCD_ID", insertable = false, updatable = false)
-	private Long highCmcdId;
-
-	@Column(name = "HIGH_CMCD_NM")
-	private String highCmcdName;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DICT_ID")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+	@ManyToMany(mappedBy = "commonCodes", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Dict dict;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "HIGH_DICT_ID")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-	@JsonIgnore
-	private Dict highDict;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "HIGH_CMCD_ID")
-	@JsonIgnore
-	private CommonCode highCommonCode;
-
-	@OneToMany(mappedBy = "highCommonCode", fetch = FetchType.LAZY)
-	@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
-	@JsonView(View.Detail.class)
-	@JsonIgnoreProperties({"lowCommonCodes"})
-	private List<CommonCode> lowCommonCodes = new ArrayList<>();
+	private Set<Dict> dicts = new HashSet<>();
 
 	@Override
 	public String getName() {

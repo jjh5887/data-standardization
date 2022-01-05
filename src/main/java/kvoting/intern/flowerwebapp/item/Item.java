@@ -23,6 +23,4 @@ public interface Item {
 
 	@JsonIgnore
 	String getName();
-
-	Set<?> getRegs();
 }

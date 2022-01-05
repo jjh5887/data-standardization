@@ -24,6 +24,7 @@ import kvoting.intern.flowerwebapp.account.Account;
 import kvoting.intern.flowerwebapp.account.AccountRole;
 import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.account.request.AccountCreateRequest;
+import kvoting.intern.flowerwebapp.cmcd.CommonCode;
 import kvoting.intern.flowerwebapp.cmcd.CommonCodeBase;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeReg;
 import kvoting.intern.flowerwebapp.cmcd.registration.CommonCodeRegService;
@@ -67,9 +68,11 @@ import kvoting.intern.flowerwebapp.word.WordService;
 import kvoting.intern.flowerwebapp.word.registration.WordReg;
 import kvoting.intern.flowerwebapp.word.registration.WordRegService;
 import kvoting.intern.flowerwebapp.word.registration.request.WordRegistRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @Configuration
+@RequiredArgsConstructor
 public class AppConfig {
 
 	@Bean
@@ -178,12 +181,13 @@ public class AppConfig {
 			}
 
 			private DictRegistRequest generateDictRequest(List<Long> words, CaseStyle cs, String nm,
-				Set<Long> domains) {
+				Set<Long> domains, List<Long> commonCodes) {
 				return DictRegistRequest.builder()
 					.words(words)
 					.base(generateDictBase(nm, cs))
 					.domains(domains)
 					.customDomains(new HashSet<>())
+					.commonCodes(commonCodes)
 					.build();
 			}
 
@@ -195,10 +199,10 @@ public class AppConfig {
 					.build();
 			}
 
-			public CmcdRegRequest generateCmcdRegRequest(List<Word> words, Dict dict) {
+			public CmcdRegRequest generateCmcdRegRequest() {
 				return CmcdRegRequest.builder()
 					.base(generateCommonCodeBase())
-					.dict(dict.getId())
+					// .dict(dict.getId())
 					.build();
 			}
 
@@ -272,21 +276,18 @@ public class AppConfig {
 
 				List<WordReg> wordRegs = new ArrayList<>();
 				for (WordRegistRequest request : requests) {
-					wordRegs.add((WordReg)wordRegService.create(request, account));
+					wordRegs.add((WordReg)wordRegService.create(request, account.getEmail()));
+				}
+
+				for (WordReg reg : wordRegs) {
+					wordRegService.process(reg.getId(), ProcessType.APPROVED, account.getEmail());
 				}
 
 				WordReg wordReg = wordRegs.get(0);
 				WordRegistRequest request = requests.get(0);
-
-				wordRegService.process(wordReg.getId(), ProcessType.APPROVED, account);
 				request.getBase().setEngName("shd");
-
-				WordReg modify = (WordReg)wordRegService.modify(request, wordReg.getItem().getId(), account);
-				wordRegService.process(modify.getId(), ProcessType.APPROVED, account);
-
-				for (WordReg reg : wordRegs) {
-					wordRegService.process(reg.getId(), ProcessType.APPROVED, account);
-				}
+				WordReg modify = (WordReg)wordRegService.modify(request, wordReg.getItem().getId(), account.getEmail());
+				wordRegService.process(modify.getId(), ProcessType.APPROVED, account.getEmail());
 
 				Word pass = wordService.getByEng("pass");
 				Word us = wordService.getByEng("us");
@@ -296,16 +297,16 @@ public class AppConfig {
 				List<DomainReg> domainRegs = new ArrayList<>();
 				for (int i = 0; i < DataType.values().length; i++) {
 					domainRegs.add((DomainReg)domainRegService
-						.create(generateDomainRequest(i, List.of(us.getId(), pass.getId())), account));
+						.create(generateDomainRequest(i, List.of(us.getId(), pass.getId())), account.getEmail()));
 				}
 
 				for (int i = 0; i < domainRegs.size(); i++) {
-					domainRegService.process(domainRegs.get(i).getId(), ProcessType.APPROVED, account);
+					domainRegService.process(domainRegs.get(i).getId(), ProcessType.APPROVED, account.getEmail());
 				}
 
 				Word word = (Word)wordService.get(words.get(2).getId());
 				word.getBase().setEngName("phn");
-				wordService.save(word);
+				wordService.create(word);
 
 				// getDomains
 				Page<Domain> varDomains = domainService.getByEngNameContains("VA", PageRequest.of(0, 10));
@@ -316,71 +317,86 @@ public class AppConfig {
 
 				// create dict_reg
 				DictRegistRequest dictRegistRequest = generateDictRequest(List.of(us.getId(), pass.getId()),
-					CaseStyle.CAMEL, "비밀번호", Set.of(var.getId()));
-				dictRegService.create(dictRegistRequest, account);
+					CaseStyle.CAMEL, "비밀번호", Set.of(var.getId()), new ArrayList<>());
+				dictRegService.create(dictRegistRequest, account.getEmail());
 				DictRegistRequest mb_nm = generateDictRequest(List.of(mb.getId(), nm.getId()), CaseStyle.SNAKE, "회원 이름",
-					Set.of(num.getId()));
-				DictReg reg = (DictReg)dictRegService.create(mb_nm, account);
+					Set.of(num.getId()), new ArrayList<>());
+				DictReg reg = (DictReg)dictRegService.create(mb_nm, account.getEmail());
 				Dict item = reg.getItem();
 
 				Dict dict = dictService.getDictByEngName("MB_NM", PageRequest.of(0, 10)).getContent().get(0);
 				Word blb = wordService.getByEng("addr");
-				CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest(List.of(blb), dict);
-				CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest, account);
+				CmcdRegRequest cmcdRegRequest = generateCmcdRegRequest();
+				CommonCodeReg commonCodeReg = (CommonCodeReg)commonCodeRegService.create(cmcdRegRequest,
+					account.getEmail());
 
 				// approve
-				dictRegService.process(reg.getId(), ProcessType.APPROVED, account);
-				commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account);
+				dictRegService.process(reg.getId(), ProcessType.APPROVED, account.getEmail());
+				commonCodeRegService.process(commonCodeReg.getId(), ProcessType.APPROVED, account.getEmail());
 				ConstraintReg constraintReg = (ConstraintReg)constraintRegService.create(generateConstraintRegRequest(),
-					account);
+					account.getEmail());
 				CustomDomainReg customDomainReg = (CustomDomainReg)customDomainRegService.create(
 					generateCustomDomainRegRequest(Set.of(constraintReg.getItem().getId()),
-						List.of(us.getId(), pass.getId())), account);
+						List.of(us.getId(), pass.getId())), account.getEmail());
 
 				CustomDomain customDomain = customDomainService.getDetail(customDomainReg.getItem().getId());
-				constraintRegService.process(constraintReg.getId(), ProcessType.APPROVED, account);
-				customDomainRegService.process(customDomainReg.getId(), ProcessType.APPROVED, account);
+				constraintRegService.process(constraintReg.getId(), ProcessType.APPROVED, account.getEmail());
+				customDomainRegService.process(customDomainReg.getId(), ProcessType.APPROVED, account.getEmail());
 				mb_nm.getCustomDomains().add(customDomain.getId());
-				DictReg modifyDictReg = (DictReg)dictRegService.modify(mb_nm, item.getId(), account);
-				dictRegService.process(modifyDictReg.getId(), ProcessType.APPROVED, account);
+				DictReg modifyDictReg = (DictReg)dictRegService.modify(mb_nm, item.getId(), account.getEmail());
+				dictRegService.process(modifyDictReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 				WordRegistRequest typeWord = generateWordRequest("tp", "타입", "Type");
 				WordRegistRequest codeWord = generateWordRequest("cd", "코드", "Code");
-				WordReg typeReg = (WordReg)wordRegService.create(typeWord, account);
-				WordReg codeReg = (WordReg)wordRegService.create(codeWord, account);
+				WordReg typeReg = (WordReg)wordRegService.create(typeWord, account.getEmail());
+				WordReg codeReg = (WordReg)wordRegService.create(codeWord, account.getEmail());
 
-				DictRegistRequest processTypeRequest = generateDictRequest(
-					List.of(typeReg.getItemId(), codeReg.getItemId()), CaseStyle.SNAKE, "처리 상태", Set.of(var.getId()));
-				DictReg dictReg = (DictReg)dictRegService.create(processTypeRequest, account);
-				CmcdRegRequest tpcdRequest = generateCmcdRegRequest(null, dictReg.getItem());
-				tpcdRequest.getBase().setCode("A01");
-				tpcdRequest.getBase().setCodeName("처리 상태 코드");
-				tpcdRequest.getBase().setDescription("처리 상태를 나타내는 코드");
-				CommonCodeReg tpcdReg = (CommonCodeReg)commonCodeRegService.create(tpcdRequest, account);
+				System.out.println(wordService.getByEng("tp"));
+				System.out.println(typeReg.getItemId());
 
-				CmcdRegRequest approveRequest = generateCmcdRegRequest(null, dictReg.getItem());
-				approveRequest.setDict(null);
-				approveRequest.getBase().setCode("A0101");
+				List<Long> ids = new ArrayList<>();
+				ids.add(typeReg.getItemId());
+				ids.add(codeReg.getItemId());
+
+				DictRegistRequest processTypeRequest = generateDictRequest(ids, CaseStyle.SNAKE, "처리 상태",
+					Set.of(var.getId()), new ArrayList<>());
+
+				CmcdRegRequest approveRequest = generateCmcdRegRequest();
+				approveRequest.getBase().setCode("A01");
 				approveRequest.getBase().setCodeName("승인");
 				approveRequest.getBase().setDescription("승인됨");
-				approveRequest.getBase().setOrder(0L);
-				approveRequest.setHighCommonCode(tpcdReg.getItemId());
-				approveRequest.setHighDict(tpcdReg.getDictId());
-				commonCodeRegService.create(approveRequest, account);
+				CommonCodeReg approveCmcdReg = (CommonCodeReg)commonCodeRegService.create(approveRequest, account.getEmail());
+				CommonCode approveCmcd = approveCmcdReg.getItem();
 
-				approveRequest.getBase().setCode("A0102");
+				approveRequest.getBase().setCode("A02");
 				approveRequest.getBase().setCodeName("거절");
 				approveRequest.getBase().setDescription("거절됨");
-				approveRequest.getBase().setOrder(1L);
-				approveRequest.setHighCommonCode(tpcdReg.getItemId());
-				approveRequest.setHighDict(tpcdReg.getDictId());
-				commonCodeRegService.create(approveRequest, account);
+				CommonCodeReg rejectCmcdReg = (CommonCodeReg)commonCodeRegService.create(approveRequest, account.getEmail());
+				CommonCode rejectCmcd = rejectCmcdReg.getItem();
+
+				processTypeRequest.setCommonCodes(new ArrayList<>());
+				processTypeRequest.getCommonCodes().add(approveCmcd.getId());
+				processTypeRequest.getCommonCodes().add(rejectCmcd.getId());
+
+				DictReg dictReg = (DictReg)dictRegService.create(processTypeRequest, account.getEmail());
+				Dict tpcd = dictReg.getItem();
+
+				// CmcdRegRequest tpcdRequest = generateCmcdRegRequest(null, tpcd);
+				// tpcdRequest.getBase().setCode("A01");
+				// tpcdRequest.getBase().setCodeName("처리 상태 코드");
+				// tpcdRequest.getBase().setDescription("처리 상태를 나타내는 코드");
+				// CommonCodeReg tpcdReg = (CommonCodeReg)commonCodeRegService.create(tpcdRequest, account.getEmail());
+				// Registration modify1 = dictRegService.modify(processTypeRequest, tpcd.getId(), account.getEmail());
+				// dictRegService.process(modify1.getId(), ProcessType.APPROVED, account.getEmail());
+
 				WordRegistRequest request1 = generateWordRequest(us.getBase().getEngName(), us.getBase().getName(),
 					us.getBase().getOrgEngName());
 				request1.getBase().setName("유저");
 				request1.getBase().setEngName("ac");
-				Registration registration = wordRegService.modify(request1, us.getId(), account);
-				wordRegService.process(registration.getId(), ProcessType.APPROVED, account);
+				Registration registration = wordRegService.modify(request1, us.getId(), account.getEmail());
+				wordRegService.process(registration.getId(), ProcessType.APPROVED, account.getEmail());
+
+
 				System.out.println(jwtTokenProvider.createToken("test@test.com"));
 			}
 		};

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,13 +14,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import kvoting.intern.flowerwebapp.config.RegUrl;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomainBase;
@@ -39,12 +37,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue(value = "CUSTOM_DOMAIN")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CUSTOM_DOMAIN_ID"}))
+@DiscriminatorValue(value = RegUrl.CUSTOM_DOMAIN_REG)
 public class CustomDomainReg extends Registration<CustomDomain, CustomDomainBase> {
-
-	@Column(name = "CUSTOM_DOMAIN_ID", insertable = false, updatable = false)
-	private Long itemId;
 
 	@Embedded
 	private CustomDomainBase base;

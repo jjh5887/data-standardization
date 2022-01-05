@@ -42,9 +42,9 @@ class CustomDomainRegServiceTest {
 	public void registCreateCustomDomain() {
 		Account account = accountRepository.findAll().get(0);
 		ConstraintReg constraintReg = (ConstraintReg)constraintRegService.create(generateConstraintRegRequest(),
-			account);
+			account.getEmail());
 		CustomDomainReg customDomainReg = (CustomDomainReg)customDomainRegService.create(
-			generateCustomDomainRegRequest(Set.of(constraintReg.getItem().getId())), account);
+			generateCustomDomainRegRequest(Set.of(constraintReg.getItem().getId())), account.getEmail());
 
 		CustomDomain customDomain = customDomainService.getDetail(customDomainReg.getItem().getId());
 

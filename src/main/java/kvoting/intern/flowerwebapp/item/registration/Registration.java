@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -41,6 +43,7 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorColumn(name = "REG_TYPE")
 @EqualsAndHashCode(of = "id")
 @JsonView(View.Public.class)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "REG_ITEM_ID"}))
 public class Registration<I extends Item, B> {
 
 	@Id
@@ -50,6 +53,9 @@ public class Registration<I extends Item, B> {
 
 	@Column(name = "REG_ITEM_NM")
 	private String itemName;
+
+	@Column(name = "REG_ITEM_ID")
+	private Long itemId;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "REGT_ID", referencedColumnName = "USER_ID")
@@ -98,13 +104,6 @@ public class Registration<I extends Item, B> {
 	}
 
 	public void setItem(I item) {
-	}
-
-	public Long getItemId() {
-		return null;
-	}
-
-	public void setItemId(Long id) {
 	}
 
 	public B getBase() {

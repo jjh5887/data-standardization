@@ -51,7 +51,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"CUSTOM_DOMAIN_NAME"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"CUSTOM_DOMAIN_NAME", "CUSTOM_DOMAIN_DB",
+	"CUSTOM_DOMAIN_DATA_TYPE"}))
 @JsonView(View.Public.class)
 public class CustomDomain implements Item {
 	@Id

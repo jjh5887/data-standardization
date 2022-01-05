@@ -14,13 +14,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import kvoting.intern.flowerwebapp.config.ItemUrl;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "도메인 API")
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/domain", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ItemUrl.DOMAIN, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DomainController {
 	private final DomainService domainService;
 

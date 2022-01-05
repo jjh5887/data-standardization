@@ -3,7 +3,6 @@ package kvoting.intern.flowerwebapp.constraint.registration;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,14 +10,13 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import kvoting.intern.flowerwebapp.config.RegUrl;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.constraint.ConstraintBase;
 import kvoting.intern.flowerwebapp.ctdomain.CustomDomain;
@@ -36,12 +34,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue(value = "CONSTRAINT")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"REG_ID", "CONSTRAINT_ID"}))
+@DiscriminatorValue(value = RegUrl.CONSTRAINT_REG)
 public class ConstraintReg extends Registration<Constraint, ConstraintBase> {
-
-	@Column(name = "CONSTRAINT_ID", insertable = false, updatable = false)
-	private Long itemId;
 
 	@Embedded
 	@JsonView(View.Detail.class)

@@ -16,10 +16,6 @@ import lombok.experimental.SuperBuilder;
 @ApiModel(value = "공통코드 요청")
 public class CmcdRegRequest extends RegRequest {
 	private CommonCodeBase base;
-	@ApiModelProperty(value = "용어 id")
-	private Long dict;
-	@ApiModelProperty(value = "상위 공통코드 id")
-	private Long highCommonCode;
-	@ApiModelProperty(value = "상위 용어 id")
-	private Long highDict;
 }
+
+

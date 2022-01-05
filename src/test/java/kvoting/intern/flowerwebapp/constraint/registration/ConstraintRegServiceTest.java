@@ -55,7 +55,7 @@ class ConstraintRegServiceTest {
 	public void registCreateConstraint() {
 		Account account = accountRepository.findAll().get(0);
 		ConstraintRegRequest request = generateConstraintRegRequest();
-		ConstraintReg registration = (ConstraintReg)constraintRegService.create(request, account);
+		ConstraintReg registration = (ConstraintReg)constraintRegService.create(request, account.getEmail());
 
 		assertThat(constraintRepository.count()).isEqualTo(1L);
 		assertThat(constraintRegRepository.count()).isEqualTo(1L);

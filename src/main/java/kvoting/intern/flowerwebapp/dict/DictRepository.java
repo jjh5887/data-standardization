@@ -24,4 +24,6 @@ public interface DictRepository extends JpaRepository<Dict, Long> {
 		countQuery = "select count(*) from cc_dict_word_tc d where d.WORD_ID = ?1",
 		nativeQuery = true)
 	Page<Dict> findByWord(Long id, Pageable pageable);
+
+	boolean existsByBase_EngNameIgnoreCase(String base_engName);
 }

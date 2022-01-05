@@ -4,6 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,6 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @lombok.Data
 public class DomainBase {
+	@Null
 	@Column(name = "DOMAIN_NAME")
 	@ApiModelProperty(hidden = true)
 	private String name;
@@ -24,11 +29,13 @@ public class DomainBase {
 	@ApiModelProperty(value = "설명")
 	private String description;
 
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DB_TPCD")
 	@ApiModelProperty(value = "디비 종류")
 	private DB db;
 
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DATA_TPCD")
 	@ApiModelProperty(value = "데이터 타입")

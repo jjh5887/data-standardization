@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import kvoting.intern.flowerwebapp.config.ItemUrl;
 import kvoting.intern.flowerwebapp.item.Item;
 import kvoting.intern.flowerwebapp.view.View;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "단어 API")
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/word", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ItemUrl.WORD, produces = MediaType.APPLICATION_JSON_VALUE)
 public class WordController {
 	private final WordService wordService;
 

@@ -3,6 +3,7 @@ package kvoting.intern.flowerwebapp.constraint.registration;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import kvoting.intern.flowerwebapp.account.AccountService;
 import kvoting.intern.flowerwebapp.constraint.Constraint;
 import kvoting.intern.flowerwebapp.constraint.ConstraintService;
 import kvoting.intern.flowerwebapp.item.Item;
@@ -14,8 +15,8 @@ import kvoting.intern.flowerwebapp.item.registration.request.RegRequest;
 public class ConstraintRegService extends RegistrationService {
 
 	public ConstraintRegService(ConstraintRegRepository constraintRegRepository,
-		ModelMapper modelMapper, ConstraintService itemService) {
-		super(constraintRegRepository, modelMapper, itemService);
+		ModelMapper modelMapper, ConstraintService itemService, AccountService accountService) {
+		super(constraintRegRepository, modelMapper, itemService, accountService);
 		this.regClazz = ConstraintReg.class;
 		this.itemClazz = Constraint.class;
 	}

@@ -65,7 +65,7 @@ class DomainRegServiceTest {
 		List<Word> words = wordRepository.findAll();
 		// create
 		DomainRegistRequest domainRegistRequest = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account.getEmail());
 
 		// Then
 		Domain domain = (Domain)domainService.get(domainReg.getItem().getId());
@@ -81,12 +81,13 @@ class DomainRegServiceTest {
 		generateWords(account);
 		List<Word> words = wordRepository.findAll();
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// modify
 		request.getBase().setDescription("this is new domain");
 		request.getBase().setNullable(false);
-		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(), account);
+		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(),
+			account.getEmail());
 
 		// Then
 		DomainReg savedReg = (DomainReg)domainRegService.getRegistration(savedModifyReg.getId());
@@ -104,10 +105,10 @@ class DomainRegServiceTest {
 		generateWords(account);
 		List<Word> words = wordRepository.findAll();
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// delete
-		DomainReg savedDeleteReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account);
+		DomainReg savedDeleteReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account.getEmail());
 
 		// Then
 		DomainReg savedReg = (DomainReg)domainRegService.getRegistration(savedDeleteReg.getId());
@@ -125,10 +126,10 @@ class DomainRegServiceTest {
 		generateWords(account);
 		// create
 		DomainRegistRequest domainRegistRequest = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account.getEmail());
 		// approve
 		DomainReg approvedDomainReg = (DomainReg)domainRegService.process(domainReg.getId(), ProcessType.APPROVED,
-			account);
+			account.getEmail());
 
 		// Then
 		assertThat(domainRegRepository.count()).isEqualTo(1L);
@@ -149,10 +150,10 @@ class DomainRegServiceTest {
 		generateWords(account);
 		// create
 		DomainRegistRequest domainRegistRequest = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(domainRegistRequest, account.getEmail());
 		// approve
 		DomainReg rejectedDomainReg = (DomainReg)domainRegService.process(domainReg.getId(), ProcessType.REJECTED,
-			account);
+			account.getEmail());
 
 		// Then
 		assertThat(domainRegRepository.count()).isEqualTo(1L);
@@ -172,15 +173,16 @@ class DomainRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		generateWords(account);
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// modify
 		request.getBase().setDescription("this is new domain");
 		request.getBase().setNullable(false);
-		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(), account);
+		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(),
+			account.getEmail());
 		// approve
 		DomainReg approvedReg = (DomainReg)domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED,
-			account);
+			account.getEmail());
 
 		// Then
 		Domain domain = (Domain)domainService.get(approvedReg.getItem().getId());
@@ -196,15 +198,16 @@ class DomainRegServiceTest {
 		Account account = accountService.getAccount("test@test.com");
 		generateWords(account);
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// modify
 		request.getBase().setDescription("this is new domain");
 		request.getBase().setNullable(false);
-		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(), account);
+		DomainReg savedModifyReg = (DomainReg)domainRegService.modify(request, domainReg.getItem().getId(),
+			account.getEmail());
 		// approve
 		DomainReg rejectedReg = (DomainReg)domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED,
-			account);
+			account.getEmail());
 
 		// Then
 		Domain domain = (Domain)domainService.get(rejectedReg.getItem().getId());
@@ -222,14 +225,14 @@ class DomainRegServiceTest {
 		generateWords(account);
 		List<Word> words = wordRepository.findAll();
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 
 		// delete
-		DomainReg savedModifyReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account);
+		DomainReg savedModifyReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account.getEmail());
 		// approve
 		DomainReg processReg = (DomainReg)domainRegService.process(savedModifyReg.getId(), ProcessType.APPROVED,
-			account);
+			account.getEmail());
 
 		// Then
 		assertThat(domainRegRepository.count()).isEqualTo(2L);
@@ -246,12 +249,12 @@ class DomainRegServiceTest {
 		generateWords(account);
 
 		DomainRegistRequest request = makeDomRequest(words);
-		DomainReg domainReg = (DomainReg)domainRegService.create(request, account);
-		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account);
+		DomainReg domainReg = (DomainReg)domainRegService.create(request, account.getEmail());
+		domainRegService.process(domainReg.getId(), ProcessType.APPROVED, account.getEmail());
 		// delete
-		DomainReg savedModifyReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account);
+		DomainReg savedModifyReg = (DomainReg)domainRegService.delete(domainReg.getItem().getId(), account.getEmail());
 		// reject
-		domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account);
+		domainRegService.process(savedModifyReg.getId(), ProcessType.REJECTED, account.getEmail());
 
 		// Then
 		assertThat(domainRegRepository.count()).isEqualTo(2L);
@@ -293,7 +296,7 @@ class DomainRegServiceTest {
 		}
 
 		for (WordRegistRequest request : requests) {
-			wordRegService.create(request, account);
+			wordRegService.create(request, account.getEmail());
 		}
 	}
 }

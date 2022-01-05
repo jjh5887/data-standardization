@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kvoting.intern.flowerwebapp.exception.WebException;
+import kvoting.intern.flowerwebapp.exception.code.ItemErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -15,11 +17,12 @@ import lombok.SneakyThrows;
 public abstract class ItemServiceImpl implements ItemService {
 	protected final JpaRepository itemRepository;
 
+	@Override
 	@SneakyThrows
 	@Transactional(readOnly = true)
 	public Item get(Long id) {
 		return (Item)itemRepository.findById(id).orElseThrow(() -> {
-			throw new RuntimeException();
+			throw new WebException(ItemErrorCode.ItemNotFound);
 		});
 	}
 
@@ -31,15 +34,25 @@ public abstract class ItemServiceImpl implements ItemService {
 		return itemRepository.findAll(pageable);
 	}
 
-	public Item save(Item item) {
+	@Override
+	public Item create(Item item) {
+		if (exists(item)) {
+			throw new WebException(ItemErrorCode.DuplicatedItem);
+		}
 		return (Item)itemRepository.save(item);
 	}
 
+	public Item update(Item item) {
+		return (Item)itemRepository.save(item);
+	}
+
+	@Override
 	public void delete(Item item) {
 		itemRepository.delete(item);
 	}
 
-	public void delete(Long id) throws Throwable {
+	@Override
+	public void delete(Long id) {
 		itemRepository.deleteById(id);
 	}
 }

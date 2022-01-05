@@ -44,4 +44,13 @@ public class ConstraintService extends ItemServiceImpl {
 		Hibernate.initialize(constraint.getCustomDomains());
 		return constraint;
 	}
+
+	@Override
+	public boolean exists(Item item) {
+		Constraint constraint = (Constraint)item;
+		return ((ConstraintRepository)itemRepository)
+			.exists(constraint.getBase().getName(),
+				constraint.getBase().getInputType(),
+				constraint.getBase().getValue());
+	}
 }
